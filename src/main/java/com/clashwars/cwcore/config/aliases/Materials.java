@@ -317,6 +317,8 @@ public class Materials extends EasyConfig {
                     String[] split = matName.split("-");
                     if (split != null && split.length > 0) {
                         return Material.valueOf(split[0]);
+                    } else {
+                        return Material.valueOf(matName);
                     }
                 }
             }
