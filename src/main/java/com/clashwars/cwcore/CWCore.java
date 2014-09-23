@@ -1,8 +1,6 @@
 package com.clashwars.cwcore;
 
 import com.clashwars.cwcore.config.aliases.*;
-import org.bukkit.Material;
-import org.bukkit.block.Biome;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
@@ -18,6 +16,7 @@ public class CWCore extends JavaPlugin {
     private Entities entityCfg;
     private Enchantments enchantsCfg;
     private Biomes biomesCfg;
+    private Particles particlesCfg;
 
 
     public void onDisable() {
@@ -58,6 +57,10 @@ public class CWCore extends JavaPlugin {
         biomesCfg = new Biomes("plugins/CWCore/Aliases/Biomes.yml");
         biomesCfg.load();
         biomesCfg.update();
+
+        particlesCfg = new Particles("plugins/CWCore/Aliases/Particles.yml");
+        particlesCfg.load();
+        particlesCfg.update();
     }
 
 
@@ -127,9 +130,18 @@ public class CWCore extends JavaPlugin {
     /**
      * Get the biomes aliases config/manager.
      * Can be used to get a biome by name or get a better displayname for a biome.
-     * @return {@link com.clashwars.cwcore.config.aliases.Enchantments}
+     * @return {@link com.clashwars.cwcore.config.aliases.Biomes}
      */
     public Biomes getBiomes() {
         return biomesCfg;
+    }
+
+    /**
+     * Get the particle aliases config/manager.
+     * Can be used to get a particle by name or get a better displayname for a particle.
+     * @return {@link com.clashwars.cwcore.config.aliases.Particles}
+     */
+    public Particles getParticles() {
+        return particlesCfg;
     }
 }
