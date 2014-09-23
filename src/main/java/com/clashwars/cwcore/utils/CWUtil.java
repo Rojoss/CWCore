@@ -145,4 +145,9 @@ public class CWUtil {
         val = val / 100;
         return val;
     }
+
+    public static Color getRandomColor() {
+        //TODO: Implement
+        return null;
+    }
 }

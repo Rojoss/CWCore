@@ -1,11 +1,15 @@
 package com.clashwars.cwcore.commands;
 
 import com.clashwars.cwcore.CWCore;
-import com.clashwars.cwcore.utils.CWItem;
+import com.clashwars.cwcore.helpers.CWEntity;
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 
 public class Commands {
@@ -44,11 +48,24 @@ public class Commands {
                     return true;
                 }
                 if (args[0].equalsIgnoreCase("item3")) {
-                    new CWItem(Material.DIRT, 1).setName("&9TEST1").giveToPlayer(player);
+                    new CWItem(Material.DIRT, 1).setName("&9TEST1").makeGlowing().giveToPlayer(player);
                     return true;
                 }
                 if (args[0].equalsIgnoreCase("rename")) {
                     player.setItemInHand(new CWItem(player.getItemInHand()).setName("&6Renamed..."));
+                    return true;
+                }
+                if (args[0].equalsIgnoreCase("e1")) {
+                    CWEntity.create(EntityType.SHEEP, player.getLocation()).setDyeColor(DyeColor.LIME).setBaby(true).setHand(new CWItem(Material.DIAMOND_PICKAXE));
+                    return true;
+                }
+                if (args[0].equalsIgnoreCase("e2")) {
+                    CWEntity entity = CWEntity.create(EntityType.OCELOT, player.getLocation()).setCatType(Ocelot.Type.RED_CAT).setBaby(true).setHand(new CWItem(Material.DIAMOND_PICKAXE)).setSitting(true);
+                    entity.entity().setPassenger(player);
+                    return true;
+                }
+                if (args[0].equalsIgnoreCase("e3")) {
+                    CWEntity.create(EntityType.WITHER_SKULL, player.getLocation()).setPowered(true).setVelocity(player.getVelocity());
                     return true;
                 }
             }

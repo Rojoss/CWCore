@@ -1,8 +1,12 @@
-package com.clashwars.cwcore.utils;
+package com.clashwars.cwcore.helpers;
 
 import com.clashwars.cwcore.CWCore;
+import com.clashwars.cwcore.utils.CWUtil;
+import com.comphenix.protocol.wrappers.nbt.NbtCompound;
+import com.comphenix.protocol.wrappers.nbt.NbtFactory;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -387,6 +391,11 @@ public class CWItem extends ItemStack {
                 player.getWorld().dropItem(player.getLocation(), itemClone);
             }
         }
+    }
+
+    public CWItem makeGlowing() {
+        //TODO: Make this with protocol stuff...
+        return this;
     }
 
     /**
