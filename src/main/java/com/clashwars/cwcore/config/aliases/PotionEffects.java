@@ -21,7 +21,10 @@ public class PotionEffects extends EasyConfig {
      */
     public void update() {
         for (PotionEffectType effect : PotionEffectType.values()) {
-            String effectName = effect.toString();
+            if (effect == null || effect.getName() == null) {
+                continue;
+            }
+            String effectName = effect.getName();
             if (!effects.containsKey(effectName)) {
                 ArrayList<String> aliases = new ArrayList<String>();
 

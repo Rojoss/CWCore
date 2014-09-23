@@ -1,9 +1,9 @@
-package com.clashwars.cwcore.reflection;
+package com.clashwars.cwcore.packet;
 
-import com.clashwars.cwcore.reflection.internal.ReflectionHandler;
-import com.clashwars.cwcore.reflection.internal.ReflectionHandler.PackageType;
-import com.clashwars.cwcore.reflection.internal.ReflectionHandler.PacketType;
-import com.clashwars.cwcore.reflection.internal.ReflectionHandler.SubPackageType;
+import com.clashwars.cwcore.packet.reflection.ReflectionHandler;
+import com.clashwars.cwcore.packet.reflection.ReflectionHandler.PackageType;
+import com.clashwars.cwcore.packet.reflection.ReflectionHandler.PacketType;
+import com.clashwars.cwcore.packet.reflection.ReflectionHandler.SubPackageType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

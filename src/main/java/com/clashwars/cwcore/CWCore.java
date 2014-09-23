@@ -1,6 +1,10 @@
 package com.clashwars.cwcore;
 
+import com.clashwars.cwcore.commands.Commands;
 import com.clashwars.cwcore.config.aliases.*;
+import com.clashwars.cwcore.dependencies.internal.DependencyManager;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
@@ -9,6 +13,9 @@ public class CWCore extends JavaPlugin {
 
     private static CWCore instance;
     private final Logger log = Logger.getLogger("Minecraft");
+
+    private Commands cmds;
+    private DependencyManager dm;
 
     private Materials materialsCfg;
     private Sounds soundsCfg;
@@ -26,9 +33,21 @@ public class CWCore extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        //Load dependencies
+        dm = new DependencyManager(this);
+        dm.loadDependencies();
+
+        //Load command system.
+        cmds = new Commands(this);
+
+        //Load the aliases.
         loadAliases();
 
         log("Enabled.");
+    }
+
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        return cmds.onCommand(sender, cmd, label, args);
     }
 
 
@@ -72,6 +91,14 @@ public class CWCore extends JavaPlugin {
         log.info("[CWCore " + getDescription().getVersion() + "]: " + msg.toString());
     }
 
+    /**
+     * Log a [SEVERE] message to the console.
+     * @param error
+     */
+    public void error(Object error) {
+        log.severe("[CWCore " + getDescription().getVersion() + "]: " + error.toString());
+    }
+
 
 
     /**
@@ -80,6 +107,18 @@ public class CWCore extends JavaPlugin {
      */
     public static CWCore inst() {
         return instance;
+    }
+
+
+    /**
+     * Get the dependency manager.
+     * All dependencies can be accessed from here.
+     * Some dependencies like WorldGuard have a Util class like CWWorldGuard for easier access.
+     * But with this you can access the main classes and like economy manager and protocol manager.
+     * @return DependencyManager
+     */
+    public DependencyManager GetDM() {
+        return dm;
     }
 
     /**

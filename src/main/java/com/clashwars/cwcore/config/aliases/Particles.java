@@ -1,7 +1,7 @@
 package com.clashwars.cwcore.config.aliases;
 
 import com.clashwars.cwcore.config.internal.EasyConfig;
-import com.clashwars.cwcore.reflection.ParticleEffect;
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 
 import java.util.ArrayList;

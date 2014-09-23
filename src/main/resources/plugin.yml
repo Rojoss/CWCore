@@ -2,3 +2,8 @@ main : com.clashwars.cwcore.CWCore
 name: ${project.artifactId}
 version: ${project.version}
 description: ${project.description}
+softdepend: [Vault, ProtocolLib, WorldGuard, Factions, Essentials]
+commands:
+  cwtest:
+    description: Testing command
+    usage: /<command> [param]

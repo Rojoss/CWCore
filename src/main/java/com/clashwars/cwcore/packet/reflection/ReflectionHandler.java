@@ -1,4 +1,4 @@
-package com.clashwars.cwcore.reflection.internal;
+package com.clashwars.cwcore.packet.reflection;
 
 import org.bukkit.Bukkit;
 
