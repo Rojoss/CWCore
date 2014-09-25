@@ -1,6 +1,7 @@
 package com.clashwars.cwcore.dependencies;
 
 import com.clashwars.cwcore.CWCore;
+import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
@@ -174,6 +175,19 @@ public class CWWorldGuard {
         CuboidClipboard cc = CuboidClipboard.loadSchematic(file);
         cc.rotate2D(rotation);
         cc.paste(es, origin, noAir);
+    }
+
+    public static boolean doesSchematicExists(String name) throws CommandException, FilenameException {
+        File dir = WorldEdit.getInstance().getWorkingDirectoryFile(WorldEdit.getInstance().getConfiguration().saveDir);
+        com.sk89q.worldedit.LocalPlayer lplayer = WGBukkit.getPlugin().getWorldEdit().wrapPlayer(CWCore.inst().getServer().getOnlinePlayers().iterator().next());
+        if (lplayer == null) {
+            return false;
+        }
+        File f = WorldEdit.getInstance().getSafeOpenFile(lplayer, dir, name, "schematic", "schematic");
+        if (!f.exists()) {
+            return false;
+        }
+        return true;
     }
 
 }
