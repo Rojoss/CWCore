@@ -2,7 +2,16 @@ package com.clashwars.cwcore.utils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.material.Directional;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
+import java.io.File;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -15,12 +24,18 @@ public class CWUtil {
         random = new Random();
     }
 
+
+
+    //##########################################################################################
+    //###############################  STRING COLOR UTILITIES  #################################
+    //##########################################################################################
+
     /**
      * Format a message with [CW] Prefix
      * @param msg
      * @return formatted message
      */
-    public static String formatMsg(String msg) {
+    public static String formatCWMsg(String msg) {
         return integrateColor("&8[&4CW&8] &6" + msg);
     }
 
@@ -38,15 +53,25 @@ public class CWUtil {
     }
 
     /**
-     * Integrate ChatColor in a list of strings based on color codes.
-     * @param str
-     * @return formatted string list
+     * Integrate ChatColor in a array of strings based on color codes.
+     * @param str Array of strings
+     * @return formatted string array
      */
     public static String[] integrateColor(String[] str) {
         for (int i = 0; i < str.length; i++) {
-            for (ChatColor c : ChatColor.values()) {
-                str[i] = str[i].replaceAll("&" + c.getChar() + "|&" + Character.toUpperCase(c.getChar()), c.toString());
-            }
+            str[i] = integrateColor(str[i]);
+        }
+        return str;
+    }
+
+    /**
+     * Integrate ChatColor in a list of strings based on color codes.
+     * @param str List of strings
+     * @return formatted string list
+     */
+    public static List<String> integrateColor(List<String> str) {
+        for (int i = 0; i < str.size(); i++) {
+            str.set(i, integrateColor(str.get(i)));
         }
         return str;
     }
@@ -73,18 +98,130 @@ public class CWUtil {
     }
 
 
+
+
+    //##########################################################################################
+    //##################################  STRING UTILITIES  ####################################
+    //##########################################################################################
+
     /**
-     * Remove Convert a string to a List<String> for lore based on \n symbols and add in colors etc.
-     * @param loreStr
+     * Capitalize the first character of a string.
+     * @param str
+     * @return Capitalized string
+     */
+    public static String capitalize(String str) {
+        if (str.length() == 0) return str;
+        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+    }
+
+    /**
+     * Remove Convert a string to a List<String> mostly useful for lores.
+     * @param str The string to split.
+     * @param seperateChar The string used for seperation.
+     * @param color Should ChatColors be integrated in all strings?
      * @return formatted string
      */
-    public static List<String> loreFromString(String loreStr) {
-        List<String> lore = null;
-        loreStr = integrateColor(loreStr);
-        String[] split = loreStr.split("\n");
-        lore = Arrays.asList(split);
-        return lore;
+    public static List<String> splitToList(String str, String seperateChar, boolean color) {
+        List<String> list = null;
+        if (color) {
+            str = integrateColor(str);
+        }
+        String[] split = str.split(seperateChar);
+        list = Arrays.asList(split);
+        return list;
     }
+
+    /**
+     * Trim first string from string array
+     * @param arr The array of strings to modify
+     * @return String[] with the first string removed.
+     */
+    public static String[] trimFirst(String[] arr) {
+        String[] ret = new String[arr.length - 1];
+        for (int i = 1; i < arr.length; i++) {
+            ret[i - 1] = arr[i];
+        }
+        return ret;
+    }
+
+    /**
+     * Trim first string from string list
+     * @param list The list of strings to modify
+     * @return List<String> with the first string removed.
+     */
+    public static List<String> trimFirst(List<String> list) {
+        return Arrays.asList(trimFirst(list.toArray(new String[list.size() - 1])));
+    }
+
+
+
+
+    //##########################################################################################
+    //###################################  TIME UTILITIES  #####################################
+    //##########################################################################################
+
+    /**
+     * Get a string with min:sec based on a long time.
+     * @param time The time to convert to min:sec
+     * @return String with min:sec
+     */
+    public static String getMinSecStr(long time) {
+        return getMinSecStr(time, null, null);
+    }
+
+    /**
+     * Get a string with min:sec based on a long time and give it colors.
+     * @param time The time to convert to min:sec
+     * @param timeColor The color used for the min time and sec time.
+     * @param color The color used for the ':' seperator
+     * @return Colored string with min:sec
+     */
+    public static String getMinSecStr(long time, ChatColor timeColor, ChatColor color) {
+        time = time / 1000;
+        int minsLeft = (int) time / 60;
+        int secsLeft = (int) time - minsLeft * 60;
+        if (color == null || timeColor == null) {
+            return minsLeft + ":" + secsLeft;
+        } else {
+            return "" + timeColor + minsLeft + color + ":" + timeColor + secsLeft;
+        }
+    }
+
+    /**
+     * Get a string with hour:min:sec based on a long time.
+     * @param time The time to convert to hour:min:sec
+     * @return String with hour:min:sec
+     */
+    public static String getHourMinSecStr(long time) {
+        return getHourMinSecStr(time, null, null);
+    }
+
+    /**
+     * Get a string with hour:min:sec based on a long time and give it colors.
+     * @param time The time to convert to hour:min:sec
+     * @param timeColor The color used for the min time and sec time.
+     * @param color The color used for the ':' seperator
+     * @return Colored string with hour:min:sec
+     */
+    public static String getHourMinSecStr(long time, ChatColor timeColor, ChatColor color) {
+        time = time / 1000;
+        int hoursLeft = (int) time / 60;
+        time = time - hoursLeft * 60;
+        int minsLeft = (int) time / 60;
+        int secsLeft = (int) time - minsLeft * 60;
+        if (color == null || timeColor == null) {
+            return hoursLeft + ":" + minsLeft + ":" + secsLeft;
+        } else {
+            return "" + timeColor + hoursLeft + color + ":" + timeColor + minsLeft + color + ":" + timeColor + secsLeft;
+        }
+    }
+
+
+
+
+    //##########################################################################################
+    //##############################  RANDOMIZATION UTILITIES  #################################
+    //##########################################################################################
 
     /**
      * Get a random number between start and end.
@@ -97,14 +234,60 @@ public class CWUtil {
     }
 
     /**
-     * Capitalize the first character of a string.
-     * @param str
-     * @return Capitalized string
+     * Get a random float (Same as Random.nextFloat())
+     * @return random float between 0-1
      */
-    public static String capitalize(String str) {
-        if (str.length() == 0) return str;
-        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+    public static float randomFloat() {
+        return random.nextFloat();
     }
+
+    /**
+     * Get a random value out of a Array.
+     * @param array The array like String[] or int[]
+     * @return Random value out of array.
+     */
+    public static <T> T random(T[] array) {
+        return array[random(0, array.length-1)];
+    }
+
+    /**
+     * Get a random value out of a List.
+     * @param list The list like List<String>
+     * @return Random value out of list.
+     */
+    public static <T> T random(List<T> list) {
+        return list.get(random(0, list.size() - 1));
+    }
+
+    /**
+     * Get a random value out of a enum
+     * @param clazz The enum class like Material.class
+     * @return Random value out of enum
+     */
+    public static <T extends Enum<?>> T randomEnum(Class<T> clazz){
+        int x = random.nextInt(clazz.getEnumConstants().length);
+        return clazz.getEnumConstants()[x];
+    }
+
+    /**
+     * Get a random {@link org.bukkit.Color}
+     * @return random color
+     */
+    public static Color getRandomColor() {
+        Random rand = new Random();
+        int r = rand.nextInt(255);
+        int g = rand.nextInt(255);
+        int b = rand.nextInt(255);
+
+        return Color.fromRGB(r, g, b);
+    }
+
+
+
+
+    //##########################################################################################
+    //#################################  NUMBER UTILITIES  #####################################
+    //##########################################################################################
 
     /**
      * Convert a string like '1' to a int. Returns -1 if it's invalid.
@@ -146,8 +329,57 @@ public class CWUtil {
         return val;
     }
 
-    public static Color getRandomColor() {
-        //TODO: Implement
-        return null;
+    /**
+     * Get percentage based on 2 ints.
+     * For example small=10 big = 50 will return 10/50*100 = 20.0%
+     * @param smallInt
+     * @param bigInt
+     * @return Percentage as double
+     */
+    public static double getPercentage(int smallInt, int bigInt) {
+        return ((double) (smallInt) / bigInt) * 100;
+    }
+
+
+
+
+    //##########################################################################################
+    //###################################  MISC UTILITIES  #####################################
+    //##########################################################################################
+
+    /**
+     * Delete a directory at specified path.
+     * @param path The path were to delete the directory.
+     * @return True if deleted and false if not deleted.
+     */
+    public static boolean deleteDirectory(File path) {
+        if( path.exists() ) {
+            File files[] = path.listFiles();
+            for(int i=0; i<files.length; i++) {
+                if(files[i].isDirectory()) {
+                    deleteDirectory(files[i]);
+                } else {
+                    files[i].delete();
+                }
+            }
+        }
+        return(path.delete());
+    }
+
+    /**
+     * Teleport a player to a location.
+     * It will unmount any entity and teleport player and entity and then remount.
+     * @param entity The Entity to teleport.
+     * @param loc The location to teleport to.
+     */
+    public static void teleport(Entity entity, Location loc) {
+        if (entity.getVehicle() == null) {
+            entity.teleport(loc);
+        }
+        Entity vehicle = entity.getVehicle();
+        entity.leaveVehicle();
+        vehicle.teleport(loc);
+        entity.teleport(loc);
+        vehicle.setPassenger(entity);
     }
 }

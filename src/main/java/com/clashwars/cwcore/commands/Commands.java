@@ -27,14 +27,14 @@ public class Commands {
         if (label.equalsIgnoreCase("cwtest")) {
             //Console check
             if (!(sender instanceof Player)) {
-                sender.sendMessage(CWUtil.formatMsg("&cThis is a player command only."));
+                sender.sendMessage(CWUtil.formatCWMsg("&cThis is a player command only."));
                 return true;
             }
             Player player = (Player) sender;
 
             //Permission check.
             if (!player.isOp() && !player.hasPermission("cwcore.testcmd")) {
-                player.sendMessage(CWUtil.formatMsg("&cInsuficient permissions."));
+                player.sendMessage(CWUtil.formatCWMsg("&cInsuficient permissions."));
                 return true;
             }
 
