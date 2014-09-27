@@ -178,16 +178,23 @@ public class CWWorldGuard {
     }
 
     public static boolean doesSchematicExists(String name) throws CommandException, FilenameException {
+        if (getSchematicFile(name) != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public static File getSchematicFile(String name) throws FilenameException, CommandException {
         File dir = WorldEdit.getInstance().getWorkingDirectoryFile(WorldEdit.getInstance().getConfiguration().saveDir);
         com.sk89q.worldedit.LocalPlayer lplayer = WGBukkit.getPlugin().getWorldEdit().wrapPlayer(CWCore.inst().getServer().getOnlinePlayers().iterator().next());
         if (lplayer == null) {
-            return false;
+            return null;
         }
         File f = WorldEdit.getInstance().getSafeOpenFile(lplayer, dir, name, "schematic", "schematic");
         if (!f.exists()) {
-            return false;
+            return null;
         }
-        return true;
+        return f;
     }
 
 }
