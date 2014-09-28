@@ -13,6 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -72,6 +73,24 @@ public class CWUtil {
     public static List<String> integrateColor(List<String> str) {
         for (int i = 0; i < str.size(); i++) {
             str.set(i, integrateColor(str.get(i)));
+        }
+        return str;
+    }
+
+    public static String integrateColor(String str, boolean format, boolean magic) {
+        char ch;
+        for (ChatColor c : ChatColor.values()) {
+            ch = c.getChar();
+
+            if (!format && (ch == 'k' || ch == 'l' || ch == 'n' || ch == 'o' || ch == 'm' || ch == 'K' || ch == 'L' || ch == 'N' || ch == 'O' || ch == 'M')) {
+                continue;
+            }
+
+            if (!magic && (ch == 'k' || ch == 'K')) {
+                continue;
+            }
+
+            str = str.replaceAll("&" + ch + "|&" + Character.toUpperCase(ch), c.toString());
         }
         return str;
     }
@@ -151,6 +170,37 @@ public class CWUtil {
      */
     public static List<String> trimFirst(List<String> list) {
         return Arrays.asList(trimFirst(list.toArray(new String[list.size() - 1])));
+    }
+
+    public static String implode(String[] arr, String glue, int start, int end) {
+        String ret = "";
+
+        if (arr == null || arr.length <= 0)
+            return ret;
+
+        for (int i = start; i <= end && i < arr.length; i++) {
+            ret += arr[i] + glue;
+        }
+
+        return ret.substring(0, ret.length() - glue.length());
+    }
+
+    public static String implode(String[] arr, String glue, int start) {
+        return implode(arr, glue, start, arr.length - 1);
+    }
+
+    public static String implode(String[] arr, String glue) {
+        return implode(arr, glue, 0);
+    }
+
+    public static String implode(String[] arr) {
+        return implode(arr, " ");
+    }
+
+    public static String implode(Collection<String> args, String glue) {
+        if (args.isEmpty())
+            return "";
+        return implode(args.toArray(new String[args.size()]), glue);
     }
 
 
