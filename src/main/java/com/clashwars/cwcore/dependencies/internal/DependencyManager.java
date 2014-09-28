@@ -4,6 +4,7 @@ import com.clashwars.cwcore.CWCore;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.earth2me.essentials.Essentials;
+import com.massivecraft.factions.Factions;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.Plugin;
@@ -16,6 +17,7 @@ public class DependencyManager {
     private Economy economy;
     private WorldGuardPlugin worldguard;
     private Essentials essentials;
+    private Factions factions;
     private ProtocolLibrary protocolLib;
     private ProtocolManager protocolManager;
 
@@ -29,6 +31,7 @@ public class DependencyManager {
         loadWorldguard();
         loadEssentials();
         loadProtocolLib();
+        loadFactions();
     }
 
     // ECONOMY
@@ -97,6 +100,27 @@ public class DependencyManager {
     public Essentials getEssentials() {
         return essentials;
     }
+
+
+    //FACTIONS
+    private void loadFactions() {
+        Plugin plugin = cwc.getServer().getPluginManager().getPlugin("Factions");
+        if (plugin == null || !(plugin instanceof Factions)) {
+            cwc.error("Factions dependency couldn't be loaded!");
+            return;
+        }
+        factions = (Factions) plugin;
+        cwc.log("Factions dependency loaded!");
+    }
+
+    /**
+     * Get Factions plugin class.
+     * @return Factions
+     */
+    public Factions getFactions() {
+        return factions;
+    }
+
 
 
     //PROTOCOLLIB
