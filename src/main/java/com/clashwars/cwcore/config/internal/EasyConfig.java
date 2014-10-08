@@ -143,7 +143,7 @@ public abstract class EasyConfig {
     private Object toBukkit(Object in, Field field, String path) throws Exception {
         if (isConfigurationSection(in)) {
             return getMap((ConfigurationSection) in, field, path);
-        } else if (isJSON(in)) {
+        } else if (isJsonLocation(in)) {
             return getLocation((String) in);
         } else {
             return in;
@@ -177,6 +177,18 @@ public abstract class EasyConfig {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private boolean isJsonLocation(Object o) {
+        if (isJSON(o)) {
+            if (o instanceof String) {
+                String s = ((String) o).toLowerCase();
+                if (s.contains("world") && s.contains("x") && s.contains("y") && s.contains("z")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @SuppressWarnings("rawtypes")
