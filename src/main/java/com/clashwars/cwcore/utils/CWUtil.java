@@ -1,9 +1,6 @@
 package com.clashwars.cwcore.utils;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.material.Directional;
@@ -20,6 +17,10 @@ import java.util.Random;
 public class CWUtil {
 
     private static Random random;
+    private static final int MSEC_IN_DAY = 86400000;
+    private static final int MSEC_IN_HOUR = 3600000;
+    private static final int MSEC_IN_MIN = 60000;
+    private static final int MSEC_IN_SEC = 1000;
 
     static {
         random = new Random();
@@ -211,59 +212,47 @@ public class CWUtil {
     //##########################################################################################
 
     /**
-     * Get a string with min:sec based on a long time.
+     * Format a timestamp to a string with days/hours/mins/secs/ms.
+     * For example: '%Dd %H:%M:%S' will be replaced with something like '1d 23:12:52'
+     * The possible options in the syntax are:
+     * %D = Days
+     * %H = Hours
+     * %M = Minutes
+     * %S = Seconds
+     * %MS = MilliSeconds
+     * %% Remainder percentage of seconds with 1 decimal like '%S.%%s' could be '34.1s'
+     * %%% Remainder percentage of seconds with 2 decimals like '%S.%%%s' could be '34.13s'
      * @param time The time to convert to min:sec
-     * @return String with min:sec
+     * @param syntax The string with the above options which will be replaced with the time.
+     * @return Formatted time string.
      */
-    public static String getMinSecStr(long time) {
-        return getMinSecStr(time, null, null);
-    }
+    public static String formatTime(long time, String syntax) {
+        //time = time / 1000;
 
-    /**
-     * Get a string with min:sec based on a long time and give it colors.
-     * @param time The time to convert to min:sec
-     * @param timeColor The color used for the min time and sec time.
-     * @param color The color used for the ':' seperator
-     * @return Colored string with min:sec
-     */
-    public static String getMinSecStr(long time, ChatColor timeColor, ChatColor color) {
-        time = time / 1000;
-        int minsLeft = (int) time / 60;
-        int secsLeft = (int) time - minsLeft * 60;
-        if (color == null || timeColor == null) {
-            return minsLeft + ":" + secsLeft;
-        } else {
-            return "" + timeColor + minsLeft + color + ":" + timeColor + secsLeft;
-        }
-    }
+        int days = (int) time / MSEC_IN_DAY;
+        time = time - days * MSEC_IN_DAY;
 
-    /**
-     * Get a string with hour:min:sec based on a long time.
-     * @param time The time to convert to hour:min:sec
-     * @return String with hour:min:sec
-     */
-    public static String getHourMinSecStr(long time) {
-        return getHourMinSecStr(time, null, null);
-    }
+        int hours = (int) time / MSEC_IN_HOUR;
+        time = time - hours * MSEC_IN_HOUR;
 
-    /**
-     * Get a string with hour:min:sec based on a long time and give it colors.
-     * @param time The time to convert to hour:min:sec
-     * @param timeColor The color used for the min time and sec time.
-     * @param color The color used for the ':' seperator
-     * @return Colored string with hour:min:sec
-     */
-    public static String getHourMinSecStr(long time, ChatColor timeColor, ChatColor color) {
-        time = time / 1000;
-        int hoursLeft = (int) time / 60;
-        time = time - hoursLeft * 60;
-        int minsLeft = (int) time / 60;
-        int secsLeft = (int) time - minsLeft * 60;
-        if (color == null || timeColor == null) {
-            return hoursLeft + ":" + minsLeft + ":" + secsLeft;
-        } else {
-            return "" + timeColor + hoursLeft + color + ":" + timeColor + minsLeft + color + ":" + timeColor + secsLeft;
-        }
+        int mins = (int) time / MSEC_IN_MIN;
+        time = time - mins * MSEC_IN_MIN;
+
+        int secs = (int) time / MSEC_IN_SEC;
+        time = time - secs * MSEC_IN_SEC;
+
+        int ms = (int) time;
+        int ds = (int) time / 100;
+        int fs = (int) time / 10;
+
+        syntax = syntax.replace("%D", "" + days);
+        syntax = syntax.replace("%H", "" + hours);
+        syntax = syntax.replace("%M", "" + mins);
+        syntax = syntax.replace("%S", "" + secs);
+        syntax = syntax.replace("%MS", "" + ms);
+        syntax = syntax.replace("%%%", "" + fs);
+        syntax = syntax.replace("%%", "" + ds);
+        return syntax;
     }
 
 
