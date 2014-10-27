@@ -3,6 +3,7 @@ package com.clashwars.cwcore.utils;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -491,5 +492,44 @@ public class CWUtil {
         locStr += "|yaw=" + String.valueOf(loc.getYaw());
 
         return locStr;
+    }
+
+    public static boolean isPlayerLookingAtHitBox(Player player, Location loc, int width, int height) {
+        boolean isLooking = false;
+        Location loc1 = lookAt(player.getLocation(), loc);
+        Location loc2 = player.getLocation();
+        int yaw1 = (int)Math.abs(loc1.getYaw());
+        int yaw2 = (int)Math.abs(loc2.getYaw());
+        int pitch1 = (int)Math.abs(loc1.getPitch());
+        int pitch2 = (int)Math.abs(loc2.getPitch());
+        if (yaw1 + width > yaw2 || yaw1 - width < yaw2 && pitch1 + height > pitch2 || pitch1 - height < pitch2) {
+            isLooking = true;
+        }
+        return isLooking;
+    }
+
+    public static Location lookAt(Location loc, Location target) {
+        loc = loc.clone();
+        double dx = target.getX() - loc.getX();
+        double dy = target.getY() - loc.getY();
+        double dz = target.getZ() - loc.getZ();
+
+        if (dx != 0) {
+            if (dx < 0) {
+                loc.setYaw((float)(1.5 * Math.PI));
+            } else {
+                loc.setYaw((float)(0.5 * Math.PI));
+            }
+            loc.setYaw((float)loc.getYaw() - (float)Math.atan(dz / dx));
+        } else if (dz < 0) {
+            loc.setYaw((float)Math.PI);
+        }
+
+        double dxz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
+
+        loc.setPitch((float)-Math.atan(dy / dxz));
+        loc.setYaw(-loc.getYaw() * 180f / (float)Math.PI);
+        loc.setPitch(loc.getPitch() * 180f / (float)Math.PI);
+        return loc;
     }
 }
