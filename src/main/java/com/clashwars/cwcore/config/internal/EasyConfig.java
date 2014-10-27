@@ -2,7 +2,6 @@ package com.clashwars.cwcore.config.internal;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -183,7 +182,7 @@ public abstract class EasyConfig {
         if (isJSON(o)) {
             if (o instanceof String) {
                 String s = ((String) o).toLowerCase();
-                if (s.contains("world") && s.contains("x") && s.contains("y") && s.contains("z")) {
+                if (s.contains("world\":") && s.contains("x\":") && s.contains("y\":") && s.contains("z\":")) {
                     return true;
                 }
             }
@@ -203,14 +202,6 @@ public abstract class EasyConfig {
     private boolean isLocation(Object o) {
         try {
             return (Location) o != null;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private boolean isMaterial(Object o) {
-        try {
-            return (Material) o != null;
         } catch (Exception e) {
             return false;
         }

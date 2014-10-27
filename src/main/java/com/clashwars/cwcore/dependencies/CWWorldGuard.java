@@ -152,8 +152,8 @@ public class CWWorldGuard {
      * @throws DataException
      * @throws IOException
      */
-    public static void pasteSchematic(World world, File file, Location location, boolean noAir, int rotation) throws MaxChangedBlocksException, DataException, IOException {
-        pasteSchematic(world, file, BukkitUtil.toVector(location), noAir, rotation);
+    public static CuboidClipboard pasteSchematic(World world, File file, Location location, boolean noAir, int rotation, boolean offset) throws MaxChangedBlocksException, DataException, IOException {
+        return pasteSchematic(world, file, BukkitUtil.toVector(location), noAir, rotation, offset);
     }
 
     /**
@@ -167,14 +167,18 @@ public class CWWorldGuard {
      * @throws IOException
      * @throws MaxChangedBlocksException
      */
-    public static void pasteSchematic(World world, File file, Vector origin, boolean noAir, int rotation) throws DataException, IOException, MaxChangedBlocksException {
+    public static CuboidClipboard pasteSchematic(World world, File file, Vector origin, boolean noAir, int rotation, boolean offset) throws DataException, IOException, MaxChangedBlocksException {
         if (rotation != 90 && rotation != 180 && rotation != 270 && rotation != 360 && rotation != 0) {
             rotation = 0;
         }
         EditSession es = new EditSession(new BukkitWorld(world), 999999999);
         CuboidClipboard cc = CuboidClipboard.loadSchematic(file);
         cc.rotate2D(rotation);
+        if (offset) {
+            origin.add(cc.getOffset());
+        }
         cc.paste(es, origin, noAir);
+        return cc;
     }
 
     public static boolean doesSchematicExists(String name) throws CommandException, FilenameException {

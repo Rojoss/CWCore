@@ -1,18 +1,14 @@
 package com.clashwars.cwcore.utils;
 
 import org.bukkit.*;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.material.Directional;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.File;
-import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class CWUtil {
 
@@ -342,6 +338,19 @@ public class CWUtil {
     }
 
     /**
+     * Convert a string like '1.5' to a double. Returns -1 if it's invalid.
+     * @param str
+     * @return double
+     */
+    public static double getDouble(String str) {
+        try {
+            return Double.parseDouble(str);
+        } catch (NumberFormatException e) {
+        }
+        return -1;
+    }
+
+    /**
      * Convert a string like '1.12' to a float. Returns -1 if it's invalid.
      * @param str
      * @return float
@@ -420,5 +429,67 @@ public class CWUtil {
         vehicle.teleport(loc);
         entity.teleport(loc);
         vehicle.setPassenger(entity);
+    }
+
+    public static Location getBlockCenterByBlockface(Location blockLoc, BlockFace face) {
+        if (face == BlockFace.DOWN) {
+            return blockLoc.add(0.5f, 0.0f, 0.5f);
+        } else if (face == BlockFace.UP) {
+            return blockLoc.add(0.5f, 1.0f, 0.5f);
+        } else if (face == BlockFace.NORTH) {
+            return blockLoc.add(0.5f, 0.5f, 0.0f);
+        } else if (face == BlockFace.EAST) {
+            return blockLoc.add(1.0f, 0.5f, 0.5f);
+        } else if (face == BlockFace.SOUTH) {
+            return blockLoc.add(0.5f, 0.5f, 1.0f);
+        } else if (face == BlockFace.WEST) {
+            return blockLoc.add(0.0f, 0.5f, 0.5f);
+        }
+        return blockLoc.add(0.5f, 0.5f, 0.5f);
+    }
+
+    public static Location locFromString(String locStr) {
+        Location loc = null;
+        if (locStr == null || locStr.isEmpty()) {
+            return loc;
+        }
+        HashMap<String, String> dataMap = new HashMap<String, String>();
+        String[] dataArray = locStr.split("\\|");
+        for (String data : dataArray) {
+            String[] data2 = null;
+            if (data.contains("\\=")) {
+                data2 = data.split("\\=");
+            } else if (data.contains("\u003d")) {
+                data2 = data.split("\u003d");
+            }
+            if (data2.length >= 2) {
+                dataMap.put(data2[0], data2[1]);
+            }
+        }
+        if (dataMap.containsKey("x") && dataMap.containsKey("y") && dataMap.containsKey("z") && dataMap.containsKey("world")) {
+            loc = new Location(Bukkit.getWorld(dataMap.get("world")), getDouble(dataMap.get("x")), getDouble(dataMap.get("y")), getDouble(dataMap.get("z")));
+            if (dataMap.containsKey("yaw")) {
+                loc.setYaw(getFloat(dataMap.get("yaw")));
+            }
+            if (dataMap.containsKey("pitch")) {
+                loc.setPitch(getFloat(dataMap.get("pitch")));
+            }
+        }
+        return loc;
+    }
+
+    public static String locToString(Location loc) {
+        if (loc == null) {
+            return null;
+        }
+        String locStr = "";
+        locStr += "world=" + loc.getWorld().getName();
+        locStr += "|x=" + String.valueOf(loc.getX());
+        locStr += "|y=" + String.valueOf(loc.getY());
+        locStr += "|z=" + String.valueOf(loc.getZ());
+        locStr += "|pitch=" + String.valueOf(loc.getPitch());
+        locStr += "|yaw=" + String.valueOf(loc.getYaw());
+
+        return locStr;
     }
 }
