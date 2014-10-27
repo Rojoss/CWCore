@@ -1,9 +1,11 @@
 package com.clashwars.cwcore.utils;
 
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.BlockIterator;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -531,5 +533,59 @@ public class CWUtil {
         loc.setYaw(-loc.getYaw() * 180f / (float)Math.PI);
         loc.setPitch(loc.getPitch() * 180f / (float)Math.PI);
         return loc;
+    }
+
+    /**
+     * Get a player in line of sight within right.
+     * This is a heavy method so make sure the player can't spam it and that it's not called every tick for example.
+     * @param player The player
+     * @param range The range how far to check.
+     * @return Targeted player if one is found else return null.
+     */
+    protected Player getTargetedPlayer(Player player, int range) {
+        Player target = null;
+
+        //Get list of nearby players.
+        List<Entity> ne = player.getNearbyEntities(range, range, range);
+        ArrayList<Player> players = new ArrayList<Player>();
+        for (Entity e : ne) {
+            if (e instanceof Player) {
+                players.add((Player)e);
+            }
+        }
+
+        //Create a block iterator for all blocks in range.
+        //This will get all blocks in a line were the player is looking till range.
+        BlockIterator bi;
+        try {
+            bi = new BlockIterator(player, range);
+        } catch (IllegalStateException e) {
+            return null;
+        }
+
+        Block b;
+        Location l;
+        int bx, by, bz;
+        double ex, ey, ez;
+        //Loop through all blocks in the itterator.
+        while (bi.hasNext()) {
+            b = bi.next();
+            bx = b.getX();
+            by = b.getY();
+            bz = b.getZ();
+            //At each block location loop through the players.
+            for (Player p : players) {
+                l = p.getLocation();
+                ex = l.getX();
+                ey = l.getY();
+                ez = l.getZ();
+                //Check if the location of the player is the same as the block with offsets for the hitbox.
+                if ((bx - .75 <= ex && ex <= bx + 1.75) && (bz - .75 <= ez && ez <= bz + 1.75) && (by - 1 <= ey && ey <= by + 2.5)) {
+                    target = p;
+                    return target;
+                }
+            }
+        }
+        return null;
     }
 }
