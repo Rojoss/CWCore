@@ -542,7 +542,7 @@ public class CWUtil {
      * @param range The range how far to check.
      * @return Targeted player if one is found else return null.
      */
-    protected Player getTargetedPlayer(Player player, int range) {
+    public static Player getTargetedPlayer(Player player, int range) {
         Player target = null;
 
         //Get list of nearby players.
