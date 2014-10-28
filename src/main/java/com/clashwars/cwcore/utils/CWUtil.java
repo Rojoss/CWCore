@@ -463,13 +463,12 @@ public class CWUtil {
             }
         } else {
             OutputStream out;
-            try (InputStream in = new FileInputStream(fromFile)) {
-                out = new FileOutputStream(toFile);
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = in.read(buffer)) > 0) {
-                    out.write(buffer, 0, length);
-                }
+            InputStream in = new FileInputStream(fromFile);
+            out = new FileOutputStream(toFile);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = in.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
             }
             out.close();
         }
