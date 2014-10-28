@@ -1,5 +1,6 @@
 package com.clashwars.cwcore.utils;
 
+import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -471,6 +472,21 @@ public class CWUtil {
                 out.write(buffer, 0, length);
             }
             out.close();
+        }
+    }
+
+    /**
+     * Delete a folder. (using appache FileUtils)
+     * Credits to multiverse.
+     * @param file The folder to delete.
+     * @return true if the folder was successfully deleted.
+     */
+    public static boolean deleteFolder(File file) {
+        try {
+            FileUtils.deleteDirectory(file);
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 
