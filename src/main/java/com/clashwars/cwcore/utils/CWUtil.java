@@ -5,12 +5,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.util.BlockIterator;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.bukkit.util.*;
+import org.bukkit.util.Vector;
 
-import java.io.File;
+import java.io.*;
 import java.util.*;
 
 public class CWUtil {
@@ -77,6 +75,13 @@ public class CWUtil {
         return str;
     }
 
+    /**
+     * Integrate colors in a string but you can set what you want to format.
+     * @param str The string to format.
+     * @param format Format colors?
+     * @param magic Format magic symbol?
+     * @return Formatted string,
+     */
     public static String integrateColor(String str, boolean format, boolean magic) {
         char ch;
         for (ChatColor c : ChatColor.values()) {
@@ -395,7 +400,7 @@ public class CWUtil {
 
 
     //##########################################################################################
-    //###################################  MISC UTILITIES  #####################################
+    //###################################  FILE UTILITIES  #####################################
     //##########################################################################################
 
     /**
@@ -418,6 +423,64 @@ public class CWUtil {
     }
 
     /**
+     * Get a list of files with all directories found at the given path.
+     * If the path doesn't exist it will return null and if no directories are found a empty list.
+     * @param path The src path/file were to look for directories.
+     * @return List with Files of directory paths or null if path specified doesn't exist.
+     */
+    public static List<File> getDirectories(File path) {
+        List<File> directories = new ArrayList<File>();
+        if (path.exists()) {
+            File files[] = path.listFiles();
+            for(int i=0; i<files.length; i++) {
+                if(files[i].isDirectory()) {
+                    directories.add(files[i]);
+                }
+            }
+            return directories;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Copy a directory and all directories/files in it to another place.
+     * It will throw an exception if it failed.
+     * @param fromFile The directory to copy.
+     * @param toFile The destination.
+     * @throws IOException
+     */
+    public static void copyDirectory(File fromFile, File toFile) throws IOException {
+        if (fromFile.isDirectory()) {
+            if (!toFile.exists()) {
+                toFile.mkdir();
+            }
+            String files[] = fromFile.list();
+            for (String file : files) {
+                File srcFile = new File(fromFile, file);
+                File destFile = new File(toFile, file);
+                copyDirectory(srcFile, destFile);
+            }
+        } else {
+            OutputStream out;
+            try (InputStream in = new FileInputStream(fromFile)) {
+                out = new FileOutputStream(toFile);
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = in.read(buffer)) > 0) {
+                    out.write(buffer, 0, length);
+                }
+            }
+            out.close();
+        }
+    }
+
+
+    //##########################################################################################
+    //#################################  LOCATION UTILITIES  ###################################
+    //##########################################################################################
+
+    /**
      * Teleport a player to a location.
      * It will unmount any entity and teleport player and entity and then remount.
      * @param entity The Entity to teleport.
@@ -434,6 +497,28 @@ public class CWUtil {
         vehicle.setPassenger(entity);
     }
 
+    /**
+     * Test if a location is within a cuboid of the 2 specified locations.
+     * @param loc The location to check.
+     * @param pos1 First location of cuboid
+     * @param pos2 Second location of cuboid
+     * @return True if loc is within and false if not.
+     */
+    public static boolean isLocWithin(Location loc, Location pos1, Location pos2) {
+        Vector min = new Vector(Math.min(pos1.getBlockX(), pos2.getBlockX()), Math.min(pos1.getBlockY(), pos2.getBlockY()), Math.min(pos1.getBlockZ(), pos2.getBlockZ()));
+        Vector max = new Vector(Math.max(pos1.getBlockX(), pos2.getBlockX()) -1, Math.max(pos1.getBlockY(), pos2.getBlockY()) -1, Math.max(pos1.getBlockZ(), pos2.getBlockZ()) -1);
+        if (loc.getX() >= min.getX() && loc.getX() <= max.getX() && loc.getY() >= min.getY() && loc.getY() <= max.getY() && loc.getZ() >= min.getZ() && loc.getZ() <= max.getZ()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get the center of the given blockface at the given block.
+     * @param blockLoc The location of the block.
+     * @param face The block face to get the center at.
+     * @return Modified location with offset towards center of blockface.
+     */
     public static Location getBlockCenterByBlockface(Location blockLoc, BlockFace face) {
         if (face == BlockFace.DOWN) {
             return blockLoc.add(0.5f, 0.0f, 0.5f);
@@ -451,6 +536,68 @@ public class CWUtil {
         return blockLoc.add(0.5f, 0.5f, 0.5f);
     }
 
+
+    /**
+     * Check if a player is looking at the specified location.
+     * The width and height are to set the bounding box the larger the size the less accurate the check will be.
+     * @param player The player to do the check with.
+     * @param loc The target location to check.
+     * @param width Width margin/offset
+     * @param height Height margin/offset
+     * @return True if player is looking at it else False.
+     */
+    public static boolean isPlayerLookingAtHitBox(Player player, Location loc, int width, int height) {
+        boolean isLooking = false;
+        Location loc1 = lookAt(player.getLocation(), loc);
+        Location loc2 = player.getLocation();
+        int yaw1 = (int)Math.abs(loc1.getYaw());
+        int yaw2 = (int)Math.abs(loc2.getYaw());
+        int pitch1 = (int)Math.abs(loc1.getPitch());
+        int pitch2 = (int)Math.abs(loc2.getPitch());
+        if (yaw1 + width > yaw2 || yaw1 - width < yaw2 && pitch1 + height > pitch2 || pitch1 - height < pitch2) {
+            isLooking = true;
+        }
+        return isLooking;
+    }
+
+    /**
+     * Modify a location to look at another location.
+     * It will modify the pitch/yaw only.
+     * @param loc The location to modify
+     * @param target The location to make loc look at.
+     * @return Modified location looking at the target location
+     */
+    public static Location lookAt(Location loc, Location target) {
+        loc = loc.clone();
+        double dx = target.getX() - loc.getX();
+        double dy = target.getY() - loc.getY();
+        double dz = target.getZ() - loc.getZ();
+
+        if (dx != 0) {
+            if (dx < 0) {
+                loc.setYaw((float)(1.5 * Math.PI));
+            } else {
+                loc.setYaw((float)(0.5 * Math.PI));
+            }
+            loc.setYaw((float)loc.getYaw() - (float)Math.atan(dz / dx));
+        } else if (dz < 0) {
+            loc.setYaw((float)Math.PI);
+        }
+
+        double dxz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
+
+        loc.setPitch((float)-Math.atan(dy / dxz));
+        loc.setYaw(-loc.getYaw() * 180f / (float)Math.PI);
+        loc.setPitch(loc.getPitch() * 180f / (float)Math.PI);
+        return loc;
+    }
+
+    /**
+     * Get a location from string (string generated by locToString())
+     * If the location string is invalid it will return null.
+     * @param locStr The string with location data.
+     * @return Location if valid else null.
+     */
     public static Location locFromString(String locStr) {
         Location loc = null;
         if (locStr == null || locStr.isEmpty()) {
@@ -481,6 +628,12 @@ public class CWUtil {
         return loc;
     }
 
+    /**
+     * Convert a location to string.
+     * Example: 'world=world|x=1|y=12|z=-123|yaw=0.0|pitch=0.0'
+     * @param loc The location to convert.
+     * @return String with location data.
+     */
     public static String locToString(Location loc) {
         if (loc == null) {
             return null;
@@ -496,44 +649,12 @@ public class CWUtil {
         return locStr;
     }
 
-    public static boolean isPlayerLookingAtHitBox(Player player, Location loc, int width, int height) {
-        boolean isLooking = false;
-        Location loc1 = lookAt(player.getLocation(), loc);
-        Location loc2 = player.getLocation();
-        int yaw1 = (int)Math.abs(loc1.getYaw());
-        int yaw2 = (int)Math.abs(loc2.getYaw());
-        int pitch1 = (int)Math.abs(loc1.getPitch());
-        int pitch2 = (int)Math.abs(loc2.getPitch());
-        if (yaw1 + width > yaw2 || yaw1 - width < yaw2 && pitch1 + height > pitch2 || pitch1 - height < pitch2) {
-            isLooking = true;
-        }
-        return isLooking;
-    }
 
-    public static Location lookAt(Location loc, Location target) {
-        loc = loc.clone();
-        double dx = target.getX() - loc.getX();
-        double dy = target.getY() - loc.getY();
-        double dz = target.getZ() - loc.getZ();
 
-        if (dx != 0) {
-            if (dx < 0) {
-                loc.setYaw((float)(1.5 * Math.PI));
-            } else {
-                loc.setYaw((float)(0.5 * Math.PI));
-            }
-            loc.setYaw((float)loc.getYaw() - (float)Math.atan(dz / dx));
-        } else if (dz < 0) {
-            loc.setYaw((float)Math.PI);
-        }
+    //##########################################################################################
+    //###################################  MISC UTILITIES  #####################################
+    //##########################################################################################
 
-        double dxz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
-
-        loc.setPitch((float)-Math.atan(dy / dxz));
-        loc.setYaw(-loc.getYaw() * 180f / (float)Math.PI);
-        loc.setPitch(loc.getPitch() * 180f / (float)Math.PI);
-        return loc;
-    }
 
     /**
      * Get a player in line of sight within right.
