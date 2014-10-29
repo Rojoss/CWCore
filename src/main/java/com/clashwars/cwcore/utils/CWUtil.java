@@ -490,6 +490,20 @@ public class CWUtil {
         }
     }
 
+    public static boolean deleteFolder2(File path) {
+        if(path.exists()) {
+            File files[] = path.listFiles();
+            for(int i=0; i<files.length; i++) {
+                if(files[i].isDirectory()) {
+                    deleteFolder2(files[i]);
+                } else {
+                    files[i].delete();
+                }
+            }
+        }
+        return(path.delete());
+    }
+
 
     //##########################################################################################
     //#################################  LOCATION UTILITIES  ###################################
@@ -619,13 +633,11 @@ public class CWUtil {
             return loc;
         }
         HashMap<String, String> dataMap = new HashMap<String, String>();
-        String[] dataArray = locStr.split("\\|");
+        String[] dataArray = locStr.split(" \\$");
         for (String data : dataArray) {
             String[] data2 = null;
-            if (data.contains("\\=")) {
-                data2 = data.split("\\=");
-            } else if (data.contains("\u003d")) {
-                data2 = data.split("\u003d");
+            if (data.contains("\\|")) {
+                data2 = data.split("\\|");
             }
             if (data2.length >= 2) {
                 dataMap.put(data2[0], data2[1]);
@@ -654,12 +666,12 @@ public class CWUtil {
             return null;
         }
         String locStr = "";
-        locStr += "world=" + loc.getWorld().getName();
-        locStr += "|x=" + String.valueOf(loc.getX());
-        locStr += "|y=" + String.valueOf(loc.getY());
-        locStr += "|z=" + String.valueOf(loc.getZ());
-        locStr += "|pitch=" + String.valueOf(loc.getPitch());
-        locStr += "|yaw=" + String.valueOf(loc.getYaw());
+        locStr += "world|" + loc.getWorld().getName();
+        locStr += "$x|" + String.valueOf(loc.getX());
+        locStr += "$y|" + String.valueOf(loc.getY());
+        locStr += "$z|" + String.valueOf(loc.getZ());
+        locStr += "$pitch|" + String.valueOf(loc.getPitch());
+        locStr += "$yaw|" + String.valueOf(loc.getYaw());
 
         return locStr;
     }
