@@ -689,10 +689,10 @@ public class CWUtil {
             return loc;
         }
         HashMap<String, String> dataMap = new HashMap<String, String>();
-        String[] dataArray = locStr.split(" \\$");
+        String[] dataArray = locStr.split("\\$");
         for (String data : dataArray) {
             String[] data2 = null;
-            if (data.contains("\\|")) {
+            if (data.contains("|")) {
                 data2 = data.split("\\|");
             }
             if (data2 != null && data2.length >= 2) {
