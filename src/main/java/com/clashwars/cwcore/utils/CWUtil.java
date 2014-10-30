@@ -397,8 +397,64 @@ public class CWUtil {
         return ((double) (smallInt) / bigInt) * 100;
     }
 
+    /**
+     * Get a entry from a map with the lowest value.
+     * It works for Integer, Double and Float.
+     * @param map the map to check.
+     * @return Entry<K, V> with the lowest value.
+     */
+    public static <K, V> Map.Entry<K, V> getMinByValue(Map<K, V> map) {
+        Map.Entry<K, V> min = null;
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (min.getValue() instanceof Integer && entry.getValue() instanceof Integer) {
+                if (min == null || getInt(min.getValue().toString()) > getInt(min.getValue().toString())) {
+                    min = entry;
+                }
+            } else if (min.getValue() instanceof Double && entry.getValue() instanceof Double) {
+                if (min == null || getDouble(min.getValue().toString()) > getDouble(min.getValue().toString())) {
+                    min = entry;
+                }
+            } else if (min.getValue() instanceof Float && entry.getValue() instanceof Float) {
+                if (min == null || getFloat(min.getValue().toString()) > getFloat(min.getValue().toString())) {
+                    min = entry;
+                }
+            }
+            if (min == null) {
+                min = entry;
+            }
+        }
+        return min;
+    }
 
 
+    /**
+     * Get a entry from a map with the lowest key.
+     * It works for Integer, Double and Float.
+     * @param map the map to check.
+     * @return Entry<K, V> with the lowest key.
+     */
+    public static <K, V> Map.Entry<K, V> getMinByKey(Map<K, V> map) {
+        Map.Entry<K, V> min = null;
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (min.getKey() instanceof Integer && entry.getKey() instanceof Integer) {
+                if (min == null || getInt(min.getKey().toString()) > getInt(min.getKey().toString())) {
+                    min = entry;
+                }
+            } else if (min.getKey() instanceof Double && entry.getKey() instanceof Double) {
+                if (min == null || getDouble(min.getKey().toString()) > getDouble(min.getKey().toString())) {
+                    min = entry;
+                }
+            } else if (min.getKey() instanceof Float && entry.getKey() instanceof Float) {
+                if (min == null || getFloat(min.getKey().toString()) > getFloat(min.getKey().toString())) {
+                    min = entry;
+                }
+            }
+            if (min == null) {
+                min = entry;
+            }
+        }
+        return min;
+    }
 
     //##########################################################################################
     //###################################  FILE UTILITIES  #####################################
@@ -735,5 +791,21 @@ public class CWUtil {
             }
         }
         return null;
+    }
+
+    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue( Map<K, V> map ) {
+        List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
+            @Override
+            public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        } );
+
+        Map<K, V> result = new LinkedHashMap<>();
+        for (Map.Entry<K, V> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
     }
 }
