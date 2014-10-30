@@ -4,6 +4,7 @@ import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.comphenix.protocol.wrappers.nbt.NbtCompound;
 import com.comphenix.protocol.wrappers.nbt.NbtFactory;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -395,6 +396,22 @@ public class CWItem extends ItemStack {
 
     public CWItem makeGlowing() {
         //TODO: Make this with protocol stuff...
+        return this;
+    }
+
+    /**
+     * Replace all \n symbols in the lore with new lines in the lore.
+     * @return CWItem
+     */
+    public CWItem replaceLoreNewLines() {
+        if (getLore() != null && getLore().size() > 0) {
+            List<String> loreList = new ArrayList<String>();
+            List<String> loreClone = getLore();
+            for (String lore : loreClone) {
+                loreList.addAll(CWUtil.splitToList(lore, "\\|\\|", false));
+        }
+            setLore(loreList);
+        }
         return this;
     }
 
