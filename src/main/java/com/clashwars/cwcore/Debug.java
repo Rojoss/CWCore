@@ -18,7 +18,7 @@ public class Debug {
      * @see #log(String, Object)
      */
     public static void log(Object obj) {
-        log("" + obj);
+        log("", obj);
     }
 
     /**
@@ -36,7 +36,7 @@ public class Debug {
      * @see #bc(String, Object)
      */
     public static void bc(Object obj) {
-        bc("" + obj);
+        bc("", obj);
     }
 
     /**
@@ -54,7 +54,7 @@ public class Debug {
      * @see #send(org.bukkit.entity.Player, String, Object)
      */
     public static void send(Player player, Object obj) {
-        send(player, "" + obj);
+        send(player, "", obj);
     }
 
     /**
@@ -72,7 +72,7 @@ public class Debug {
      * @see #bcOps(String, Object)
      */
     public static void bcOps(Object obj) {
-        bcOps("" + obj);
+        bcOps("", obj);
     }
 
     /**
