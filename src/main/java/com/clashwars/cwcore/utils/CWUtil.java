@@ -812,4 +812,39 @@ public class CWUtil {
         }
         return result;
     }
+
+    /**
+     * Get a Set<Block> with all blocks found between the 2 locations.
+     * You can specify a list of materials that have to match.
+     * So if you want to find all chests within a area you add 'new Material[] {Material.CHEST}'
+     * If material is null it will just all add blocks in the area.
+     * @param pos1 The first position
+     * @param pos2 The second position
+     * @param filter Array with block materials.
+     * @return Set with blocks found in the area.
+     */
+    public static Set<Block> findBlocksInArea(Location pos1, Location pos2, Material[] filter) {
+        Set<Block> blocks = new HashSet<Block>();
+        List<Material> filterList = filter == null ? new ArrayList<Material>() : Arrays.asList(filter);
+        Vector min = new Vector(Math.min(pos1.getBlockX(), pos2.getBlockX()), Math.min(pos1.getBlockY(), pos2.getBlockY()), Math.min(pos1.getBlockZ(), pos2.getBlockZ()));
+        Vector max = new Vector(Math.max(pos1.getBlockX(), pos2.getBlockX()) -1, Math.max(pos1.getBlockY(), pos2.getBlockY()) -1, Math.max(pos1.getBlockZ(), pos2.getBlockZ()) -1);
+        int xDiff = max.getBlockX() - min.getBlockX();
+        int yDiff = max.getBlockY() - min.getBlockY();
+        int zDiff = max.getBlockZ() - min.getBlockZ();
+
+        Block block;
+        for (int x = 0; x < xDiff; x++) {
+            for (int z = 0; z < zDiff; z++) {
+                for (int y = 0; y < yDiff; y++) {
+                    block = pos1.getWorld().getBlockAt(min.getBlockX() + x,  min.getBlockY() + y, min.getBlockZ() + z);
+                    if (filterList == null) {
+                        blocks.add(block);
+                    } else if (filterList.contains(block.getType())) {
+                        blocks.add(block);
+                    }
+                }
+            }
+        }
+        return blocks;
+    }
 }
