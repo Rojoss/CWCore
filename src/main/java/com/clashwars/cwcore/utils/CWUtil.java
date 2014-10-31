@@ -1,11 +1,14 @@
 package com.clashwars.cwcore.utils;
 
+import com.clashwars.cwcore.helpers.CWItem;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.*;
 import org.bukkit.util.Vector;
 
@@ -735,6 +738,132 @@ public class CWUtil {
 
 
     //##########################################################################################
+    //#################################  ITEM/INV UTILITIES  ###################################
+    //##########################################################################################
+
+    /**
+     * Remove a certain amount of items from the given ItemStack.
+     * If there is more amt or equal to the item it will remove the item.
+     * If there is a remainder what didn't get removed it will be returned.
+     * @param item The item to remove items from.
+     * @param amt The amount of items to try remove.
+     * @return Amount of items that didn't get removed. (remainder)
+     */
+    public static int removeItemsFromStack(ItemStack item, int amt) {
+        int stackAmt = item.getAmount();
+        if (stackAmt > amt) {
+            item.setAmount(stackAmt - amt);
+            return 0;
+        }
+        item.setType(Material.AIR);
+        item.setAmount(0);
+        if (stackAmt == amt) {
+            return 0;
+        }
+        return (amt -= stackAmt);
+    }
+
+
+    /**
+     * @see #removeItems(org.bukkit.inventory.Inventory, org.bukkit.inventory.ItemStack, int, boolean, boolean)
+     */
+    public static int removeItems(Inventory inv, ItemStack item) {
+        return removeItems(inv, item, item.getAmount(), false, false);
+    }
+
+    /**
+     * @see #removeItems(org.bukkit.inventory.Inventory, org.bukkit.inventory.ItemStack, int, boolean, boolean)
+     */
+    public static int removeItems(Inventory inv, ItemStack item, int amt) {
+        return removeItems(inv, item, amt, false, false);
+    }
+
+    /**
+     * @see #removeItems(org.bukkit.inventory.Inventory, org.bukkit.inventory.ItemStack, int, boolean, boolean)
+     */
+    public static int removeItems(Inventory inv, ItemStack item, boolean checkName) {
+        return removeItems(inv, item, item.getAmount(), checkName, false);
+    }
+
+    /**
+     * @see #removeItems(org.bukkit.inventory.Inventory, org.bukkit.inventory.ItemStack, int, boolean, boolean)
+     */
+    public static int removeItems(Inventory inv, ItemStack item, int amt, boolean checkName) {
+        return removeItems(inv, item, amt, checkName, false);
+    }
+
+    /**
+     * Remove items from a Inventory.
+     * It'll check for items of the ItemStack you specified and it will try and remove the specified amt.
+     * If you set checkName to true it will only remove items with the exact same name and the same goes for durability.
+     * If there is a remainder what didn't get removed it will be returned.
+     * @param inv The inventory to remove the items from.
+     * @param item The item to remove (used to check type, durability, name etc)
+     * @param amt The amount of items to try and remove.
+     * @param checkName If set to true only items matching the name will be removed.
+     * @param checkDurability If set to true only items matching durability will be removed.
+     * @return Amount of items that didn't get removed. (remainder)
+     */
+    public static int removeItems(Inventory inv, ItemStack item, int amt, boolean checkName, boolean checkDurability) {
+        int stackAmt;
+        for (ItemStack stack : inv.getContents()) {
+            //Check if items match
+            if (!compareItems(stack, item, checkName, checkDurability)) {
+                continue;
+            }
+
+            //Remove the items
+            stackAmt = stack.getAmount();
+            if (stackAmt > amt) {
+                stack.setAmount(stackAmt - amt);
+                return 0;
+            }
+            stack.setType(Material.AIR);
+            stack.setAmount(0);
+            if (stackAmt == amt) {
+                return 0;
+            }
+            amt -= stackAmt;
+        }
+        return amt;
+    }
+
+
+    /**
+     * @see #compareItems(org.bukkit.inventory.ItemStack, org.bukkit.inventory.ItemStack, boolean, boolean)
+     */
+    public static boolean compareItems(ItemStack stack1, ItemStack stack2) {
+        return compareItems(stack1, stack2, false, true);
+    }
+
+    /**
+     * Compare 2 ItemStack's with each other.
+     * If you set checkName to true it will only be called equal when both items have the same name and the same goes for durability.
+     * @param stack1 ItemStack 1 to compare with stack 2.
+     * @param stack2 ItemStack 2 to compare with stack 1.
+     * @param checkName If set to true only items matching the name will be removed.
+     * @param checkDurability If set to true only items matching durability will be removed.
+     * @return
+     */
+    public static boolean compareItems(ItemStack stack1, ItemStack stack2, boolean checkName, boolean checkDurability) {
+        if (stack1.getType() != stack2.getType()) {
+            return false;
+        }
+        if (checkDurability && stack1.getDurability() != stack2.getDurability()) {
+            return false;
+        }
+        if (checkName && stack2.hasItemMeta()) {
+            if (!stack1.hasItemMeta() || !stack1.getItemMeta().getDisplayName().equalsIgnoreCase(stack2.getItemMeta().getDisplayName())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+
+    //##########################################################################################
     //###################################  MISC UTILITIES  #####################################
     //##########################################################################################
 
@@ -827,15 +956,15 @@ public class CWUtil {
         Set<Block> blocks = new HashSet<Block>();
         List<Material> filterList = filter == null ? new ArrayList<Material>() : Arrays.asList(filter);
         Vector min = new Vector(Math.min(pos1.getBlockX(), pos2.getBlockX()), Math.min(pos1.getBlockY(), pos2.getBlockY()), Math.min(pos1.getBlockZ(), pos2.getBlockZ()));
-        Vector max = new Vector(Math.max(pos1.getBlockX(), pos2.getBlockX()) -1, Math.max(pos1.getBlockY(), pos2.getBlockY()) -1, Math.max(pos1.getBlockZ(), pos2.getBlockZ()) -1);
+        Vector max = new Vector(Math.max(pos1.getBlockX(), pos2.getBlockX()), Math.max(pos1.getBlockY(), pos2.getBlockY()), Math.max(pos1.getBlockZ(), pos2.getBlockZ()));
         int xDiff = max.getBlockX() - min.getBlockX();
         int yDiff = max.getBlockY() - min.getBlockY();
         int zDiff = max.getBlockZ() - min.getBlockZ();
 
         Block block;
-        for (int x = 0; x < xDiff; x++) {
-            for (int z = 0; z < zDiff; z++) {
-                for (int y = 0; y < yDiff; y++) {
+        for (int x = 0; x <= xDiff; x++) {
+            for (int z = 0; z <= zDiff; z++) {
+                for (int y = 0; y <= yDiff; y++) {
                     block = pos1.getWorld().getBlockAt(min.getBlockX() + x,  min.getBlockY() + y, min.getBlockZ() + z);
                     if (filterList == null) {
                         blocks.add(block);
