@@ -24,7 +24,7 @@ public class BleedEffect extends Effect {
     /**
      * Color of blood. Default is red (152)
      */
-    public int color = 152;
+    public int itemID = 152;
 
     public BleedEffect(EffectManager effectManager) {
         super(effectManager);
@@ -38,7 +38,7 @@ public class BleedEffect extends Effect {
         // Location to spawn the blood-item.
         Location location = getLocation();
         location.add(0, RandomUtils.random.nextFloat() * 1.75f, 0);
-        location.getWorld().playEffect(location, org.bukkit.Effect.STEP_SOUND, color);
+        location.getWorld().playEffect(location, org.bukkit.Effect.STEP_SOUND, itemID);
 
         Entity entity = getEntity();
         if (hurt && entity != null) {

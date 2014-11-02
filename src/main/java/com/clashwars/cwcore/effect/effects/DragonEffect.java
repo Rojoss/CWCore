@@ -73,7 +73,7 @@ public class DragonEffect extends Effect {
                 VectorUtils.rotateAroundAxisX(v, rndAngle.get(i));
                 VectorUtils.rotateAroundAxisZ(v, -location.getPitch() * MathUtils.degreesToRadians);
                 VectorUtils.rotateAroundAxisY(v, -(location.getYaw() + 90) * MathUtils.degreesToRadians);
-                particle.display(location.add(v), visibleRange, 0, 0, 0, 0, 1);
+                particle.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
                 location.subtract(v);
             }
             step++;

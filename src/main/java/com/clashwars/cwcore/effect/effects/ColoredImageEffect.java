@@ -101,6 +101,7 @@ public class ColoredImageEffect extends Effect{
         type = EffectType.REPEATING;
         period = 2;
         iterations = 200;
+        amt = 2;
     }
 
     public void loadFile(File file) {
@@ -173,7 +174,7 @@ public class ColoredImageEffect extends Effect{
                     }
                     VectorUtils.rotateVector(v, rotX, rotY, rotZ);
                 }
-                colorEffect.display(location.add(v), visibleRange, 0, 0, 0, 0, 2);
+                colorEffect.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
                 location.subtract(v);
             }
         }

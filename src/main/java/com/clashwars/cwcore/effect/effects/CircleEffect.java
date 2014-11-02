@@ -66,6 +66,7 @@ public class CircleEffect extends Effect{
         type = EffectType.REPEATING;
         period = 2;
         iterations = 50;
+        amt = 30;
     }
     
     @Override
@@ -80,7 +81,7 @@ public class CircleEffect extends Effect{
     	VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
 		if(enableRotation)
 			VectorUtils.rotateVector(v, angularVelocityX * step, angularVelocityY * step, angularVelocityZ * step);
-		particle.display(location.add(v), visibleRange, 0, 0, 0, 0, 30);
+		particle.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
 		step++;
     }
 

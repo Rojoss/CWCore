@@ -116,11 +116,11 @@ public class EarthEffect extends Effect {
         Location location = getLocation();
         if (firstStep) invalidate();
         for (Vector v : cacheGreen) {
-            ParticleEffect.HAPPY_VILLAGER.display(location.add(v), visibleRange, 0, 0, 0, 0, 3);
+            ParticleEffect.HAPPY_VILLAGER.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt*2);
             location.subtract(v);
         }
         for (Vector v : cacheBlue) {
-            ParticleEffect.DRIP_WATER.display(location.add(v), visibleRange, 0, 0, 0, 0, 1);
+            ParticleEffect.DRIP_WATER.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
             location.subtract(v);
         }
     }

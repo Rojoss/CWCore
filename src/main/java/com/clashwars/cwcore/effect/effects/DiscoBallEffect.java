@@ -7,7 +7,6 @@ import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.RandomUtils;
-import com.clashwars.cwcore.utils.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -76,7 +75,7 @@ public class DiscoBallEffect extends Effect {
             Location loc = location.clone().subtract(v);
             for (int i = 0; i < lineParticles; i++) {
                 loc.add(v);
-                lineParticle.display(loc, visibleRange);
+                lineParticle.display(loc, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
             }
         }
 
@@ -84,7 +83,7 @@ public class DiscoBallEffect extends Effect {
         for (int i = 0; i < sphereParticles; i++) {
             Vector vector = RandomUtils.getRandomVector().multiply(sphereRadius);
             location.add(vector);
-            sphereParticle.display(location, visibleRange);
+            sphereParticle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
             location.subtract(vector);
         }
     }

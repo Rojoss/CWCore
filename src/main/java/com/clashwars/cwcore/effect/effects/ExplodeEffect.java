@@ -25,14 +25,16 @@ public class ExplodeEffect extends Effect {
     public ExplodeEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.INSTANT;
+        amt = 25;
+        speed = .5f;
     }
 
     @Override
     public void onRun() {
         Location location = getLocation();
         location.getWorld().playSound(location, sound, 4.0F, (1.0F + (RandomUtils.random.nextFloat() - RandomUtils.random.nextFloat()) * 0.2F) * 0.7F);
-        ParticleEffect.EXPLODE.display(location, visibleRange, 0, 0, 0, speed, amount);
-        ParticleEffect.HUGE_EXPLOSION.display(location, visibleRange, 0, 0, 0, 0, amount);
+        ParticleEffect.EXPLODE.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+        ParticleEffect.HUGE_EXPLOSION.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
     }
 
 }

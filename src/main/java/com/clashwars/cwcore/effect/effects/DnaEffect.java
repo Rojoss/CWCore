@@ -105,7 +105,7 @@ public class DnaEffect extends Effect {
         VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
 
         location.add(v);
-        particle.display(location, visibleRange);
+        particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
         location.subtract(v);
     }
 

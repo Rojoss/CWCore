@@ -27,7 +27,7 @@ public class SmokeEffect extends Effect {
         for (int i = 0; i < 20; i++) {
             location.add(RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * 0.6d));
             location.add(0, RandomUtils.random.nextFloat() * 2, 0);
-            particle.display(location, visibleRange);
+            particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
         }
     }
 

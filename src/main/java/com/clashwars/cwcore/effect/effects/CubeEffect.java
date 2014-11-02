@@ -4,7 +4,6 @@ import com.clashwars.cwcore.effect.Effect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.packet.ParticleEffect;
-import com.clashwars.cwcore.utils.RandomUtils;
 import com.clashwars.cwcore.utils.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -134,7 +133,7 @@ public class CubeEffect extends Effect {
                     Vector v = new Vector(posX, posY, posZ);
                     if (enableRotation)
                         VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-                    particle.display(location.add(v), visibleRange);
+                    particle.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
                     location.subtract(v);
                 }
             }

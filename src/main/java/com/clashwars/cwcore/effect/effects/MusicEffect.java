@@ -28,6 +28,8 @@ public class MusicEffect extends Effect {
         type = EffectType.REPEATING;
         iterations = 400;
         period = 1;
+        speed = .5f;
+        amt = 1;
     }
 
     @Override
@@ -35,7 +37,7 @@ public class MusicEffect extends Effect {
         Location location = getLocation();
         location.add(0, 1.9f, 0);
         location.add(Math.cos(radialsPerStep * step) * radius, 0, Math.sin(radialsPerStep * step) * radius);
-        ParticleEffect.NOTE.display(location, visibleRange, 0, 0, 0, .5f, 1);
+        ParticleEffect.NOTE.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
         step++;
     }
 

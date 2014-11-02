@@ -59,7 +59,7 @@ public class HillEffect extends Effect {
                 v.setY(height * y1 * y2);
                 VectorUtils.rotateAroundAxisY(v, yRotation);
 
-                particle.display(location.add(v), visibleRange, 0, 0, 0, 0, 0);
+                particle.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
                 location.subtract(v);
             }
         }

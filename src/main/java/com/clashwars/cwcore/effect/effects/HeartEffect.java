@@ -18,7 +18,7 @@ public class HeartEffect extends Effect {
      * ParticleType of spawned particle
      */
 
-    public ParticleEffect particle = ParticleEffect.MAGIC_CRIT;
+    public ParticleEffect particle = ParticleEffect.HEART;
 
     /**
      * Heart-particles per interation (100)
@@ -74,7 +74,7 @@ public class HeartEffect extends Effect {
 
             VectorUtils.rotateVector(vector, xRotation, yRotation, zRotation);
 
-            particle.display(location.add(vector), visibleRange, 0, 0, 0, 0, 0);
+            particle.display(location.add(vector), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
             location.subtract(vector);
         }
     }

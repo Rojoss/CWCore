@@ -75,7 +75,7 @@ public class TornadoEffect extends Effect{
 		for(int i = 0; i < (100 * cloudSize); i++){
 			Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * cloudSize);
 			if(showCloud){
-				cloudParticle.display(l.add(v), visibleRange, 0, 0, 0, 0, 7);
+                cloudParticle.display(l.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
 				l.subtract(v);
 			}
 		}

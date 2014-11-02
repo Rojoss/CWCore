@@ -78,7 +78,7 @@ public class LineEffect extends Effect {
             }
             step++;
             loc.add(v);
-            particle.display(loc, visibleRange);
+            particle.display(loc, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
         }
     }
 

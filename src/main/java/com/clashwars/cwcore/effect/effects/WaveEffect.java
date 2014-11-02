@@ -161,12 +161,12 @@ public class WaveEffect extends Effect {
 
         for (Vector v : cloudCache) {
             location.add(v);
-            cloudParticle.display(location, visibleRange, 0, 0, 0, 0, 1);
+            cloudParticle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
             location.subtract(v);
         }
         for (Vector v : waterCache) {
             location.add(v);
-            particle.display(location, visibleRange, 0, 0, 0, 0, 1);
+            particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
             location.subtract(v);
         }
     }

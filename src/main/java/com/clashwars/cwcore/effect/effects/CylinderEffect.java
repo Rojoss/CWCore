@@ -112,10 +112,10 @@ public class CylinderEffect extends Effect {
             }
             if (enableRotation)
                 VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-            particle.display(location.add(v), visibleRange);
+            particle.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
             location.subtract(v);
         }
-        particle.display(location, visibleRange);
+        particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
         step++;
     }
 

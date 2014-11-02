@@ -85,7 +85,7 @@ public class AtomEffect extends Effect {
                 VectorUtils.rotateAroundAxisX(v, xRotation);
                 VectorUtils.rotateAroundAxisY(v, rotation);
                 location.add(v);
-                particleOrbital.display(location, visibleRange, 0, 0, 0, 0, 0);
+                particleOrbital.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
                 location.subtract(v);
             }
             step++;

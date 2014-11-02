@@ -5,7 +5,6 @@ import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.RandomUtils;
-import com.clashwars.cwcore.utils.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -59,11 +58,11 @@ public class CloudEffect extends Effect{
 			double z = RandomUtils.random.nextDouble() * particleRadius;
 			l.add(x, 0, z);
 			if(r!=1)
-				mainParticle.display(l, visibleRange);
+				mainParticle.display(l, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
 			l.subtract(x, 0, z);
 			l.subtract(x, 0, z);
 			if(r!=1)
-				mainParticle.display(l, visibleRange);
+				mainParticle.display(l, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
 			l.add(x, 0, z);
 		}
 	}

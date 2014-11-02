@@ -58,12 +58,12 @@ public class StarEffect extends Effect {
                 v.setY(innerRadius + height);
                 VectorUtils.rotateAroundAxisX(v, xRotation);
                 location.add(v);
-                particle.display(location, visibleRange);
+                particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
                 location.subtract(v);
                 VectorUtils.rotateAroundAxisX(v, Math.PI);
                 VectorUtils.rotateAroundAxisY(v, Math.PI / 2);
                 location.add(v);
-                particle.display(location, visibleRange);
+                particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
                 location.subtract(v);
             }
         }

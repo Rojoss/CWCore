@@ -58,7 +58,7 @@ public class WarpEffect extends Effect {
             x = Math.cos(angle) * radius;
             z = Math.sin(angle) * radius;
             location.add(x, 0, z);
-            particle.display(location, visibleRange);
+            particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
             location.subtract(x, 0, z);
         }
         location.subtract(0, y, 0);
