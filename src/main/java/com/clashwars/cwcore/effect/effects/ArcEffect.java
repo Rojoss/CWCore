@@ -7,6 +7,16 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+/**
+ * Creates a spline/arc between the location and the target location.<br>
+ * <b>DEFAULTS:</b><br>
+ * height = 2<br>
+ * particles = 100<br>
+ * <br>
+ * type = EffectType.REPEATING<br>
+ * period = 1<br>
+ * iterations = 200<br>
+ */
 public class ArcEffect extends Effect {
 
     /**

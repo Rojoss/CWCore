@@ -9,6 +9,23 @@ import com.clashwars.cwcore.utils.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+/**
+ * Creates an atom.<br>
+ * <b>DEFAULTS:</b><br>
+ * particleNucleus = ParticleEffect.DRIP_WATER<br>
+ * particleOrbital = ParticleEffect.DRIP_LAVA<br>
+ * radius = 3<br>
+ * radiusNucleus = .2f<br>
+ * particlesNucleus = 10<br>
+ * particlesOrbital = 10<br>
+ * orbitals = 3<br>
+ * rotation = 0<br>
+ * angularVelocity = Math.PI / 80d<br>
+ * <br>
+ * type = EffectType.REPEATING<br>
+ * period = 2<br>
+ * iterations = 200<br>
+ */
 public class AtomEffect extends Effect {
 
     /**

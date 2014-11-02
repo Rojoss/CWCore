@@ -8,6 +8,19 @@ import com.clashwars.cwcore.utils.RandomUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+/**
+ * Creates a cloud with rain/snow<br>
+ * <b>DEFAULTS:</b><br>
+ * cloudParticle = ParticleEffect.CLOUD<br>
+ * mainParticle = ParticleEffect.DRIP_WATER<br>
+ * cloudSize = .7f
+ * particleRadius = cloudSize-.1f
+ * yOffset = .8
+ * <br>
+ * type = EffectType.REPEATING<br>
+ * period = 5<br>
+ * iterations = 50<br>
+ */
 public class CloudEffect extends Effect{
 	
 	/*

@@ -8,6 +8,22 @@ import com.clashwars.cwcore.utils.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+/**
+ * Creates a circle that can orbit around.<br>
+ * <b>DEFAULTS:</b><br>
+ * particle = ParticleEffect.HAPPY_VILLAGER<br>
+ * itemID = xRotation, yRotation, zRotation = 0<br>
+ * angularVelocityX = Math.PI / 200<br>
+ * angularVelocityY = Math.PI / 170<br>
+ * angularVelocityZ = Math.PI / 155<br>
+ * radius = .4f<br>
+ * enableRotation = true<br>
+ * particles = 20<br>
+ * <br>
+ * type = EffectType.REPEATING<br>
+ * period = 4<br>
+ * iterations = 25<br>
+ */
 public class CircleEffect extends Effect{
 	
 

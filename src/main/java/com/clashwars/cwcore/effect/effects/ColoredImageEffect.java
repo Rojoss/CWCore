@@ -19,6 +19,24 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Display a image with colors based on the ChatColors.<br>
+ * <b>DEFAULTS:</b><br>
+ * ParticleEffect particle = ParticleEffect.FLAME
+ * stepX = 10
+ * stepY = 10
+ * size = (float) 1 / 40
+ * enableRotation = true
+ * plane = Plane.XYZ
+ * angularVelocityX = Math.PI / 200
+ * angularVelocityY = Math.PI / 170
+ * angularVelocityZ = Math.PI / 155
+ * <br>
+ * type = EffectType.REPEATING<br>
+ * period = 2<br>
+ * iterations = 200<br>
+ * amt = 2<br>
+ */
 public class ColoredImageEffect extends Effect{
 
     /**

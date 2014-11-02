@@ -10,9 +10,20 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 /**
- * Creates an animated Sphere.. Thanks to the author for sharing it!
- * https://www.youtube.com/watch?feature=player_embedded&v=RUjIw_RprRw
- * @author <a href="http://forums.bukkit.org/members/qukie.90952701/">Qukie</a>
+ * Creates an animated Sphere.. Thanks to the author (Qukie) for sharing it!
+ * <br>
+ * <b>DEFAULTS:</b><br>
+ * particle = ParticleEffect.WITCH_MAGIC<br>
+ * particles = 150<br>
+ * particlesPerIteration = 10<br>
+ * size = 1F<br>
+ * xFactor = 1F, yFactor = 2F, zFactor = 1F<br>
+ * xOffset, yOffset = 0.8F, zOffset<br>
+ * xRotation, yRotation, zRotation = 0<br>
+ * <br>
+ * type = EffectType.REPEATING<br>
+ * iterations = 500<br>
+ * period = 1<br>
  */
 public class AnimatedBallEffect extends Effect {
 

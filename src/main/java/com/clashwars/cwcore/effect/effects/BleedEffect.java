@@ -7,19 +7,22 @@ import com.clashwars.cwcore.effect.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
+/**
+ * Creates a bunch of fireworks and effects.<br>
+ * <b>DEFAULTS:</b><br>
+ * hurt = true<br>
+ * itemID = 152<br>
+ * <br>
+ * type = EffectType.REPEATING<br>
+ * period = 4<br>
+ * iterations = 25<br>
+ */
 public class BleedEffect extends Effect {
 
     /**
      * Play the Hurt Effect for the Player
      */
     public boolean hurt = true;
-
-    /**
-     * Duration in ticks, the blood-particles take to despawn.
-     * Not used anymore
-     */
-    @Deprecated
-    public int duration = 10;
 
     /**
      * Color of blood. Default is red (152)

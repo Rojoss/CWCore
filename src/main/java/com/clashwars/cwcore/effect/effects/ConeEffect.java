@@ -10,6 +10,22 @@ import com.clashwars.cwcore.utils.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+/**
+ * Creates a cone.<br>
+ * <b>DEFAULTS:</b><br>
+ * particle = ParticleEffect.FLAME
+ * lengthGrow = .05f
+ * angularVelocity = Math.PI / 16
+ * particles = 10
+ * radiusGrow = 0.006f
+ * particlesCone = 180
+ * rotation = 0
+ * randomize = false
+ * <br>
+ * type = EffectType.REPEATING<br>
+ * period = 1<br>
+ * iterations = 200<br>
+ */
 public class ConeEffect extends Effect {
 
     /**

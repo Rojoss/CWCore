@@ -11,6 +11,26 @@ import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
 
+/**
+ * Creates a bunch of fireworks and effects.<br>
+ * <b>DEFAULTS:</b><br>
+ * fireworkType = FireworkEffect.Type.BURST<br>
+ * color = Color.RED<br>
+ * color2 = Color.ORANGE<br>
+ * color3 = Color.BLACK<br>
+ * fadeColor = Color.BLACK<br>
+ * intensity = 2<br>
+ * radius = 2<br>
+ * explosions = 10<br>
+ * soundInterval = 5<br>
+ * sound = Sound.EXPLODE<br>
+ * soundVolume = 100<br>
+ * soundPitch = 1<br>
+ * <br>
+ * type = EffectType.REPEATING<br>
+ * period = 2<br>
+ * iterations = 400<br>
+ */
 public class BigBangEffect extends Effect {
 
     public FireworkEffect.Type fireworkType = FireworkEffect.Type.BURST;
