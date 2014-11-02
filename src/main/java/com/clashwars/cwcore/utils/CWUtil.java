@@ -1,6 +1,5 @@
 package com.clashwars.cwcore.utils;
 
-import com.clashwars.cwcore.helpers.CWItem;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -9,7 +8,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.*;
+import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
 import java.io.*;
@@ -585,21 +584,37 @@ public class CWUtil {
         vehicle.setPassenger(entity);
     }
 
+
+    /**
+     * @see #isLocWithin(org.bukkit.Location, org.bukkit.Location, org.bukkit.Location, org.bukkit.util.Vector)
+     */
+    public static boolean isLocWithin(Location loc, Location pos1, Location pos2) {
+        return isLocWithin(loc, pos1, pos2, new Vector(0,0,0));
+    }
+
     /**
      * Test if a location is within a cuboid of the 2 specified locations.
+     * If a offset is specified you can add a XX amount of blocks offset in any direction this can also be negative.
+     * For example if you have a 10*10*10 area and the offset is 2 then it'll be a 14*14*14 area because 2 blocks are added to each axis.
      * @param loc The location to check.
      * @param pos1 First location of cuboid
      * @param pos2 Second location of cuboid
+     * @param offset Vector with offset for each axis. (It will add this offset to each side so 1 offset means 1 extra block on both sides.)
      * @return True if loc is within and false if not.
      */
-    public static boolean isLocWithin(Location loc, Location pos1, Location pos2) {
+    public static boolean isLocWithin(Location loc, Location pos1, Location pos2, Vector offset) {
         Vector min = new Vector(Math.min(pos1.getBlockX(), pos2.getBlockX()), Math.min(pos1.getBlockY(), pos2.getBlockY()), Math.min(pos1.getBlockZ(), pos2.getBlockZ()));
-        Vector max = new Vector(Math.max(pos1.getBlockX(), pos2.getBlockX()) -1, Math.max(pos1.getBlockY(), pos2.getBlockY()) -1, Math.max(pos1.getBlockZ(), pos2.getBlockZ()) -1);
+        Vector max = new Vector(Math.max(pos1.getBlockX(), pos2.getBlockX()), Math.max(pos1.getBlockY(), pos2.getBlockY()), Math.max(pos1.getBlockZ(), pos2.getBlockZ()));
+
+        min.subtract(offset);
+        max.add(offset);
+
         if (loc.getX() >= min.getX() && loc.getX() <= max.getX() && loc.getY() >= min.getY() && loc.getY() <= max.getY() && loc.getZ() >= min.getZ() && loc.getZ() <= max.getZ()) {
             return true;
         }
         return false;
     }
+
 
     /**
      * Get the center of the given blockface at the given block.
