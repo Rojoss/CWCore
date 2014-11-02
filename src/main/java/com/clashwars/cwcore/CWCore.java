@@ -3,17 +3,14 @@ package com.clashwars.cwcore;
 import com.clashwars.cwcore.commands.Commands;
 import com.clashwars.cwcore.config.aliases.*;
 import com.clashwars.cwcore.dependencies.internal.DependencyManager;
-import com.comphenix.protocol.Packets;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.ConnectionSide;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
-import net.minecraft.server.v1_7_R4.PacketEncoder;
+import com.clashwars.cwcore.effect.EffectManager;
+import com.clashwars.cwcore.effect.EntityManager;
+import com.clashwars.cwcore.effect.event.ItemListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 public class CWCore extends JavaPlugin {
@@ -24,6 +21,7 @@ public class CWCore extends JavaPlugin {
     private Commands cmds;
     private DependencyManager dm;
     private CooldownManager cdm;
+    private EntityManager entityManager;
 
     private Materials materialsCfg;
     private Sounds soundsCfg;
@@ -50,6 +48,11 @@ public class CWCore extends JavaPlugin {
 
         //Other
         cdm = new CooldownManager();
+
+        //Load effects
+        entityManager = new EntityManager(this);
+        EffectManager.initialize();
+        getServer().getPluginManager().registerEvents(new ItemListener(), this);
 
         //Load the aliases.
         loadAliases();
@@ -202,5 +205,13 @@ public class CWCore extends JavaPlugin {
      */
     public Particles getParticles() {
         return particlesCfg;
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    public List<EffectManager> getEffectManagers() {
+        return EffectManager.getManagers();
     }
 }

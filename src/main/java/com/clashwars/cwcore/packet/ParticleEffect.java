@@ -4,7 +4,6 @@ import com.clashwars.cwcore.packet.reflection.ReflectionHandler;
 import com.clashwars.cwcore.packet.reflection.ReflectionHandler.PackageType;
 import com.clashwars.cwcore.packet.reflection.ReflectionHandler.PacketType;
 import com.clashwars.cwcore.packet.reflection.ReflectionHandler.SubPackageType;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -16,192 +15,225 @@ import java.util.Map.Entry;
 
 /**
  * ParticleEffect Library v1.4
- * <p>
- * This library was created by @DarkBlade12 based on content related to particles of @microgeek (names and packet values), it allows you to display all Minecraft particle effects on a Bukkit server
- * <p>
- * You are welcome to use it, modify it and redistribute it under the following conditions:
- * 1. Don't claim this class as your own
- * 2. Don't remove this text
- * <p>
+ *
+ * This library was created by @DarkBlade12 based on content related to
+ * particles of @microgeek (names and packet values), it allows you to display
+ * all Minecraft particle effects on a Bukkit server
+ *
+ * You are welcome to use it, modify it and redistribute it under the following
+ * conditions: 1. Don't claim this class as your own 2. Don't remove this text
+ *
  * (Would be nice if you provide credit to me)
  *
  * @author DarkBlade12
+ * @changed Slikey
  */
 public enum ParticleEffect {
     /**
-     * Appearance Huge explosions
-     * Displayed by TNT and creepers
+     * @appearance Huge explosions
+     * @displayed by TNT and creepers
      */
     HUGE_EXPLOSION("hugeexplosion"),
     /**
-     * Appearance Smaller explosions
-     * Displayed by TNT and creepers
+     * @appearance Smaller explosions
+     * @displayed by TNT and creepers
      */
     LARGE_EXPLODE("largeexplode"),
     /**
-     * Appearance Little white sparkling stars
-     * Displayed by Fireworks
+     * @appearance Little white sparkling stars
+     * @displayed by Fireworks
      */
     FIREWORKS_SPARK("fireworksSpark"),
     /**
-     * Appearance Bubbles
-     * Displayed in water
+     * @appearance Bubbles
+     * @displayed in water
      */
     BUBBLE("bubble"),
     /**
-     * Appearance Unknown
+     * @appearance Unknown
      */
     SUSPEND("suspend"),
     /**
-     * Appearance Little gray dots
-     * Displayed in the Void and water
+     * @appearance Little gray dots
+     * @displayed in the Void and water
      */
     DEPTH_SUSPEND("depthSuspend"),
     /**
-     * Appearance Little gray dots
-     * Displayed by Mycelium
+     * @appearance Little gray dots
+     * @displayed by Mycelium
      */
     TOWN_AURA("townaura"),
     /**
-     * Appearance Light brown crosses
-     * Displayed by critical hits
+     * @appearance Light brown crosses
+     * @displayed by critical hits
      */
     CRIT("crit"),
     /**
-     * Appearance Cyan stars
-     * Displayed by hits with an enchanted weapon
+     * @appearance Cyan stars
+     * @displayed by hits with an enchanted weapon
      */
     MAGIC_CRIT("magicCrit"),
     /**
-     * Appearance Little black/gray clouds
-     * Displayed by torches, primed TNT and end portals
+     * @appearance Little black/gray clouds
+     * @displayed by torches, primed TNT and end portals
      */
     SMOKE("smoke"),
     /**
-     * Appearance Colored swirls
-     * Displayed by potion effects
+     * @appearance Colored swirls
+     * @displayed by potion effects
      */
     MOB_SPELL("mobSpell"),
     /**
-     * Appearance Transparent colored swirls
-     * Displayed by beacon effect
+     * @appearance Transparent colored swirls
+     * @displayed by beacon effect
      */
     MOB_SPELL_AMBIENT("mobSpellAmbient"),
     /**
-     * Appearance Colored swirls
-     * Displayed by splash potions
+     * @appearance Colored swirls
+     * @displayed by splash potions
      */
     SPELL("spell"),
     /**
-     * Appearance Colored crosses
-     * Displayed by instant splash potions (instant health/instant damage)
+     * @appearance Colored crosses
+     * @displayed by instant splash potions (instant health/instant damage)
      */
     INSTANT_SPELL("instantSpell"),
     /**
-     * Appearance Colored crosses
-     * Displayed by witches
+     * @appearance Colored crosses
+     * @displayed by witches
      */
     WITCH_MAGIC("witchMagic"),
     /**
-     * Appearance Colored notes
-     * Displayed by note blocks
+     * @appearance Colored notes
+     * @displayed by note blocks
      */
     NOTE("note"),
     /**
-     * Appearance Little purple clouds
-     * Displayed by nether portals, endermen, ender pearls, eyes of ender and ender chests
+     * @appearance Little purple clouds
+     * @displayed by nether portals, endermen, ender pearls, eyes of ender and
+     *            ender chests
      */
     PORTAL("portal"),
     /**
-     * Appearance: White letters
-     * Displayed by enchantment tables that are near bookshelves
+     * @appearance: White letters
+     * @displayed by enchantment tables that are near bookshelves
      */
     ENCHANTMENT_TABLE("enchantmenttable"),
     /**
-     * Appearance White clouds
+     * @appearance White clouds
      */
     EXPLODE("explode"),
     /**
-     * Appearance Little flames
-     * Displayed by torches, furnaces, magma cubes and monster spawners
+     * @appearance Little flames
+     * @displayed by torches, furnaces, magma cubes and monster spawners
      */
     FLAME("flame"),
     /**
-     * Appearance Little orange blobs
-     * Displayed by lava
+     * @appearance Little orange blobs
+     * @displayed by lava
      */
     LAVA("lava"),
     /**
-     * Appearance Gray transparent squares
+     * @appearance Gray transparent squares
      */
     FOOTSTEP("footstep"),
     /**
-     * Appearance Blue drops
-     * Displayed by water, rain and shaking wolves
+     * @appearance Blue drops
+     * @displayed by water, rain and shaking wolves
      */
     SPLASH("splash"),
     /**
-     * Appearance Blue droplets
-     * Displayed on water when fishing
+     * @appearance Blue droplets
+     * @displayed on water when fishing
      */
     WAKE("wake"),
     /**
-     * Appearance Black/Gray clouds
-     * Displayed by fire, minecarts with furance and blazes
+     * @appearance Black/Gray clouds
+     * @displayed by fire, minecarts with furance and blazes
      */
     LARGE_SMOKE("largesmoke"),
     /**
-     * Appearance Large white clouds
-     * Displayed on mob death
+     * @appearance Large white clouds
+     * @displayed on mob death
      */
     CLOUD("cloud"),
     /**
-     * Appearance Little colored clouds
-     * Displayed by active redstone wires and redstone torches
+     * @appearance Little colored clouds
+     * @displayed by active redstone wires and redstone torches
      */
     RED_DUST("reddust"),
     /**
-     * Appearance Little white parts
-     * Displayed by cracking snowballs and eggs
+     * @appearance Little white parts
+     * @displayed by cracking snowballs and eggs
      */
     SNOWBALL_POOF("snowballpoof"),
     /**
-     * Appearance Blue drips
-     * Displayed by blocks below a water source
+     * @appearance Blue drips
+     * @displayed by blocks below a water source
      */
     DRIP_WATER("dripWater"),
     /**
-     * Appearance Orange drips
-     * Displayed by blocks below a lava source
+     * @appearance Orange drips
+     * @displayed by blocks below a lava source
      */
     DRIP_LAVA("dripLava"),
     /**
-     * Appearance White clouds
+     * @appearance White clouds
      */
     SNOW_SHOVEL("snowshovel"),
     /**
-     * Appearance Little green parts
-     * Displayed by slimes
+     * @appearance Little green parts
+     * @displayed by slimes
      */
     SLIME("slime"),
     /**
-     * Appearance Red hearts
-     * Displayed when breeding
+     * @appearance Red hearts
+     * @displayed when breeding
      */
     HEART("heart"),
     /**
-     * Appearance Dark gray cracked hearts
-     * Displayed when attacking a villager in a village
+     * @appearance Dark gray cracked hearts
+     * @displayed when attacking a villager in a village
      */
     ANGRY_VILLAGER("angryVillager"),
     /**
-     * Displayed by bone meal and when trading with a villager
+     * @appearance Green stars
+     * @displayed by bone meal and when trading with a villager
      */
-    HAPPY_VILLAGER("happyVillager");
+    HAPPY_VILLAGER("happyVillager"),
+    /**
+     * @version 1.8
+     * @appearance "No" Sign
+     * @displayed by barrier blocks
+     */
+    BARRIER("barrier"),
+    /**
+     * @version 1.8
+     * @appearance Droplets
+     * @displayed ?
+     */
+    DROPLET("droplet"),
+    /**
+     * @version 1.8
+     * @appearance Take
+     * @displayed ?
+     */
+    TAKE("take"),
+    /**
+     * @version 1.8
+     * @appearance Mob appearance
+     * @displayed The appearance of elder guardians
+     */
+    MOB_APPEARANCE("mobappearance"),
+
+    ICON_CRACK("iconcrack_{subtype}"),
+    BLOCK_CRACK("blockcrack_{subtype}"),
+    TILE_CRACK("tilecrack_{subtype}");
 
     private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
-    private static final double MAX_RANGE = 16;
+    private static final double MAX_RANGE = 50;
     private static Constructor<?> packetPlayOutWorldParticles;
+    private static boolean legacy = false;
     private static Method getHandle;
     private static Field playerConnection;
     private static Method sendPacket;
@@ -211,8 +243,12 @@ public enum ParticleEffect {
         for (ParticleEffect p : values())
             NAME_MAP.put(p.name, p);
         try {
-            packetPlayOutWorldParticles = ReflectionHandler.getConstructor(PacketType.PLAY_OUT_WORLD_PARTICLES.getPacket(), String.class, float.class, float.class, float.class, float.class, float.class,
-                    float.class, float.class, int.class);
+            packetPlayOutWorldParticles = ReflectionHandler.getConstructor(PacketType.PLAY_OUT_WORLD_PARTICLES.getPacket(), String.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class, int.class);
+            // 1.6 Backwards compatibility
+            if (packetPlayOutWorldParticles == null) {
+                packetPlayOutWorldParticles = ReflectionHandler.getConstructor(PacketType.PLAY_OUT_WORLD_PARTICLES.getPacket());
+                legacy = true;
+            }
             getHandle = ReflectionHandler.getMethod("CraftPlayer", SubPackageType.ENTITY, "getHandle");
             playerConnection = ReflectionHandler.getField("EntityPlayer", PackageType.MINECRAFT_SERVER, "playerConnection");
             sendPacket = ReflectionHandler.getMethod(playerConnection.getType(), "sendPacket", ReflectionHandler.getClass("Packet", PackageType.MINECRAFT_SERVER));
@@ -222,7 +258,8 @@ public enum ParticleEffect {
     }
 
     /**
-     * @param name Name of this particle effect
+     * @param name
+     *            Name of this particle effect
      */
     private ParticleEffect(String name) {
         this.name = name;
@@ -238,7 +275,8 @@ public enum ParticleEffect {
     /**
      * Gets a particle effect from name
      *
-     * @param name Name of the particle effect
+     * @param name
+     *            Name of the particle effect
      * @return The particle effect
      */
     public static ParticleEffect fromName(String name) {
@@ -252,16 +290,17 @@ public enum ParticleEffect {
     /**
      * Gets a list of players in a certain range
      *
-     * @param center Center location
-     * @param range  Range
+     * @param center
+     *            Center location
+     * @param range
+     *            Range
      * @return The list of players in the specified range
      */
     private static List<Player> getPlayers(Location center, double range) {
         List<Player> players = new ArrayList<Player>();
-        String name = center.getWorld().getName();
         double squared = range * range;
-        for (Player p : Bukkit.getOnlinePlayers())
-            if (p.getWorld().getName().equals(name) && p.getLocation().distanceSquared(center) <= squared)
+        for (Player p : center.getWorld().getPlayers())
+            if (p.getLocation().distanceSquared(center) <= squared)
                 players.add(p);
         return players;
     }
@@ -269,19 +308,60 @@ public enum ParticleEffect {
     /**
      * Instantiates a new @PacketPlayOutWorldParticles object through reflection
      *
-     * @param center  Center location of the effect
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param speed   Display speed of the particles
-     * @param amount  Amount of particles
+     * @param center
+     *            Center location of the effect
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
      * @return The packet object
-     * @throws #PacketInstantiationException if the amount is lower than 1 or if the @PacketPlayOutWorldParticles has changed its name or constructor parameters
+     * @throws #PacketInstantiationException if the amount is lower than 1 or if
+     *         the @PacketPlayOutWorldParticles has changed its name or
+     *         constructor parameters
      */
     private static Object instantiatePacket(String name, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
         if (amount < 1)
-            throw new PacketInstantiationException("Amount cannot be lower than 1");
+            amount = 1;
         try {
+            if (legacy) {
+                // This is really slow, but only here for backwards compatibility.
+                Object packet = packetPlayOutWorldParticles.newInstance();
+                for (Field field : packet.getClass().getDeclaredFields())
+                {
+                    field.setAccessible(true);
+                    String fieldName = field.getName();
+                    if (fieldName.equals("a")) {
+                        field.set(packet, name);
+                    } else if (fieldName.equals("b")) {
+                        field.setFloat(packet, (float)center.getX());
+                    } else if (fieldName.equals("c")) {
+                        field.setFloat(packet, (float)center.getY());
+                    } else if (fieldName.equals("d")) {
+                        field.setFloat(packet, (float)center.getZ());
+                    } else if (fieldName.equals("e")) {
+                        field.setFloat(packet, offsetX);
+                    } else if (fieldName.equals("f")) {
+                        field.setFloat(packet, offsetY);
+                    } else if (fieldName.equals("g")) {
+                        field.setFloat(packet, offsetZ);
+                    } else if (fieldName.equals("h")) {
+                        field.setFloat(packet, speed);
+                    } else if (fieldName.equals("i")) {
+                        field.setInt(packet, amount);
+                    }
+                }
+
+                return packet;
+            }
             return packetPlayOutWorldParticles.newInstance(name, (float) center.getX(), (float) center.getY(), (float) center.getZ(), offsetX, offsetY, offsetZ, speed, amount);
         } catch (Exception e) {
             throw new PacketInstantiationException("Packet instantiation failed", e);
@@ -289,16 +369,28 @@ public enum ParticleEffect {
     }
 
     /**
-     * Instantiates a new @PacketPlayOutWorldParticles object through reflection especially for the "iconcrack" effect
+     * Instantiates a new @PacketPlayOutWorldParticles object through reflection
+     * especially for the "iconcrack" effect
      *
-     * @param id      Id of the icon
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param speed   Display speed of the particles
-     * @param amount  Amount of particles
+     * @param id
+     *            Id of the icon
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
      * @return The packet object
-     * @throws #PacketInstantiationException if the amount is lower than 1 or if the @PacketPlayOutWorldParticles has changed its name or constructor parameters
+     * @throws #PacketInstantiationException if the amount is lower than 1 or if
+     *         the @PacketPlayOutWorldParticles has changed its name or
+     *         constructor parameters
      * @see #instantiatePacket
      */
     private static Object instantiateIconCrackPacket(int id, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
@@ -306,16 +398,28 @@ public enum ParticleEffect {
     }
 
     /**
-     * Instantiates a new @PacketPlayOutWorldParticles object through reflection especially for the "blockcrack" effect
+     * Instantiates a new @PacketPlayOutWorldParticles object through reflection
+     * especially for the "blockcrack" effect
      *
-     * @param id      Id of the block
-     * @param data    Data value
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param amount  Amount of particles
+     * @param id
+     *            Id of the block
+     * @param data
+     *            Data value
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param amount
+     *            Amount of particles
      * @return The packet object
-     * @throws #PacketInstantiationException if the amount is lower than 1 or if the @PacketPlayOutWorldParticles has changed its name or constructor parameters
+     * @throws #PacketInstantiationException if the amount is lower than 1 or if
+     *         the @PacketPlayOutWorldParticles has changed its name or
+     *         constructor parameters
      * @see #instantiatePacket
      */
     private static Object instantiateBlockCrackPacket(int id, byte data, Location center, float offsetX, float offsetY, float offsetZ, int amount) {
@@ -323,17 +427,30 @@ public enum ParticleEffect {
     }
 
     /**
-     * Instantiates a new @PacketPlayOutWorldParticles object through reflection especially for the "blockdust" effect
+     * Instantiates a new @PacketPlayOutWorldParticles object through reflection
+     * especially for the "blockdust" effect
      *
-     * @param id      Id of the block
-     * @param data    Data value
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param speed   Display speed of the particles
-     * @param amount  Amount of particles
+     * @param id
+     *            Id of the block
+     * @param data
+     *            Data value
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
      * @return The packet object
-     * @throws #PacketInstantiationException if the amount is lower than 1 or if the name or the constructor of @PacketPlayOutWorldParticles have changed
+     * @throws #PacketInstantiationException if the amount is lower than 1 or if
+     *         the name or the constructor of @PacketPlayOutWorldParticles have
+     *         changed
      * @see #instantiatePacket
      */
     private static Object instantiateBlockDustPacket(int id, byte data, Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
@@ -343,9 +460,12 @@ public enum ParticleEffect {
     /**
      * Sends a packet through reflection to a player
      *
-     * @param p      Receiver of the packet
-     * @param packet Packet that is sent
-     * @throws #PacketSendingException if the packet is null or some methods which are accessed through reflection have changed
+     * @param p
+     *            Receiver of the packet
+     * @param packet
+     *            Packet that is sent
+     * @throws #PacketSendingException if the packet is null or some methods
+     *         which are accessed through reflection have changed
      */
     private static void sendPacket(Player p, Object packet) {
         try {
@@ -358,8 +478,10 @@ public enum ParticleEffect {
     /**
      * Sends a packet through reflection to a collection of players
      *
-     * @param players Receivers of the packet
-     * @param packet  Packet that is sent
+     * @param players
+     *            Receivers of the packet
+     * @param packet
+     *            Packet that is sent
      * @throws #PacketSendingException if the sending to a single player fails
      * @see #sendPacket
      */
@@ -369,68 +491,197 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a particle effect which is only visible for the specified players
+     * Displays a particle effect which is only visible for all players within a
+     * certain range in the world of @param center
      *
-     * @param center  Center location of the effect
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param speed   Display speed of the particles
-     * @param amount  Amount of particles
-     * @param players Receivers of the effect
-     * @see #sendPacket
-     * @see #instantiatePacket
-     */
-    public void display(Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount, Player... players) {
-        sendPacket(Arrays.asList(players), instantiatePacket(name, center, offsetX, offsetY, offsetZ, speed, amount));
-    }
-
-    /**
-     * Displays a particle effect which is only visible for all players within a certain range in the world of @param center
-     *
-     * @param center  Center location of the effect
-     * @param range   Range of the visibility
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param speed   Display speed of the particles
-     * @param amount  Amount of particles
-     * @throws @IllegalArgumentException if the range is higher than 20
+     * @param center
+     *            Center location of the effect
+     * @param range
+     *            Range of the visibility
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
+     * @throws @IllegalArgumentException if providing a parameterized particle
      * @see #sendPacket
      * @see #instantiatePacket
      */
     public void display(Location center, double range, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
         if (range > MAX_RANGE)
-            throw new IllegalArgumentException("Range cannot exceed the maximum value of 16");
+            range = MAX_RANGE;
+        // throw new
+        // IllegalArgumentException("Range cannot exceed the maximum value of 16");
+        if (this == BLOCK_CRACK || this == ICON_CRACK || this == TILE_CRACK) {
+            throw new IllegalArgumentException("Missing subtype for parameterized ParticleEffect");
+        }
         sendPacket(getPlayers(center, range), instantiatePacket(name, center, offsetX, offsetY, offsetZ, speed, amount));
     }
 
     /**
-     * Displays a particle effect which is only visible for all players within a range of 20 in the world of @param center
+     * Display this effect to a specific player.
      *
-     * @param center  Center location of the effect
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param speed   Display speed of the particles
-     * @param amount  Amount of particles
-     * @see #display(org.bukkit.Location, double, float, float, float, float, int)
+     * @param player
+     *            The player who will see the effect.
+     * @param location
+     *            Center location of the effect
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
+     * @throws @IllegalArgumentException if providing a parameterized particle
+     */
+    public void displayTo(Player player, Location location, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
+        if (this == BLOCK_CRACK || this == ICON_CRACK || this == TILE_CRACK) {
+            throw new IllegalArgumentException("Missing subtype for parameterized ParticleEffect");
+        }
+        sendPacket(player, instantiatePacket(name, location, offsetX, offsetY, offsetZ, speed, amount));
+    }
+
+    /**
+     * Displays a particle effect to a specific player.
+     *
+     * This can be used with the parameterized particle types.
+     *
+     * @param player
+     *            The player who will see the effect.
+     * @param subtype
+     *            The particle subtype, normally an item id
+     * @param location
+     *            Center location of the effect
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
+     * @throws @IllegalArgumentException if the range is higher than 20
+     * @see #sendPacket
+     * @see #instantiatePacket
+     */
+    public void displayTo(Player player, String subtype, Location location, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
+        String particleName = name;
+        if (this == BLOCK_CRACK || this == ICON_CRACK || this == TILE_CRACK) {
+            particleName = particleName.replace("{subtype}", subtype);
+        }
+        sendPacket(player, instantiatePacket(particleName, location, offsetX, offsetY, offsetZ, speed, amount));
+    }
+
+    /**
+     * Displays a particle effect which is only visible for all players within a
+     * certain range in the world of @param center
+     *
+     * This can be used with the parameterized particle types.
+     *
+     * @param subtype
+     *            The particle subtype, normally an item id
+     * @param center
+     *            Center location of the effect
+     * @param range
+     *            Range of the visibility
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
+     * @throws @IllegalArgumentException if the range is higher than 20
+     * @see #sendPacket
+     * @see #instantiatePacket
+     */
+    public void display(String subtype, Location center, double range, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
+        if (range > MAX_RANGE)
+            range = MAX_RANGE;
+        String particleName = name;
+        if (this == BLOCK_CRACK || this == ICON_CRACK || this == TILE_CRACK) {
+            particleName = particleName.replace("{subtype}", subtype);
+        }
+        sendPacket(getPlayers(center, range), instantiatePacket(particleName, center, offsetX, offsetY, offsetZ, speed, amount));
+    }
+
+    public void display(Location center, double range) {
+        display(center, range, 0, 0, 0, 0, 0);
+    }
+
+    /**
+     * Displays a particle effect which is only visible for all players within a
+     * range of 20 in the world of @param center
+     *
+     * @param center
+     *            Center location of the effect
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
+     * @see #display(Location, double, float, float, float, float, int)
      */
     public void display(Location center, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
         display(center, MAX_RANGE, offsetX, offsetY, offsetZ, speed, amount);
     }
 
     /**
-     * Displays an icon crack (item break) particle effect which is only visible for the specified players
+     * Displays an icon crack (item break) particle effect which is only visible
+     * for the specified players
      *
-     * @param center  Center location of the effect
-     * @param id      Id of the icon
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param speed   Display speed of the particles
-     * @param amount  Amount of particles
-     * @param players Receivers of the effect
+     * @param center
+     *            Center location of the effect
+     * @param id
+     *            Id of the icon
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
+     * @param players
+     *            Receivers of the effect
      * @see #sendPacket
      * @see #instantiateIconCrackPacket
      */
@@ -439,16 +690,28 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays an icon crack (item break) particle effect which is only visible for all players within a certain range in the world of @param center
+     * Displays an icon crack (item break) particle effect which is only visible
+     * for all players within a certain range in the world of @param center
      *
-     * @param center  Center location of the effect
-     * @param range   Range of the visibility
-     * @param id      Id of the icon
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param speed   Display speed of the particles
-     * @param amount  Amount of particles
+     * @param center
+     *            Center location of the effect
+     * @param range
+     *            Range of the visibility
+     * @param id
+     *            Id of the icon
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
      * @throws @IllegalArgumentException if the range is higher than 20
      * @see #sendPacket
      * @see #instantiateIconCrackPacket
@@ -460,32 +723,57 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays an icon crack (item break) effect which is visible for all players whitin the maximum range of 20 blocks in the world of @param center
+     * Displays an icon crack (item break) effect which is visible for all
+     * players whitin the maximum range of 20 blocks in the world of @param
+     * center
      *
-     * @param center  Center location of the effect
-     * @param id      Id of the icon
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param speed   Display speed of the particles
-     * @param amount  Amount of particles
-     * @see #displayIconCrack(org.bukkit.Location, double, int, float, float, float, float, int)
+     * @param center
+     *            Center location of the effect
+     * @param id
+     *            Id of the icon
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
+     * @see #displayIconCrack(Location, double, int, float, float, float, float,
+     *      int)
      */
     public static void displayIconCrack(Location center, int id, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
         displayIconCrack(center, MAX_RANGE, id, offsetX, offsetY, offsetZ, speed, amount);
     }
 
     /**
-     * Displays a block crack (block break) particle effect which is only visible for the specified players
+     * Displays a block crack (block break) particle effect which is only
+     * visible for the specified players
      *
-     * @param center  Center location of the effect
-     * @param id      Id of the block
-     * @param data    Data value
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param amount  Amount of particles
-     * @param players Receivers of the effect
+     * @param center
+     *            Center location of the effect
+     * @param id
+     *            Id of the block
+     * @param data
+     *            Data value
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param amount
+     *            Amount of particles
+     * @param players
+     *            Receivers of the effect
      * @see #sendPacket
      * @see #instantiateBlockCrackPacket
      */
@@ -494,16 +782,29 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a block crack (block break) particle effect which is only visible for all players within a certain range in the world of @param center
+     * Displays a block crack (block break) particle effect which is only
+     * visible for all players within a certain range in the world of @param
+     * center
      *
-     * @param center  Center location of the effect
-     * @param range   Range of the visibility
-     * @param id      Id of the block
-     * @param data    Data value
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param amount  Amount of particles
+     * @param center
+     *            Center location of the effect
+     * @param range
+     *            Range of the visibility
+     * @param id
+     *            Id of the block
+     * @param data
+     *            Data value
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param amount
+     *            Amount of particles
      * @throws @IllegalArgumentException if the range is higher than 20
      * @see #sendPacket
      * @see #instantiateBlockCrackPacket
@@ -515,33 +816,59 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a block crack (block break) effect which is visible for all players whitin the maximum range of 20 blocks in the world of @param center
+     * Displays a block crack (block break) effect which is visible for all
+     * players whitin the maximum range of 20 blocks in the world of @param
+     * center
      *
-     * @param center  Center location of the effect
-     * @param id      Id of the block
-     * @param data    Data value
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param amount  Amount of particles
-     * @see #displayBlockCrack(org.bukkit.Location, double, int, byte, float, float, float, int)
+     * @param center
+     *            Center location of the effect
+     * @param id
+     *            Id of the block
+     * @param data
+     *            Data value
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param amount
+     *            Amount of particles
+     * @see #displayBlockCrack(Location, double, int, byte, float, float, float,
+     *      int)
      */
     public static void displayBlockCrack(Location center, int id, byte data, float offsetX, float offsetY, float offsetZ, int amount) {
         displayBlockCrack(center, MAX_RANGE, id, data, offsetX, offsetY, offsetZ, amount);
     }
 
     /**
-     * Displays a block dust particle effect which is only visible for the specified players
+     * Displays a block dust particle effect which is only visible for the
+     * specified players
      *
-     * @param center  Center location of the effect
-     * @param id      Id of the block
-     * @param data    Data value
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param speed   Display speed of the particles
-     * @param amount  Amount of particles
-     * @param players Receivers of the effect
+     * @param center
+     *            Center location of the effect
+     * @param id
+     *            Id of the block
+     * @param data
+     *            Data value
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
+     * @param players
+     *            Receivers of the effect
      * @see #sendPacket
      * @see #instantiateBlockDustPacket
      */
@@ -550,17 +877,30 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a block dust particle effect which is only visible for all players within a certain range in the world of @param center
+     * Displays a block dust particle effect which is only visible for all
+     * players within a certain range in the world of @param center
      *
-     * @param center  Center location of the effect
-     * @param range   Range of the visibility
-     * @param id      Id of the block
-     * @param data    Data value
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param speed   Display speed of the particles
-     * @param amount  Amount of particles
+     * @param center
+     *            Center location of the effect
+     * @param range
+     *            Range of the visibility
+     * @param id
+     *            Id of the block
+     * @param data
+     *            Data value
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
      * @throws @IllegalArgumentException if the range is higher than 20
      * @see #sendPacket
      * @see #instantiateBlockDustPacket
@@ -572,38 +912,47 @@ public enum ParticleEffect {
     }
 
     /**
-     * Displays a block dust effect which is visible for all players whitin the maximum range of 20 blocks in the world of @param center
+     * Displays a block dust effect which is visible for all players whitin the
+     * maximum range of 20 blocks in the world of @param center
      *
-     * @param center  Center location of the effect
-     * @param id      Id of the block
-     * @param data    Data value
-     * @param offsetX Maximum distance particles can fly away from the center on the x-axis
-     * @param offsetY Maximum distance particles can fly away from the center on the y-axis
-     * @param offsetZ Maximum distance particles can fly away from the center on the z-axis
-     * @param speed   Display speed of the particles
-     * @param amount  Amount of particles
-     * @see #displayBlockDust(org.bukkit.Location, double, int, byte, float, float, float, float, int)
+     * @param center
+     *            Center location of the effect
+     * @param id
+     *            Id of the block
+     * @param data
+     *            Data value
+     * @param offsetX
+     *            Maximum distance particles can fly away from the center on the
+     *            x-axis
+     * @param offsetY
+     *            Maximum distance particles can fly away from the center on the
+     *            y-axis
+     * @param offsetZ
+     *            Maximum distance particles can fly away from the center on the
+     *            z-axis
+     * @param speed
+     *            Display speed of the particles
+     * @param amount
+     *            Amount of particles
+     * @see #displayBlockDust(Location, double, int, byte, float, float, float,
+     *      float, int)
      */
     public static void displayBlockDust(Location center, int id, byte data, float offsetX, float offsetY, float offsetZ, float speed, int amount) {
         displayBlockDust(center, MAX_RANGE, id, data, offsetX, offsetY, offsetZ, speed, amount);
     }
 
     /**
-     * Represents a runtime exception that can be thrown upon packet instantiation
+     * Represents a runtime exception that can be thrown upon packet
+     * instantiation
      */
     private static final class PacketInstantiationException extends RuntimeException {
         private static final long serialVersionUID = 3203085387160737484L;
 
         /**
-         * @param message Message that will be logged
-         */
-        public PacketInstantiationException(String message) {
-            super(message);
-        }
-
-        /**
-         * @param message Message that will be logged
-         * @param cause   Cause of the exception
+         * @param message
+         *            Message that will be logged
+         * @param cause
+         *            Cause of the exception
          */
         public PacketInstantiationException(String message, Throwable cause) {
             super(message, cause);
@@ -617,8 +966,10 @@ public enum ParticleEffect {
         private static final long serialVersionUID = 3203085387160737484L;
 
         /**
-         * @param message Message that will be logged
-         * @param cause   Cause of the exception
+         * @param message
+         *            Message that will be logged
+         * @param cause
+         *            Cause of the exception
          */
         public PacketSendingException(String message, Throwable cause) {
             super(message, cause);

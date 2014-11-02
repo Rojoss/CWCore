@@ -104,7 +104,7 @@ public class Debug {
         }
 
         if (obj instanceof Location) {
-            objString = "Location<World:" + ((Location)obj).getWorld() + ", X:" + ((Location)obj).getX() + ", Y:" + ((Location)obj).getY() + ", Z:" + ((Location)obj).getZ()
+            objString = "Location<World:" + ((Location)obj).getWorld().getName() + ", X:" + ((Location)obj).getX() + ", Y:" + ((Location)obj).getY() + ", Z:" + ((Location)obj).getZ()
                     + " Yaw:" + ((Location)obj).getYaw() + ", Pitch:" + ((Location)obj).getPitch() + ">";
         }
 
