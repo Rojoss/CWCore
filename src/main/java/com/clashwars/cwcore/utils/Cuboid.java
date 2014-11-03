@@ -379,7 +379,7 @@ public class Cuboid implements Iterable<Block>, Cloneable {
      * @return The max Location
      */
     public Location getMaxLoc() {
-        return new Location(getWorld(), maxY, maxY, maxZ);
+        return new Location(getWorld(), maxX, maxY, maxZ);
     }
 
     /**
@@ -405,7 +405,7 @@ public class Cuboid implements Iterable<Block>, Cloneable {
      * @return The max Vector
      */
     public Vector getMaxVector() {
-        return new Vector(maxY, maxY, maxZ);
+        return new Vector(maxX, maxY, maxZ);
     }
 
     /**
@@ -698,7 +698,7 @@ public class Cuboid implements Iterable<Block>, Cloneable {
             int x1 = Integer.parseInt(cuboidSplit[1]), y1 = Integer.parseInt(cuboidSplit[2]), z1 = Integer.parseInt(cuboidSplit[3]);
             int x2 = Integer.parseInt(cuboidSplit[4]), y2 = Integer.parseInt(cuboidSplit[5]), z2 = Integer.parseInt(cuboidSplit[6]);
 
-            Location loc1 = new Location(world, x1, y1, y2);
+            Location loc1 = new Location(world, x1, y1, z1);
             Location loc2 = new Location(world, x2, y2, z2);
 
             return new Cuboid(loc1, loc2);
