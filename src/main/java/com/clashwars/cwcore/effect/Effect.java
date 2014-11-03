@@ -93,6 +93,8 @@ public abstract class Effect implements Runnable {
      */
     public Vector targetOffset = null;
 
+    public boolean paused = false;
+
     private Location location = null;
     private WeakReference<Entity> entity = new WeakReference<Entity>(null);
     private Location target = null;
@@ -118,6 +120,14 @@ public abstract class Effect implements Runnable {
 			done = true;
 	}
 
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
+
 	private void done() {
 		done = true;
 		effectManager.done(this);
@@ -131,6 +141,9 @@ public abstract class Effect implements Runnable {
 
 	@Override
 	public final void run() {
+        if (paused) {
+            return;
+        }
         if (!validate()) {
             cancel();
             return;
