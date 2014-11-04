@@ -33,7 +33,7 @@ public class SelectionListener implements Listener {
 
         //Compare item with wands.
         ItemStack item = event.getItem();
-        if (item.getType() != wand.getType()) {
+        if (item  == null || item.getType() != wand.getType()) {
             return;
         }
         if (!item.hasItemMeta() || !item.getItemMeta().hasDisplayName()) {
@@ -47,11 +47,17 @@ public class SelectionListener implements Listener {
         event.setCancelled(true);
         Location loc = event.getClickedBlock().getLocation();
         if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-            sel.setPos1(player, loc);
-            player.sendMessage(CWUtil.formatCWMsg("&5Pos1 &6selected! &8(&7" + loc.getBlockX() + "&8, &7" + loc.getBlockY() + "&8, &7" + loc.getBlockZ() + "&8)"));
+            if (!loc.equals(sel.getPos1(player))) {
+                sel.setPos1(player, loc);
+                player.sendMessage(CWUtil.formatCWMsg("&5Pos1 &6selected! &8(&4" + loc.getBlockX() + "&8, &4" + loc.getBlockY() + "&8, &4" + loc.getBlockZ() + " &8- &7"
+                        + event.getClickedBlock().getType().toString() + "&8:&e" + event.getClickedBlock().getData() + "&8)"));
+            }
         } else {
-            sel.setPos2(player, loc);
-            player.sendMessage(CWUtil.formatCWMsg("&5Pos2 &6selected! &8(&7" + loc.getBlockX() + "&8, &7" + loc.getBlockY() + "&8, &7" + loc.getBlockZ() + "&8)"));
+            if (!loc.equals(sel.getPos2(player))) {
+                sel.setPos2(player, loc);
+                player.sendMessage(CWUtil.formatCWMsg("&5Pos2 &6selected! &8(&4" + loc.getBlockX() + "&8, &4" + loc.getBlockY() + "&8, &4" + loc.getBlockZ() + " &8- &7"
+                        + event.getClickedBlock().getType().toString() + "&8:&e" + event.getClickedBlock().getData() + "&8)"));
+            }
         }
     }
 

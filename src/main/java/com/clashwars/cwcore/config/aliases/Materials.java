@@ -1,12 +1,12 @@
 package com.clashwars.cwcore.config.aliases;
 
-import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.config.internal.EasyConfig;
 import com.clashwars.cwcore.utils.CWUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Materials extends EasyConfig {
 
@@ -308,13 +308,29 @@ public class Materials extends EasyConfig {
      * @return Material
      */
     public Material getMaterial(String alias) {
+        int id = CWUtil.getInt(alias);
+        if (id < 0 && alias.contains(":")) {
+            alias = alias.split(":")[0];
+        }
         for (String matName : materials.keySet()) {
-            if (alias.equalsIgnoreCase(matName) || alias.equalsIgnoreCase(matName.replace("_", ""))) {
+            if (id < 0 && alias.equalsIgnoreCase(matName) || alias.equalsIgnoreCase(matName.replace("_", ""))) {
                 return Material.valueOf(matName);
             }
             for (String s : materials.get(matName)) {
+                String[] split = matName.split("-");
+                if (id >= 0) {
+                    if (split != null && split.length > 0) {
+                        if (Material.valueOf(split[0]).getId() == id) {
+                            return Material.valueOf(split[0]);
+                        }
+                    } else {
+                        if (Material.valueOf(matName).getId() == id) {
+                            return Material.valueOf(matName);
+                        }
+                    }
+                    continue;
+                }
                 if (s.equalsIgnoreCase(alias)) {
-                    String[] split = matName.split("-");
                     if (split != null && split.length > 0) {
                         return Material.valueOf(split[0]);
                     } else {
@@ -332,17 +348,26 @@ public class Materials extends EasyConfig {
      * @return material data as int. -1 if no data found.
      */
     public int getMaterialData(String alias) {
-        for (String matName : materials.keySet()) {
-            for (String s : materials.get(matName)) {
-                if (s.equalsIgnoreCase(alias)) {
-                    String[] split = matName.split("-");
-                    if (split.length > 1) {
-                        return CWUtil.getInt(split[1]);
+        int id = CWUtil.getInt(alias);
+        if (id < 0) {
+            if (alias.contains(":")) {
+                String[] split = alias.split(":");
+                if (split.length > 1) {
+                    return CWUtil.getInt(split[1]);
+                }
+            }
+            for (String matName : materials.keySet()) {
+                for (String s : materials.get(matName)) {
+                    if (s.equalsIgnoreCase(alias)) {
+                        String[] split = matName.split("-");
+                        if (split.length > 1) {
+                            return CWUtil.getInt(split[1]);
+                        }
                     }
                 }
             }
         }
-        return -1;
+        return 0;
     }
 
     /**

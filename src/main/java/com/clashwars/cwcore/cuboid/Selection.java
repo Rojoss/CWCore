@@ -1,6 +1,5 @@
 package com.clashwars.cwcore.cuboid;
 
-import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.helpers.CWItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,23 +16,29 @@ import java.util.UUID;
  */
 public class Selection {
 
-    private CWItem basicWand = new CWItem(Material.STONE_AXE, 1, (byte)0, "&6Basic Wand", new String[] {"&7Select CW cuboids."});
-    private CWItem multiWand = new CWItem(Material.IRON_AXE, 1, (byte)0, "&6Multi Wand", new String[] {"&7Select both CW cuboids and WorldEdit."});
+    private CWItem basicWand = new CWItem(Material.STONE_AXE, 1, (byte)0, "&4&lCW &6&lWAND", new String[] {"&7Select CW cuboids."});
 
     Map<UUID, SelectionData> selections = new HashMap<UUID, SelectionData>();
+    SelectionData globalSelection = new SelectionData();
 
 
     /**
      * Get a Cuboid from the selection.
      * If only one of the locations is set a 1*1*1 cuboid will be returned at that location.
+     * @param player Get selection from the specified player or get global selection if it's null.
      * @return Cuboid or null if both locations aren't set.
      */
     public Cuboid getSelection(Player player) {
-        UUID uuid = player.getUniqueId();
-        if (!selections.containsKey(uuid)) {
-            selections.put(uuid, new SelectionData());
+        SelectionData sd;
+        if (player == null) {
+            sd = globalSelection;
+        } else {
+            UUID uuid = player.getUniqueId();
+            if (!selections.containsKey(uuid)) {
+                selections.put(uuid, new SelectionData());
+            }
+            sd = selections.get(uuid);
         }
-        SelectionData sd = selections.get(uuid);
         if (sd.pos1 != null && sd.pos2 != null) {
             return new Cuboid(sd.pos1, sd.pos2);
         } else if (sd.pos1 != null) {
@@ -49,66 +54,92 @@ public class Selection {
     /**
      * Get the first selected position.
      * If the position isn't set it'll return null.
+     * @param player Get pos1 from the specified player or get global pos1 if it's null.
      * @return Location of pos1 or null
      */
     public Location getPos1(Player player) {
-        UUID uuid = player.getUniqueId();
-        if (!selections.containsKey(uuid)) {
-            selections.put(uuid, new SelectionData());
+        if (player == null) {
+            return globalSelection.pos1;
+        } else {
+            UUID uuid = player.getUniqueId();
+            if (!selections.containsKey(uuid)) {
+                selections.put(uuid, new SelectionData());
+            }
+            return selections.get(uuid).pos1;
         }
-        return selections.get(uuid).pos1;
     }
 
     /**
      * Set the first position to the specified location.
+     * @param player Set pos1 from the specified player or set global pos1 if it's null.
      * @param location The location used to be set as pos1.
      */
     public void setPos1(Player player, Location location) {
-        UUID uuid = player.getUniqueId();
-        if (!selections.containsKey(uuid)) {
-            selections.put(uuid, new SelectionData());
+        if (player == null) {
+            globalSelection.pos1 = location;
+        } else {
+            UUID uuid = player.getUniqueId();
+            if (!selections.containsKey(uuid)) {
+                selections.put(uuid, new SelectionData());
+            }
+            selections.get(uuid).pos1 = location;
         }
-        selections.get(uuid).pos1 = location;
     }
 
 
     /**
      * Get the second selected position.
      * If the position isn't set it'll return null.
+     * @param player Get pos2 from the specified player or get global pos2 if it's null.
      * @return Location of pos2 or null
      */
     public Location getPos2(Player player) {
-        UUID uuid = player.getUniqueId();
-        if (!selections.containsKey(uuid)) {
-            selections.put(uuid, new SelectionData());
+        if (player == null) {
+            return globalSelection.pos2;
+        } else {
+            UUID uuid = player.getUniqueId();
+            if (!selections.containsKey(uuid)) {
+                selections.put(uuid, new SelectionData());
+            }
+            return selections.get(uuid).pos2;
         }
-        return selections.get(uuid).pos2;
     }
 
     /**
      * Set the second position to the specified location.
+     * @param player Set pos2 from the specified player or set global pos2 if it's null.
      * @param location The location used to be set as pos2.
      */
     public void setPos2(Player player, Location location) {
-        UUID uuid = player.getUniqueId();
-        if (!selections.containsKey(uuid)) {
-            selections.put(uuid, new SelectionData());
+        if (player == null) {
+            globalSelection.pos2 = location;
+        } else {
+            UUID uuid = player.getUniqueId();
+            if (!selections.containsKey(uuid)) {
+                selections.put(uuid, new SelectionData());
+            }
+            selections.get(uuid).pos2 = location;
         }
-        selections.get(uuid).pos2 = location;
     }
 
 
     /**
      * Get a enum value that shows which points have been set.
      * It'll return BOTH, NONE, POS1 or POS2.
+     * @param player Get points from the specified player or from global if it's null.
      * @return SetPoints enum value based on points set.
      */
     public SetPoints getSetPoints(Player player) {
-        UUID uuid = player.getUniqueId();
-        if (!selections.containsKey(uuid)) {
-            selections.put(uuid, new SelectionData());
+        SelectionData sd;
+        if (player == null) {
+            sd = globalSelection;
+        } else {
+            UUID uuid = player.getUniqueId();
+            if (!selections.containsKey(uuid)) {
+                selections.put(uuid, new SelectionData());
+            }
+            sd = selections.get(uuid);
         }
-        SelectionData sd = selections.get(uuid);
         if (sd.pos1 != null && sd.pos2 != null) {
             return SetPoints.BOTH;
         } else if (sd.pos1 != null) {

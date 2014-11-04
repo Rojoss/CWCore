@@ -4,6 +4,18 @@ version: ${project.version}
 description: ${project.description}
 softdepend: [Vault, ProtocolLib, WorldGuard, Factions, Essentials]
 commands:
-  cwtest:
-    description: Testing command
-    usage: /<command> [param]
+  cww:
+    description: Get cuboid selection wand.
+    usage: /<command>
+    aliases: [cwwand]
+  sel:
+    description: Cuboid selection editor commands.
+    usage: /<command> [args]
+  p1:
+    description: Set cuboid pos 1.
+    usage: /<command>
+    aliases: [l1]
+  p2:
+    description: Set cuboid pos 2.
+    usage: /<command>
+    aliases: [l2]
