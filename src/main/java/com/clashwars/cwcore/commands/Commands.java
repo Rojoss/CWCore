@@ -32,20 +32,8 @@ public class Commands {
                 return true;
             }
 
-            if (args.length > 0) {
-                if (args[0].equalsIgnoreCase("-w")) {
-                    cwc.getSel().getBasicWand().giveToPlayer(player);
-                    player.sendMessage(CWUtil.formatCWMsg("&6Basic wand given."));
-                    return true;
-                }
-            }
-            if (cwc.GetDM().getWorldedit() == null) {
-                cwc.getSel().getBasicWand().giveToPlayer(player);
-                player.sendMessage(CWUtil.formatCWMsg("&6Basic wand given. &8(&7no worldedit&8)"));
-            } else {
-                cwc.getSel().getMultiWand().giveToPlayer(player);
-                player.sendMessage(CWUtil.formatCWMsg("&6Multi wand given."));
-            }
+            cwc.getSel().getWand().giveToPlayer(player);
+            player.sendMessage(CWUtil.formatCWMsg("&6Wand given."));
             return true;
         }
 
@@ -64,19 +52,12 @@ public class Commands {
                 return true;
             }
 
-            boolean worldedit = true;
-            if (args.length > 0) {
-                if (args[0].equalsIgnoreCase("-w")) {
-                    worldedit = false;
-                }
-            }
-
             Location loc = player.getLocation();
             if (label.equalsIgnoreCase("p1") || label.equalsIgnoreCase("l1")) {
-                cwc.getSel().setPos1(loc);
+                cwc.getSel().setPos1(player, loc);
                 player.sendMessage(CWUtil.formatCWMsg("&5Pos1 &6selected! &8(&7" + loc.getBlockX() + "&8, &7" + loc.getBlockY() + "&8, &7" + loc.getBlockZ() + "&8)"));
             } else {
-                cwc.getSel().setPos2(loc);
+                cwc.getSel().setPos2(player, loc);
                 player.sendMessage(CWUtil.formatCWMsg("&5Pos2 &6selected! &8(&7" + loc.getBlockX() + "&8, &7" + loc.getBlockY() + "&8, &7" + loc.getBlockZ() + "&8)"));
             }
         }
