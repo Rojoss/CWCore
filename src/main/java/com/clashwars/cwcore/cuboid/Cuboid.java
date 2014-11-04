@@ -1,4 +1,4 @@
-package com.clashwars.cwcore.utils;
+package com.clashwars.cwcore.cuboid;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -271,61 +271,70 @@ public class Cuboid implements Iterable<Block>, Cloneable {
 
     /**
      * Set the minimum location based on a bukkit Location.
-     * If one of the axis is higher then the max it will be set to the max of that axis.
+     * The min and max location will be recalculated.
+     * So the current min location will be set to this but it might not be the same as the new min location.
      * @param min A location used as min.
      */
-    public void setMin(Location min) {
-        setMin(min.getBlockX(), min.getBlockY(), min.getBlockZ());
+    public void setPos1(Location min) {
+        setPos1(min.getBlockX(), min.getBlockY(), min.getBlockZ());
     }
 
     /**
      * Set the minimum location based on a vector.
-     * If one of the axis is higher then the max it will be set to the max of that axis.
+     * The min and max location will be recalculated.
+     * So the current min location will be set to this but it might not be the same as the new min location.
      * @param min A vector used as min.
      */
-    public void setMin(Vector min) {
-        setMin(min.getBlockX(), min.getBlockY(), min.getBlockZ());
+    public void setPos1(Vector min) {
+        setPos1(min.getBlockX(), min.getBlockY(), min.getBlockZ());
     }
 
     /**
      * Set the minimum location based on x/y/z coordinates.
-     * If one of the axis is higher then the max it will be set to the max of that axis.
+     * The min and max location will be recalculated.
+     * So the current min location will be set to this but it might not be the same as the new min location.
      * @param minX The X coordinate used as min.
      * @param minY The Y coordinate used as min.
      * @param minZ The Z coordinate used as min.
      */
-    public void setMin(int minX, int minY, int minZ) {
+    public void setPos1(int minX, int minY, int minZ) {
         this.minX = Math.min(minX, maxX);
         this.minY = Math.min(minY, maxY);
         this.minZ = Math.min(minZ, maxZ);
+        this.maxX = Math.max(minX, maxX);
+        this.maxY = Math.max(minY, maxY);
+        this.maxZ = Math.max(minZ, maxZ);
     }
 
     /**
      * Set the maximum location based on a bukkit Location.
-     * If one of the axis is lower then the min it will be set to the min of that axis.
+     * The min and max location will be recalculated.
+     * So the current max location will be set to this but it might not be the same as the new max location.
      * @param max A location used as max.
      */
-    public void setMax(Location max) {
-        setMin(max.getBlockX(), max.getBlockY(), max.getBlockZ());
+    public void setPos2(Location max) {
+        setPos2(max.getBlockX(), max.getBlockY(), max.getBlockZ());
     }
 
     /**
      * Set the maximum location based on a vector.
-     * If one of the axis is lower then the min it will be set to the min of that axis.
+     * The min and max location will be recalculated.
+     * So the current max location will be set to this but it might not be the same as the new max location.
      * @param max A vector used as max.
      */
-    public void setMax(Vector max) {
-        setMin(max.getBlockX(), max.getBlockY(), max.getBlockZ());
+    public void setPos2(Vector max) {
+        setPos2(max.getBlockX(), max.getBlockY(), max.getBlockZ());
     }
 
     /**
      * Set the maximum location based on x/y/z coordinates.
-     * If one of the axis is lower then the min it will be set to the min of that axis.
+     * The min and max location will be recalculated.
+     * So the current max location will be set to this but it might not be the same as the new max location.
      * @param maxX The X coordinate used as max.
      * @param maxY The Y coordinate used as max.
      * @param maxZ The Z coordinate used as max.
      */
-    public void setMax(int maxX, int maxY, int maxZ) {
+    public void setPos2(int maxX, int maxY, int maxZ) {
         this.maxX = Math.max(maxX, minX);
         this.maxY = Math.max(maxY, minY);
         this.maxZ = Math.max(maxZ, minZ);
@@ -467,7 +476,7 @@ public class Cuboid implements Iterable<Block>, Cloneable {
      * Expand the region by the specified amount of blocks in the specified direction.
      * If you specify for example Dir.X it will expand in both directions.
      * To only expand in 1 direction use for example Dir.NORTH
-     * @param dir The direction {@link com.clashwars.cwcore.utils.Cuboid.Dir}
+     * @param dir The direction {@link Cuboid.Dir}
      * @param amt The amount of blocks to expand.
      */
     public void expand(Dir dir, int amt) {
@@ -509,7 +518,7 @@ public class Cuboid implements Iterable<Block>, Cloneable {
      * Contract the region by the specified amount of blocks in the specified direction.
      * If you specify for example Dir.X it will contract in both directions.
      * To only contract in 1 direction use for example Dir.NORTH
-     * @param dir The direction {@link com.clashwars.cwcore.utils.Cuboid.Dir}
+     * @param dir The direction {@link Cuboid.Dir}
      * @param amt The amount of blocks to contract.
      */
     public void contract(Dir dir, int amt) {

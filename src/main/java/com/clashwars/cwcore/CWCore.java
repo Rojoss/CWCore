@@ -2,6 +2,8 @@ package com.clashwars.cwcore;
 
 import com.clashwars.cwcore.commands.Commands;
 import com.clashwars.cwcore.config.aliases.*;
+import com.clashwars.cwcore.cuboid.Selection;
+import com.clashwars.cwcore.cuboid.SelectionListener;
 import com.clashwars.cwcore.dependencies.internal.DependencyManager;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EntityManager;
@@ -22,6 +24,7 @@ public class CWCore extends JavaPlugin {
     private DependencyManager dm;
     private CooldownManager cdm;
     private EntityManager entityManager;
+    private Selection sel;
 
     private Materials materialsCfg;
     private Sounds soundsCfg;
@@ -48,13 +51,18 @@ public class CWCore extends JavaPlugin {
 
         //Other
         cdm = new CooldownManager();
+        sel = new Selection();
 
         //Load effects
         entityManager = new EntityManager(this);
         EffectManager.initialize();
-        getServer().getPluginManager().registerEvents(new ItemListener(), this);
 
         //Load the aliases.
+
+        //Listeners
+        getServer().getPluginManager().registerEvents(new ItemListener(), this);
+        getServer().getPluginManager().registerEvents(new SelectionListener(this), this);
+
         loadAliases();
 
         log("Enabled.");
@@ -213,5 +221,9 @@ public class CWCore extends JavaPlugin {
 
     public List<EffectManager> getEffectManagers() {
         return EffectManager.getManagers();
+    }
+
+    public Selection getSel() {
+        return sel;
     }
 }

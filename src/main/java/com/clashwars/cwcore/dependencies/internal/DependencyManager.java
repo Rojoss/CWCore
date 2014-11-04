@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.earth2me.essentials.Essentials;
 import com.massivecraft.factions.Factions;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.Plugin;
@@ -15,6 +16,7 @@ public class DependencyManager {
     private CWCore cwc;
 
     private Economy economy;
+    private WorldEditPlugin worldedit;
     private WorldGuardPlugin worldguard;
     private Essentials essentials;
     private Factions factions;
@@ -28,6 +30,7 @@ public class DependencyManager {
     public void loadDependencies() {
         cwc.log("Loading dependencies...");
         loadEconomy();
+        loadWorldedit();
         loadWorldguard();
         loadEssentials();
         loadProtocolLib();
@@ -59,6 +62,26 @@ public class DependencyManager {
      */
     public Economy getEconomy() {
         return economy;
+    }
+
+
+    // WORLDEDIT
+    private void loadWorldedit() {
+        Plugin plugin = cwc.getServer().getPluginManager().getPlugin("WorldEdit");
+        if (plugin == null || !(plugin instanceof WorldEditPlugin)) {
+            cwc.error("WorldEdit dependency couldn't be loaded!");
+            return;
+        }
+        worldedit = (WorldEditPlugin) plugin;
+        cwc.log("WorldEdit dependency loaded!");
+    }
+
+    /**
+     * Get WorldEditPlugin plugin class.
+     * @return WorldEditPlugin
+     */
+    public WorldEditPlugin getWorldedit() {
+        return worldedit;
     }
 
 
