@@ -757,25 +757,54 @@ public class CWUtil {
     //##########################################################################################
 
     /**
-     * Remove a certain amount of items from the given ItemStack.
+     * Remove a certain amount of items from the items the player is holding.
      * If there is more amt or equal to the item it will remove the item.
      * If there is a remainder what didn't get removed it will be returned.
-     * @param item The item to remove items from.
+     * @param player The player to remove items from.
      * @param amt The amount of items to try remove.
      * @return Amount of items that didn't get removed. (remainder)
      */
-    public static int removeItemsFromStack(ItemStack item, int amt) {
+    public static int removeItemsFromHand(Player player, int amt) {
+        ItemStack item = player.getItemInHand();
+        if (item == null) {
+            return amt;
+        }
         int stackAmt = item.getAmount();
         if (stackAmt > amt) {
             item.setAmount(stackAmt - amt);
             return 0;
         }
-        item.setType(Material.AIR);
-        item.setAmount(0);
+        player.setItemInHand(new ItemStack(Material.AIR));
         if (stackAmt == amt) {
             return 0;
         }
-        return (amt -= stackAmt);
+        return (amt - stackAmt);
+    }
+
+    /**
+     * Remove a certain amount of items from the specified slot in the specified inventory.
+     * If there is more amt or equal to the item it will remove the item.
+     * If there is a remainder what didn't get removed it will be returned.
+     * @param inv The inventory to remove the item(s) from.
+     * @param slot The slot ID to remove the item(s) from.
+     * @param amt The amount of items to try remove.
+     * @return Amount of items that didn't get removed. (remainder)
+     */
+    public static int removeItemsFromSlot(Inventory inv, int slot, int amt) {
+        ItemStack item = inv.getItem(slot);
+        if (item == null) {
+            return amt;
+        }
+        int stackAmt = item.getAmount();
+        if (stackAmt > amt) {
+            item.setAmount(stackAmt - amt);
+            return 0;
+        }
+        inv.setItem(slot, new ItemStack(Material.AIR));
+        if (stackAmt == amt) {
+            return 0;
+        }
+        return (amt - stackAmt);
     }
 
 
@@ -821,7 +850,11 @@ public class CWUtil {
      */
     public static int removeItems(Inventory inv, ItemStack item, int amt, boolean checkName, boolean checkDurability) {
         int stackAmt;
-        for (ItemStack stack : inv.getContents()) {
+        for (int i = 0; i <= inv.getSize(); i++) {
+            ItemStack stack = inv.getItem(i);
+            if (stack == null) {
+                continue;
+            }
             //Check if items match
             if (!compareItems(stack, item, checkName, checkDurability)) {
                 continue;
@@ -833,8 +866,7 @@ public class CWUtil {
                 stack.setAmount(stackAmt - amt);
                 return 0;
             }
-            stack.setType(Material.AIR);
-            stack.setAmount(0);
+            inv.setItem(i, new ItemStack(Material.AIR));
             if (stackAmt == amt) {
                 return 0;
             }
