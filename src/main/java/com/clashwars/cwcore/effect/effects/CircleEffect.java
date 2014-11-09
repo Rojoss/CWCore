@@ -22,12 +22,12 @@ public class CircleEffect extends Effect {
     public ParticleEffect particle = ParticleEffect.HAPPY_VILLAGER;
 
     /*
-     * Radius of circle
+     * Diameter of circle
      */
     public float diameter = .4f;
 
     /*
-     * Degrees to increase per itteration.
+     * Degrees to increase per iteration.
      */
     public int stepSize = 5;
 
