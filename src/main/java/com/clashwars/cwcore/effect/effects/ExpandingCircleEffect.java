@@ -1,38 +1,61 @@
 package com.clashwars.cwcore.effect.effects;
 
+import com.clashwars.cwcore.effect.Effect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
+import com.clashwars.cwcore.packet.ParticleEffect;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class ExpandingCircleEffect extends CircleEffect {
+/**
+ * Creates a basic circle.<br>
+ * <b>DEFAULTS:</b><br>
+ * particle = ParticleEffect.HAPPY_VILLAGER<br>
+ * diameter = .4f<br>
+ * stepSize = 5<br>
+ */
+public class ExpandingCircleEffect extends Effect {
 
     /*
-     * Amount of rings
+     * ParticleType of spawned particle
      */
-    public int rings = 4;
+    public ParticleEffect particle = ParticleEffect.HAPPY_VILLAGER;
 
     /*
      * Distance between rings
      */
     public float distanceBetweenRings = 0.4F;
 
+    /*
+     * Stage count
+     */
+    public int step = 1;
+
+    /*
+     * Degrees to increase per iteration
+     */
+    public int degreesPerIteration = 18;
+
     public ExpandingCircleEffect(EffectManager effectManager) {
         super(effectManager);
-        type = EffectType.INSTANT;
+        type = EffectType.REPEATING;
+        period = 10;
+        iterations = 20;
     }
 
     @Override
     public void onRun() {
-        for(int x = 1; x <= rings; x++) {
-            for (int step = 0; step <= 360; step += stepSize) {
-                Vector v = new Vector();
-                v.setX(distanceBetweenRings * x * Math.cos(step));
-                v.setZ(distanceBetweenRings * x * Math.sin(step));
-                Location location = getLocation().clone();
-                particle.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
-            }
+        if(step > iterations) {
+            return;
         }
+        for (int degrees = 0; degrees <= 360; degrees += degreesPerIteration) {
+            Vector v = new Vector();
+            v.setX(distanceBetweenRings * step * Math.cos(degrees));
+            v.setZ(distanceBetweenRings * step * Math.sin(degrees));
+            Location location = getLocation().clone();
+            particle.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+        }
+        step++;
     }
 
 
