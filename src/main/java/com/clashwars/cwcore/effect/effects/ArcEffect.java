@@ -1,9 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -18,11 +15,6 @@ import org.bukkit.util.Vector;
  * iterations = 200<br>
  */
 public class ArcEffect extends BaseEffect {
-
-    /**
-     * ParticleType of spawned particle
-     */
-    public ParticleEffect particle = ParticleEffect.FLAME;
 
     /**
      * Height of the arc in blocks
@@ -61,8 +53,12 @@ public class ArcEffect extends BaseEffect {
             Vector v = link.clone().normalize().multiply((float) length * i / particles);
             float x = ((float) i / particles) * length - length / 2;
             float y = (float) (-pitch * Math.pow(x, 2) + height);
+
             location.add(v).add(0, y, 0);
-            particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+            for (Particle particle : particleList) {
+                particle.display(location, visibleRange);
+                location.subtract(v);
+            }
             location.subtract(0, y, 0).subtract(v);
 
             step++;

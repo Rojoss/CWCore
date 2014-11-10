@@ -1,25 +1,16 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 /**
  * Creates a basic circle.<br>
  * <b>DEFAULTS:</b><br>
- * particle = ParticleEffect.HAPPY_VILLAGER<br>
  * diameter = .4f<br>
  * stepSize = 5<br>
  */
 public class CircleEffect extends BaseEffect {
-
-    /*
-     * ParticleType of spawned particle
-     */
-    public ParticleEffect particle = ParticleEffect.HAPPY_VILLAGER;
 
     /*
      * Diameter of circle
@@ -44,7 +35,12 @@ public class CircleEffect extends BaseEffect {
             v.setX(diameter * Math.cos(step));
             v.setZ(diameter * Math.sin(step));
             Location location = getLocation().clone();
-            particle.display(location.add(v).add(((double)diameter/2)-1, 0, ((double)diameter/2)-1), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+
+            location.add(v).add(((double)diameter/2)-1, 0, ((double)diameter/2)-1);
+            for (Particle particle : particleList) {
+                particle.display(location, visibleRange);
+            }
+            location.subtract(v).subtract(((double)diameter/2)-1, 0, ((double)diameter/2)-1);
         }
     }
 }

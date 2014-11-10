@@ -1,9 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import com.clashwars.cwcore.utils.MathUtils;
 import com.clashwars.cwcore.utils.RandomUtils;
 import com.clashwars.cwcore.utils.VectorUtils;
@@ -13,11 +10,6 @@ import org.bukkit.util.Vector;
 import java.util.Random;
 
 public class CylinderEffect extends BaseEffect {
-
-    /**
-     * Particle of the cube
-     */
-    public ParticleEffect particle = ParticleEffect.FLAME;
 
     /**
      * Radius of cylinder
@@ -112,10 +104,15 @@ public class CylinderEffect extends BaseEffect {
             }
             if (enableRotation)
                 VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
-            particle.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+            location.add(v);
+            for (Particle particle : particleList) {
+                particle.display(location, visibleRange);
+            }
             location.subtract(v);
         }
-        particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+        for (Particle particle : particleList) {
+            particle.display(location, visibleRange);
+        }
         step++;
     }
 

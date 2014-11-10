@@ -1,8 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
+import com.clashwars.cwcore.effect.*;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.RandomUtils;
 import org.bukkit.Location;
@@ -25,7 +23,6 @@ public class ExplodeEffect extends BaseEffect {
     public ExplodeEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.INSTANT;
-        amt = 25;
         speed = .5f;
     }
 
@@ -33,8 +30,8 @@ public class ExplodeEffect extends BaseEffect {
     public void onRun() {
         Location location = getLocation();
         location.getWorld().playSound(location, sound, 4.0F, (1.0F + (RandomUtils.random.nextFloat() - RandomUtils.random.nextFloat()) * 0.2F) * 0.7F);
-        ParticleEffect.EXPLODE.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
-        ParticleEffect.HUGE_EXPLOSION.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+        ParticleEffect.EXPLODE.display(location, visibleRange, 0, 0, 0, speed, amount);
+        ParticleEffect.HUGE_EXPLOSION.display(location, visibleRange, 0, 0, 0, 0, amount);
     }
 
 }

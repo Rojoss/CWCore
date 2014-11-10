@@ -2,6 +2,7 @@ package com.clashwars.cwcore.effect.effects;
 
 import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
+import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.MathUtils;
 import com.clashwars.cwcore.utils.VectorUtils;
@@ -74,7 +75,10 @@ public class HeartEffect extends BaseEffect {
 
             VectorUtils.rotateVector(vector, xRotation, yRotation, zRotation);
 
-            particle.display(location.add(vector), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+            location.add(vector);
+            for (Particle particle : particleList) {
+                particle.display(location, visibleRange);
+            }
             location.subtract(vector);
         }
     }

@@ -1,17 +1,13 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 
 public class BoilEffect extends BaseEffect {
 
-    public ParticleEffect particle = ParticleEffect.BUBBLE;
     public Sound sound = Sound.LAVA;
-    public float soundPitch, soundVolume, popPitch, popVolume = 1f;
+    public float soundPitch, soundVolume = 1f;
     public int soundDelay = 15;
     protected float step = 0;
 
@@ -27,11 +23,15 @@ public class BoilEffect extends BaseEffect {
         step++;
         Location location = getLocation();
 
-        if (step % soundDelay == 0) {
-            location.getWorld().playSound(location, sound, soundVolume, soundPitch);
-            ParticleEffect.SMOKE.display(location.add(0,1,0), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+        for (Particle particle : particleList) {
+            particle.display(location, visibleRange);
         }
 
-        particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+        if (step % soundDelay == 0) {
+            for (Particle particle : secondaryParticleList) {
+                particle.display(location, visibleRange);
+            }
+            location.getWorld().playSound(location, sound, soundVolume, soundPitch);
+        }
     }
 }

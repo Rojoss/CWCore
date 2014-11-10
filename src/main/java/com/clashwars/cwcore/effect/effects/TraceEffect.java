@@ -1,9 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
@@ -12,11 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TraceEffect extends BaseEffect {
-
-    /**
-     * Particle to spawn
-     */
-    public ParticleEffect particle = ParticleEffect.FLAME;
 
     /**
      * Interations to wait before refreshing particles
@@ -71,7 +63,9 @@ public class TraceEffect extends BaseEffect {
 
         for (Vector position : wayPoints) {
             Location particleLocation = new Location(world, position.getX(), position.getY(), position.getZ());
-            particle.display(particleLocation, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+            for (Particle particle : particleList) {
+                particle.display(particleLocation, visibleRange);
+            }
         }
     }
 

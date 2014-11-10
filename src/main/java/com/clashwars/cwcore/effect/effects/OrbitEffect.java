@@ -1,12 +1,9 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import org.bukkit.Location;
 
-public class MusicEffect extends BaseEffect {
+public class OrbitEffect extends BaseEffect {
 
     /**
      * Radials to spawn next note.
@@ -23,13 +20,11 @@ public class MusicEffect extends BaseEffect {
      */
     protected float step = 0;
 
-    public MusicEffect(EffectManager effectManager) {
+    public OrbitEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
         iterations = 400;
         period = 1;
-        speed = .5f;
-        amt = 1;
     }
 
     @Override
@@ -37,7 +32,9 @@ public class MusicEffect extends BaseEffect {
         Location location = getLocation();
         location.add(0, 1.9f, 0);
         location.add(Math.cos(radialsPerStep * step) * radius, 0, Math.sin(radialsPerStep * step) * radius);
-        ParticleEffect.NOTE.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+        for (Particle particle : particleList) {
+            particle.display(location, visibleRange);
+        }
         step++;
     }
 

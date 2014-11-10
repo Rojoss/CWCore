@@ -1,9 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import com.clashwars.cwcore.utils.RandomUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -11,16 +8,6 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 
 public class TornadoEffect extends BaseEffect {
-	
-	/*
-	 * Tornado particle
-	 */
-	public ParticleEffect tornadoParticle = ParticleEffect.FLAME;
-	
-	/*
-	 * Particle of the cloud
-	 */
-	public ParticleEffect cloudParticle = ParticleEffect.CLOUD;
 	
 	/*
 	 * Size of the cloud
@@ -41,16 +28,6 @@ public class TornadoEffect extends BaseEffect {
 	 * Max radius of the Tornado
 	 */
 	public float maxTornadoRadius = 5f;
-	
-	/*
-	 * Should the cloud appear?
-	 */
-	public boolean showCloud = true;
-	
-	/*
-	 * Should the tornado appear?
-	 */
-	public boolean showTornado = true;
     
     /*
      * Distance between each row
@@ -74,10 +51,11 @@ public class TornadoEffect extends BaseEffect {
 		Location l = getLocation().add(0, yOffset, 0);
 		for(int i = 0; i < (100 * cloudSize); i++){
 			Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * cloudSize);
-			if(showCloud){
-                cloudParticle.display(l.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
-				l.subtract(v);
-			}
+            l.add(v);
+            for (Particle particle : secondaryParticleList) {
+                particle.display(l, visibleRange);
+            }
+            l.subtract(v);
 		}
 		Location t = l.clone().add(0, .2, 0);
 		double r = .45 * (maxTornadoRadius*(2.35/tornadoHeight));
@@ -86,11 +64,12 @@ public class TornadoEffect extends BaseEffect {
 			if(fr > maxTornadoRadius)
 				fr = maxTornadoRadius;
 			for(Vector v : createCircle(y, fr)){
-				if(showTornado){
-                    tornadoParticle.display(t.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
-					t.subtract(v);
-					step++;
-				}
+                t.add(v);
+                for (Particle particle : particleList) {
+                    particle.display(t, visibleRange);
+                }
+                t.subtract(v);
+                step++;
 			}
 		}
 		l.subtract(0, yOffset, 0);

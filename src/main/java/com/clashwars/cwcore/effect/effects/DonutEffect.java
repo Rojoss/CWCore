@@ -1,19 +1,11 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import com.clashwars.cwcore.utils.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 public class DonutEffect extends BaseEffect {
-
-    /**
-     * ParticleType of spawned particle
-     */
-    public ParticleEffect particle = ParticleEffect.FLAME;
 
     /**
      * Amount of particles inside of a single vertical circle
@@ -62,7 +54,10 @@ public class DonutEffect extends BaseEffect {
 
                 VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
 
-                particle.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+                location.add(v);
+                for (Particle particle : particleList) {
+                    particle.display(location, visibleRange);
+                }
                 location.subtract(v);
             }
         }

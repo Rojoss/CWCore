@@ -1,18 +1,10 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import com.clashwars.cwcore.utils.RandomUtils;
 import org.bukkit.Location;
 
 public class SmokeEffect extends BaseEffect {
-
-    /**
-     * ParticleType of spawned particle
-     */
-    public ParticleEffect particle = ParticleEffect.SMOKE;
 
     public SmokeEffect(EffectManager effectManager) {
         super(effectManager);
@@ -27,7 +19,9 @@ public class SmokeEffect extends BaseEffect {
         for (int i = 0; i < 20; i++) {
             location.add(RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * 0.6d));
             location.add(0, RandomUtils.random.nextFloat() * 2, 0);
-            particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+            for (Particle particle : particleList) {
+                particle.display(location, visibleRange);
+            }
         }
     }
 

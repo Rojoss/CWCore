@@ -1,9 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import com.clashwars.cwcore.utils.MathUtils;
 import com.clashwars.cwcore.utils.VectorUtils;
 import org.bukkit.Location;
@@ -13,7 +10,6 @@ import org.bukkit.util.Vector;
  * Creates an animated Sphere.. Thanks to the author (Qukie) for sharing it!
  * <br>
  * <b>DEFAULTS:</b><br>
- * particle = ParticleEffect.WITCH_MAGIC<br>
  * particles = 150<br>
  * particlesPerIteration = 10<br>
  * size = 1F<br>
@@ -26,11 +22,6 @@ import org.bukkit.util.Vector;
  * period = 1<br>
  */
 public class AnimatedBallEffect extends BaseEffect {
-
-    /**
-     * ParticleType of spawned particle
-     */
-    public ParticleEffect particle = ParticleEffect.WITCH_MAGIC;
 
     /**
      * Ball particles total (150)
@@ -91,7 +82,10 @@ public class AnimatedBallEffect extends BaseEffect {
 
             VectorUtils.rotateVector(vector, xRotation, yRotation, zRotation);
 
-            particle.display(location.add(vector), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+            location.add(vector);
+            for (Particle particle : particleList) {
+                particle.display(location, visibleRange);
+            }
             location.subtract(vector);
         }
     }

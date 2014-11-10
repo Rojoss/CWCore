@@ -1,9 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import com.clashwars.cwcore.utils.MathUtils;
 import com.clashwars.cwcore.utils.VectorUtils;
 import org.bukkit.Location;
@@ -19,11 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ImageEffect extends BaseEffect {
-
-    /**
-     * Particle to draw the image
-     */
-    public ParticleEffect particle = ParticleEffect.FLAME;
 
     /**
      * Invert the image
@@ -133,7 +125,11 @@ public class ImageEffect extends BaseEffect {
                     continue;
                 Vector v = new Vector((float) image.getWidth() / 2 - x, (float) image.getHeight() / 2 - y, 0).multiply(size);
                 VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
-                particle.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+
+                location.add(v);
+                for (Particle particle : particleList) {
+                    particle.display(location, visibleRange);
+                }
                 location.subtract(v);
             }
         }

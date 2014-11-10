@@ -1,9 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import com.clashwars.cwcore.utils.MathUtils;
 import com.clashwars.cwcore.utils.RandomUtils;
 import com.clashwars.cwcore.utils.VectorUtils;
@@ -11,11 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 public class StarEffect extends BaseEffect {
-
-    /**
-     * Particles to create the star
-     */
-    public ParticleEffect particle = ParticleEffect.FLAME;
 
     /**
      * Particles per spike
@@ -58,12 +50,16 @@ public class StarEffect extends BaseEffect {
                 v.setY(innerRadius + height);
                 VectorUtils.rotateAroundAxisX(v, xRotation);
                 location.add(v);
-                particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+                for (Particle particle : particleList) {
+                    particle.display(location, visibleRange);
+                }
                 location.subtract(v);
                 VectorUtils.rotateAroundAxisX(v, Math.PI);
                 VectorUtils.rotateAroundAxisY(v, Math.PI / 2);
                 location.add(v);
-                particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+                for (Particle particle : particleList) {
+                    particle.display(location, visibleRange);
+                }
                 location.subtract(v);
             }
         }

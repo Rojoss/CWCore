@@ -1,9 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import com.clashwars.cwcore.utils.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -14,11 +11,6 @@ import org.bukkit.util.Vector;
  * @author Kevin
  */
 public class HillEffect extends BaseEffect {
-
-    /**
-     * ParticleType of spawned particle
-     */
-    public ParticleEffect particle = ParticleEffect.FLAME;
 
     /**
      * Height of the hill in blocks
@@ -59,7 +51,10 @@ public class HillEffect extends BaseEffect {
                 v.setY(height * y1 * y2);
                 VectorUtils.rotateAroundAxisY(v, yRotation);
 
-                particle.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+                location.add(v);
+                for (Particle particle : particleList) {
+                    particle.display(location, visibleRange);
+                }
                 location.subtract(v);
             }
         }

@@ -19,3 +19,6 @@ commands:
     description: Set cuboid pos 2.
     usage: /<command>
     aliases: [l2]
+  pe:
+    description: Display particle effects
+    usage: /<command>

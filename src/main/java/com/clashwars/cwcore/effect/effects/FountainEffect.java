@@ -1,18 +1,11 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import com.clashwars.cwcore.utils.RandomUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 public class FountainEffect extends BaseEffect {
-    /**
-     * Particle of the fountain
-     */
-    public ParticleEffect particle = ParticleEffect.SPLASH;
 
     /**
      * Amount of strands (10)
@@ -22,12 +15,12 @@ public class FountainEffect extends BaseEffect {
     /**
      * Particles per iteration per strand (100)
      */
-    public int particlesStrand = 150;
+    public int particlesStrand = 10;
 
     /**
      * Particles per iteration in the spout
      */
-    public int particlesSpout = 200;
+    public int particlesSpout = 20;
 
     /**
      * Radius of strands in blocks
@@ -73,7 +66,9 @@ public class FountainEffect extends BaseEffect {
                 y = Math.sin(Math.PI * j / particlesStrand) * height;
                 z = Math.sin(angle) * radius * ratio;
                 location.add(x, y, z);
-                particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+                for (Particle particle : particleList) {
+                    particle.display(location, visibleRange);
+                }
                 location.subtract(x, y, z);
             }
         }
@@ -81,7 +76,9 @@ public class FountainEffect extends BaseEffect {
             Vector v = RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextFloat() * radius * radiusSpout);
             v.setY(RandomUtils.random.nextFloat() * heightSpout);
             location.add(v);
-            particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+            for (Particle particle : particleList) {
+                particle.display(location, visibleRange);
+            }
             location.subtract(v);
         }
     }

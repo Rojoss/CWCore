@@ -1,9 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import com.clashwars.cwcore.utils.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -11,7 +8,6 @@ import org.bukkit.util.Vector;
 /**
  * Creates a circle that can orbit around.<br>
  * <b>DEFAULTS:</b><br>
- * particle = ParticleEffect.HAPPY_VILLAGER<br>
  * itemID = xRotation, yRotation, zRotation = 0<br>
  * angularVelocityX = Math.PI / 200<br>
  * angularVelocityY = Math.PI / 170<br>
@@ -25,12 +21,6 @@ import org.bukkit.util.Vector;
  * iterations = 25<br>
  */
 public class AnimatedCircleEffect extends BaseEffect {
-	
-
-    /*
-     * ParticleType of spawned particle
-     */
-    public ParticleEffect particle = ParticleEffect.HAPPY_VILLAGER;
 
     /*
      * Rotation of the torus.
@@ -82,7 +72,6 @@ public class AnimatedCircleEffect extends BaseEffect {
         type = EffectType.REPEATING;
         period = 2;
         iterations = 50;
-        amt = 30;
     }
     
     @Override
@@ -97,7 +86,13 @@ public class AnimatedCircleEffect extends BaseEffect {
     	VectorUtils.rotateVector(v, xRotation, yRotation, zRotation);
 		if(enableRotation)
 			VectorUtils.rotateVector(v, angularVelocityX * step, angularVelocityY * step, angularVelocityZ * step);
-		particle.display(location.add(v), visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+
+        location.add(v);
+        for (Particle particle : particleList) {
+            particle.display(location, visibleRange);
+        }
+        location.subtract(v);
+
 		step++;
     }
 

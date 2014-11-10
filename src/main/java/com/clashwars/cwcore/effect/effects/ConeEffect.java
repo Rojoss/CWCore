@@ -1,9 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import com.clashwars.cwcore.utils.MathUtils;
 import com.clashwars.cwcore.utils.RandomUtils;
 import com.clashwars.cwcore.utils.VectorUtils;
@@ -13,7 +10,6 @@ import org.bukkit.util.Vector;
 /**
  * Creates a cone.<br>
  * <b>DEFAULTS:</b><br>
- * particle = ParticleEffect.FLAME
  * lengthGrow = .05f
  * angularVelocity = Math.PI / 16
  * particles = 10
@@ -27,11 +23,6 @@ import org.bukkit.util.Vector;
  * iterations = 200<br>
  */
 public class ConeEffect extends BaseEffect {
-
-    /**
-     * ParticleType of spawned particle
-     */
-    public ParticleEffect particle = ParticleEffect.FLAME;
 
     /**
      * Growing per iteration in the length (0.05)
@@ -96,7 +87,9 @@ public class ConeEffect extends BaseEffect {
             VectorUtils.rotateAroundAxisY(v, -location.getYaw() * MathUtils.degreesToRadians);
 
             location.add(v);
-            particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+            for (Particle particle : particleList) {
+                particle.display(location, visibleRange);
+            }
             location.subtract(v);
             step++;
         }

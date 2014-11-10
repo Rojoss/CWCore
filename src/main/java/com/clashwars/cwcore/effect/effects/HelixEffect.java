@@ -1,16 +1,9 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import org.bukkit.Location;
 
 public class HelixEffect extends BaseEffect {
-    /**
-     * Particle to form the helix
-     */
-    public ParticleEffect particle = ParticleEffect.FLAME;
 
     /**
      * Amount of strands
@@ -54,7 +47,9 @@ public class HelixEffect extends BaseEffect {
                 double x = Math.cos(angle) * ratio * radius;
                 double z = Math.sin(angle) * ratio * radius;
                 location.add(x, 0, z);
-                particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+                for (Particle particle : particleList) {
+                    particle.display(location, visibleRange);
+                }
                 location.subtract(x, 0, z);
             }
         }

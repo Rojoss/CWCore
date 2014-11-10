@@ -1,18 +1,11 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import com.clashwars.cwcore.utils.RandomUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 public class SphereEffect extends BaseEffect {
-    /**
-     * ParticleType of spawned particle
-     */
-    public ParticleEffect particle = ParticleEffect.MOB_SPELL;
 
     /**
      * Radius of the sphere
@@ -43,7 +36,9 @@ public class SphereEffect extends BaseEffect {
         for (int i = 0; i < particles; i++) {
             Vector vector = RandomUtils.getRandomVector().multiply(radius);
             location.add(vector);
-            particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);;
+            for (Particle particle : particleList) {
+                particle.display(location, visibleRange);
+            }
             location.subtract(vector);
         }
     }

@@ -1,9 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.BaseEffect;
-import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.effect.*;
 import org.bukkit.Location;
 
 public class WarpEffect extends BaseEffect {
@@ -17,11 +14,6 @@ public class WarpEffect extends BaseEffect {
      * Particles per circle
      */
     public int particles = 20;
-
-    /**
-     * Particle to display
-     */
-    public ParticleEffect particle = ParticleEffect.FIREWORKS_SPARK;
 
     /**
      * Interval of the circles
@@ -58,7 +50,9 @@ public class WarpEffect extends BaseEffect {
             x = Math.cos(angle) * radius;
             z = Math.sin(angle) * radius;
             location.add(x, 0, z);
-            particle.display(location, visibleRange, (float)particleOffset.getX(), (float)particleOffset.getY(), (float)particleOffset.getZ(), speed, amt);
+            for (Particle particle : particleList) {
+                particle.display(location, visibleRange);
+            }
             location.subtract(x, 0, z);
         }
         location.subtract(0, y, 0);

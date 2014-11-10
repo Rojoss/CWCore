@@ -3,12 +3,16 @@ package com.clashwars.cwcore.commands;
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.cuboid.CuboidEditor;
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Commands {
     private CWCore cwc;
@@ -19,6 +23,54 @@ public class Commands {
 
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+
+        //Particles
+        if (label.equalsIgnoreCase("pe")) {
+            //Console check
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(CWUtil.formatCWMsg("&cThis is a player command only."));
+                return true;
+            }
+            Player player = (Player) sender;
+
+            //Permission check.
+            if (!player.isOp() && !player.hasPermission("cwcore.pe")) {
+                player.sendMessage(CWUtil.formatCWMsg("&cInsuficient permissions."));
+                return true;
+            }
+
+            if (args.length > 0 && args[0].equalsIgnoreCase("list")) {
+                List<String> effectNames = new ArrayList<String>();
+                for (ParticleEffect effect : ParticleEffect.values()) {
+                    effectNames.add(effect.toString().toLowerCase().replace("_", ""));
+                }
+                player.sendMessage(CWUtil.formatCWMsg("&6&lEffect List&8&l: &7" + CWUtil.implode(effectNames, "&8, &7")));
+                return true;
+            }
+
+            if (args.length < 6) {
+                player.sendMessage(CWUtil.formatCWMsg("&cInvalid usage: &4/pe {particle|list} {xo} {yo} {zo} {speed} {amt}"));
+                return true;
+            }
+
+            ParticleEffect effect = ParticleEffect.fromName(args[0]);
+            if (effect == null) {
+                player.sendMessage(CWUtil.formatCWMsg("&cInvalid effect specified. See &4/pe list &cfor effects."));
+                return true;
+            }
+
+            float xo = CWUtil.getFloat(args[1]);
+            float yo = CWUtil.getFloat(args[2]);
+            float zo = CWUtil.getFloat(args[3]);
+
+            float speed = CWUtil.getFloat(args[4]);
+            int amt = CWUtil.getInt(args[5]);
+
+            effect.display(player.getLocation(), xo, yo, zo, speed, amt);
+            return true;
+        }
+
+
 
         // Wand command.
         if (label.equalsIgnoreCase("cww") || label.equalsIgnoreCase("cwwand")) {

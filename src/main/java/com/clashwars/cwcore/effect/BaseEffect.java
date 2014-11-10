@@ -7,6 +7,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BaseEffect implements Runnable {
 
@@ -73,20 +75,14 @@ public abstract class BaseEffect implements Runnable {
     public Vector offset = null;
 
     /**
-     * Offset for each particle (make particles more random)
+     * List with Particles to display
      */
-    public Vector particleOffset = new Vector(0f, 0f, 0f);
+    public List<Particle> particleList = new ArrayList<Particle>();
 
     /**
-     * The animation speed of the particle.
+     * List with Particles to display for effects with 2 types of particles.
      */
-    public float speed = 0;
-
-    /**
-     * The amount of particles for each (particle)
-     * This should not be used for most effects.
-     */
-    public int amt = 0;
+    public List<Particle> secondaryParticleList = new ArrayList<Particle>();
 
     /**
      * If set, will offset the target location
