@@ -1,6 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.Effect;
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -9,7 +9,7 @@ import com.clashwars.cwcore.utils.VectorUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class DnaEffect extends Effect {
+public class DnaEffect extends BaseEffect {
 
     /**
      * ParticleType of spawned particle

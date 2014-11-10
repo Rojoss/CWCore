@@ -1,13 +1,13 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.Effect;
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 
-public class BoilEffect extends Effect {
+public class BoilEffect extends BaseEffect {
 
     public ParticleEffect particle = ParticleEffect.BUBBLE;
     public Sound sound = Sound.LAVA;

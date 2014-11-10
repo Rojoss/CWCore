@@ -1,6 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.Effect;
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -25,7 +25,7 @@ import org.bukkit.util.Vector;
  * iterations = 500<br>
  * period = 1<br>
  */
-public class AnimatedBallEffect extends Effect {
+public class AnimatedBallEffect extends BaseEffect {
 
     /**
      * ParticleType of spawned particle

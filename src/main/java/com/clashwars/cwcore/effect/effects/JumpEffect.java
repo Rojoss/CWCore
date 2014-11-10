@@ -1,12 +1,12 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.Effect;
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
-public class JumpEffect extends Effect {
+public class JumpEffect extends BaseEffect {
     /**
      * Power of jump. (0.5f)
      */

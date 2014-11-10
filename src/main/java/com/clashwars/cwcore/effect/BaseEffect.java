@@ -8,7 +8,7 @@ import org.bukkit.util.Vector;
 
 import java.lang.ref.WeakReference;
 
-public abstract class Effect implements Runnable {
+public abstract class BaseEffect implements Runnable {
 
 	/**
 	 * Handles the type, the effect is played.
@@ -105,7 +105,7 @@ public abstract class Effect implements Runnable {
 	private boolean done = false;
 	private final EffectManager effectManager;
 
-	public Effect(EffectManager effectManager) {
+	public BaseEffect(EffectManager effectManager) {
         this.effectManager = effectManager;
 	}
 

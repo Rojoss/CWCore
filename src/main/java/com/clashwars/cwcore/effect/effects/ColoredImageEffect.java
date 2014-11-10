@@ -1,6 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.Effect;
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -37,7 +37,7 @@ import java.util.ArrayList;
  * iterations = 200<br>
  * amt = 2<br>
  */
-public class ColoredImageEffect extends Effect{
+public class ColoredImageEffect extends BaseEffect {
 
     /**
      * Particle to draw the image

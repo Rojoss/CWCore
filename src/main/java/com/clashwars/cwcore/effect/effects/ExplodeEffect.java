@@ -1,6 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.Effect;
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -8,7 +8,7 @@ import com.clashwars.cwcore.utils.RandomUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 
-public class ExplodeEffect extends Effect {
+public class ExplodeEffect extends BaseEffect {
 
     /**
      * Amount of spawned smoke-sparks

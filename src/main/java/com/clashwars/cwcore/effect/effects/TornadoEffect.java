@@ -1,6 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.Effect;
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -10,7 +10,7 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
-public class TornadoEffect extends Effect{
+public class TornadoEffect extends BaseEffect {
 	
 	/*
 	 * Tornado particle

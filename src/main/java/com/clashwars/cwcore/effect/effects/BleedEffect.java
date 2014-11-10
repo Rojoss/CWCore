@@ -1,9 +1,9 @@
 package com.clashwars.cwcore.effect.effects;
 
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.utils.RandomUtils;
-import com.clashwars.cwcore.effect.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
@@ -17,7 +17,7 @@ import org.bukkit.entity.Entity;
  * period = 4<br>
  * iterations = 25<br>
  */
-public class BleedEffect extends Effect {
+public class BleedEffect extends BaseEffect {
 
     /**
      * Play the Hurt Effect for the Player

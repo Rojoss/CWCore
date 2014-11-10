@@ -1,6 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.Effect;
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.MathUtils;
@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
  * Creates a 2D Heart in 3D space. Thanks to the author for sharing it!
  * @author <a href="http://forums.bukkit.org/members/qukie.90952701/">Qukie</a>
  */
-public class HeartEffect extends Effect {
+public class HeartEffect extends BaseEffect {
 
     /**
      * ParticleType of spawned particle

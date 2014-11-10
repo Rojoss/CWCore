@@ -1,6 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.Effect;
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class WaveEffect extends Effect {
+public class WaveEffect extends BaseEffect {
     public ParticleEffect particle = ParticleEffect.DRIP_WATER;
     public ParticleEffect cloudParticle = ParticleEffect.CLOUD;
 

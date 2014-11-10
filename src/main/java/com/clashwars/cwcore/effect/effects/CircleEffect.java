@@ -1,6 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.Effect;
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -14,7 +14,7 @@ import org.bukkit.util.Vector;
  * diameter = .4f<br>
  * stepSize = 5<br>
  */
-public class CircleEffect extends Effect {
+public class CircleEffect extends BaseEffect {
 
     /*
      * ParticleType of spawned particle

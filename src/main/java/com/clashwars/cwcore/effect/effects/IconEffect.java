@@ -1,12 +1,12 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.Effect;
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import org.bukkit.Location;
 
-public class IconEffect extends Effect {
+public class IconEffect extends BaseEffect {
 
     /**
      * ParticleType of spawned particle

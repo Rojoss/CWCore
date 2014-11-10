@@ -23,7 +23,7 @@ import java.util.*;
 public final class EffectManager implements Disposable {
 
 	private final Plugin owningPlugin;
-	private final Map<Effect, BukkitTask> effects;
+	private final Map<BaseEffect, BukkitTask> effects;
     private static List<EffectManager> effectManagers;
 	private boolean disposed;
 	private boolean disposeOnTermination;
@@ -51,12 +51,12 @@ public final class EffectManager implements Disposable {
 
 	public EffectManager(Plugin owningPlugin) {
 		this.owningPlugin = owningPlugin;
-		effects = new HashMap<Effect, BukkitTask>();
+		effects = new HashMap<BaseEffect, BukkitTask>();
 		disposed = false;
 		disposeOnTermination = false;
 	}
 
-	public void start(Effect effect) {
+	public void start(BaseEffect effect) {
 		if (disposed)
 			throw new IllegalStateException("EffectManager is disposed and not able to accept any effects.");
 		if (disposeOnTermination)
@@ -84,23 +84,23 @@ public final class EffectManager implements Disposable {
 		}
 	}
 
-    public Effect start(String effectClass, ConfigurationSection parameters, Location origin, Location target, Entity originEntity, Entity targetEntity, Map<String, String> textMap) {
-        Class<? extends Effect> effectLibClass;
+    public BaseEffect start(String effectClass, ConfigurationSection parameters, Location origin, Location target, Entity originEntity, Entity targetEntity, Map<String, String> textMap) {
+        Class<? extends BaseEffect> effectLibClass;
         try {
             // A shaded manager may provide a fully-qualified path.
             if (!effectClass.contains(".")) {
                 effectClass = "de.slikey.effectlib.effect." + effectClass;
             }
-            effectLibClass = (Class<? extends Effect>)Class.forName(effectClass);
+            effectLibClass = (Class<? extends BaseEffect>)Class.forName(effectClass);
         } catch (Throwable ex) {
             owningPlugin.getLogger().info("Error loading EffectLib class: " + effectClass + ": " + ex.getMessage());
             return null;
         }
 
-        Effect effect = null;
+        BaseEffect effect = null;
         try {
             Constructor constructor = effectLibClass.getConstructor(EffectManager.class);
-            effect = (Effect) constructor.newInstance(this);
+            effect = (BaseEffect) constructor.newInstance(this);
         } catch (Exception ex) {
             owningPlugin.getLogger().warning("Error creating Effect class: " + effectClass);
         }
@@ -194,11 +194,11 @@ public final class EffectManager implements Disposable {
     }
 
 	public void cancel(boolean callback) {
-		for (Map.Entry<Effect, BukkitTask> entry : effects.entrySet())
+		for (Map.Entry<BaseEffect, BukkitTask> entry : effects.entrySet())
 			entry.getKey().cancel(callback);
 	}
 
-	public void done(Effect effect) {
+	public void done(BaseEffect effect) {
 		synchronized (this) {
             BukkitTask existingTask = effects.get(effect);
             if (existingTask != null) {

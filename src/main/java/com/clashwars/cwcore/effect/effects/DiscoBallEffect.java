@@ -2,7 +2,7 @@ package com.clashwars.cwcore.effect.effects;
 
 /* Idea by coco5843 */
 
-import com.clashwars.cwcore.effect.Effect;
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -10,7 +10,7 @@ import com.clashwars.cwcore.utils.RandomUtils;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class DiscoBallEffect extends Effect {
+public class DiscoBallEffect extends BaseEffect {
 
     /**
      * Radius of the sphere

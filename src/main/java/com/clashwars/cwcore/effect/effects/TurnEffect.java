@@ -1,12 +1,12 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.Effect;
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
-public class TurnEffect extends Effect {
+public class TurnEffect extends BaseEffect {
 
     /**
      * Angular movement per iteration

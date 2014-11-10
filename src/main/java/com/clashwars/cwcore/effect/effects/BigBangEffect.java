@@ -1,6 +1,6 @@
 package com.clashwars.cwcore.effect.effects;
 
-import com.clashwars.cwcore.effect.Effect;
+import com.clashwars.cwcore.effect.BaseEffect;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.utils.RandomUtils;
@@ -31,7 +31,7 @@ import org.bukkit.util.Vector;
  * period = 2<br>
  * iterations = 400<br>
  */
-public class BigBangEffect extends Effect {
+public class BigBangEffect extends BaseEffect {
 
     public FireworkEffect.Type fireworkType = FireworkEffect.Type.BURST;
     public Color color = Color.RED;
