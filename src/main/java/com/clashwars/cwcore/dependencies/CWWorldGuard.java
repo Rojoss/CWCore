@@ -190,11 +190,14 @@ public class CWWorldGuard {
 
     public static File getSchematicFile(String name) throws FilenameException, CommandException {
         File dir = WorldEdit.getInstance().getWorkingDirectoryFile(WorldEdit.getInstance().getConfiguration().saveDir);
-        com.sk89q.worldedit.LocalPlayer lplayer = WGBukkit.getPlugin().getWorldEdit().wrapPlayer(CWCore.inst().getServer().getOnlinePlayers().iterator().next());
-        if (lplayer == null) {
-            return null;
-        }
-        File f = WorldEdit.getInstance().getSafeOpenFile(lplayer, dir, name, "schematic", "schematic");
+//        if (CWCore.inst().getServer().getOnlinePlayers().size() <= 0) {
+//            return null;
+//        }
+//        com.sk89q.worldedit.LocalPlayer lplayer = WGBukkit.getPlugin().getWorldEdit().wrapPlayer(CWCore.inst().getServer().getOnlinePlayers().iterator().next());
+//        if (lplayer == null) {
+//            return null;
+//        }
+        File f = WorldEdit.getInstance().getSafeOpenFile(null, dir, name, "schematic", "schematic");
         if (!f.exists()) {
             return null;
         }
