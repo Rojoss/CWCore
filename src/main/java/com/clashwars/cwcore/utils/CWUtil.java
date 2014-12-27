@@ -5,6 +5,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -983,24 +984,32 @@ public class CWUtil {
                 }
             }
         }
+
         return chunkList;
     }
 
-    public static List<Entity> getEntitiesInNearbyChunks(Location l, int range) {
+    public static List<Entity> getEntitiesInNearbyChunks(Location l, int range, List<EntityType> entityTypes) {
         List<Entity> entities = new ArrayList<Entity>();
 
         for(Chunk chunk : getNearbyChunks(l, range)) {
-            entities.addAll(Arrays.asList(chunk.getEntities()));
+            if (entityTypes == null && entityTypes.size() > 0) {
+                entities.addAll(Arrays.asList(chunk.getEntities()));
+            } else {
+                for (Entity e : chunk.getEntities()) {
+                    if (entityTypes.contains(e.getType())) {
+                        entities.add(e);
+                    }
+                }
+            }
         }
 
         return entities;
     }
 
-    public static List<Entity> getNearbyEntities(Location l, float range) {
+    public static List<Entity> getNearbyEntities(Location l, float range, List<EntityType> entityTypes) {
         List<Entity> entities = new ArrayList<Entity>();
-
-        for(Entity e : getEntitiesInNearbyChunks(l, (int) range)) {
-            if(e.getLocation().distance(l) <= range) {
+        for (Entity e : getEntitiesInNearbyChunks(l, (int) range, entityTypes)) {
+            if (e.getLocation().distance(l) <= range) {
                 entities.add(e);
             }
         }
