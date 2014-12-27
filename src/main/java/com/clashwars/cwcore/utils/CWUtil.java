@@ -969,6 +969,45 @@ public class CWUtil {
         return null;
     }
 
+    public static List<Chunk> getNearbyChunks(Location l, int range) {
+        List<Chunk> chunkList = new ArrayList<Chunk>();
+        World world = l.getWorld();
+        int chunks = range / 16 + 1;
+
+        Chunk chunk;
+        for (int x = l.getChunk().getX() - chunks; x < l.getChunk().getX() + chunks; x++) {
+            for (int z = l.getChunk().getZ() - chunks; z < l.getChunk().getZ() + chunks; z++) {
+                chunk = world.getChunkAt(x, z);
+                if (chunk != null && chunk.isLoaded()) {
+                   chunkList.add(chunk);
+                }
+            }
+        }
+        return chunkList;
+    }
+
+    public static List<Entity> getEntitiesInNearbyChunks(Location l, int range) {
+        List<Entity> entities = new ArrayList<Entity>();
+
+        for(Chunk chunk : getNearbyChunks(l, range)) {
+            entities.addAll(Arrays.asList(chunk.getEntities()));
+        }
+
+        return entities;
+    }
+
+    public static List<Entity> getNearbyEntities(Location l, float range) {
+        List<Entity> entities = new ArrayList<Entity>();
+
+        for(Entity e : getEntitiesInNearbyChunks(l, (int) range)) {
+            if(e.getLocation().distance(l) <= range) {
+                entities.add(e);
+            }
+        }
+
+        return entities;
+    }
+
     public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map, final boolean descending) {
         List<Map.Entry<K, V>> list = new LinkedList<Map.Entry<K, V>>(map.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
