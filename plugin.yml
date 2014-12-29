@@ -1,7 +1,7 @@
 main : com.clashwars.cwcore.CWCore
-name: ${project.artifactId}
-version: ${project.version}
-description: ${project.description}
+name: CWCore
+version: 1.0
+description: Core plugin.
 softdepend: [Vault, ProtocolLib, WorldGuard, Factions, Essentials]
 commands:
   cww:

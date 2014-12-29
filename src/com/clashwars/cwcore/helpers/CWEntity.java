@@ -10,7 +10,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
-import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 

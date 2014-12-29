@@ -26,11 +26,11 @@ public final class ReflectionHandler {
     }
 
     public static Class<?> getClass(String name, PackageType type) throws Exception {
-        return Class.forName(type + "." + name);
+        return Class.forName(type + "" + name);
     }
 
     public static Class<?> getClass(String name, SubPackageType type) throws Exception {
-        return Class.forName(type + "." + name);
+        return Class.forName(type + "" + name);
     }
 
     public static Constructor<?> getConstructor(Class<?> clazz, Class<?>... parameterTypes) {
@@ -412,7 +412,7 @@ public final class ReflectionHandler {
         private final String name;
 
         private SubPackageType() {
-            name = PackageType.CRAFTBUKKIT + "." + name().toLowerCase();
+            name = PackageType.CRAFTBUKKIT + "" + name().toLowerCase();
         }
 
         public String getName() {

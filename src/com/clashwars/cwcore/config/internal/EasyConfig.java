@@ -98,7 +98,7 @@ public abstract class EasyConfig {
         }
         conf.load(file);
         for (Field field : getClass().getDeclaredFields()) {
-            String path = field.getName().replaceAll("__", ".");
+            String path = field.getName().replaceAll("__", "");
             if (doSkip(field)) {
                 // don't touch it
             }
@@ -124,7 +124,7 @@ public abstract class EasyConfig {
             file.createNewFile();
         }
         for (Field field : getClass().getDeclaredFields()) {
-            String path = field.getName().replaceAll("__", ".");
+            String path = field.getName().replaceAll("__", "");
             if (doSkip(field)) {
                 // don't touch it
             } else {

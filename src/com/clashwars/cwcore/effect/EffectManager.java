@@ -88,7 +88,7 @@ public final class EffectManager implements Disposable {
         Class<? extends BaseEffect> effectLibClass;
         try {
             // A shaded manager may provide a fully-qualified path.
-            if (!effectClass.contains(".")) {
+            if (!effectClass.contains("")) {
                 effectClass = "de.slikey.effectlib.effect." + effectClass;
             }
             effectLibClass = (Class<? extends BaseEffect>)Class.forName(effectClass);
