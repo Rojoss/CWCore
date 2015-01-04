@@ -3,6 +3,7 @@ package com.clashwars.cwcore.dependencies;
 import com.clashwars.cwcore.CWCore;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.worldedit.*;
+import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
@@ -23,8 +24,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CWWorldGuard {
 
@@ -36,6 +36,43 @@ public class CWWorldGuard {
      */
     public static ProtectedRegion getRegion(World world, String name) {
         return WGBukkit.getRegionManager(world).getRegion(name);
+    }
+
+    /**
+     * Check if a player is in a region.
+     * @param player
+     * @return true if he is false if not.
+     */
+    public static boolean isInRegion(Player player) {
+        return WGBukkit.getRegionManager(player.getWorld()).getApplicableRegions(player.getLocation()).size() > 0;
+    }
+
+    /**
+     * Get a list of all regions were the player is standing.
+     * @param player
+     * @return List with ProtectedRegion
+     */
+    public static List<ProtectedRegion> getRegions(Player player) {
+        List<ProtectedRegion> regions = new ArrayList<ProtectedRegion>();
+        ApplicableRegionSet set = WGBukkit.getRegionManager(player.getWorld()).getApplicableRegions(player.getLocation());
+        while (set.iterator().hasNext()) {
+            regions.add(set.iterator().next());
+        }
+        return regions;
+    }
+
+    /**
+     * Get a list of all region names were the player is standing.
+     * @param player
+     * @return List with String
+     */
+    public static List<String> getRegionNames(Player player) {
+        List<String> names = new ArrayList<String>();
+        ApplicableRegionSet set = WGBukkit.getRegionManager(player.getWorld()).getApplicableRegions(player.getLocation());
+        while (set.iterator().hasNext()) {
+            names.add(set.iterator().next().getId());
+        }
+        return names;
     }
 
     /**
