@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.earth2me.essentials.Essentials;
 import com.massivecraft.factions.Factions;
+import com.palmergames.bukkit.towny.Towny;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.economy.Economy;
@@ -20,6 +21,7 @@ public class DependencyManager {
     private WorldGuardPlugin worldguard;
     private Essentials essentials;
     private Factions factions;
+    private Towny towny;
     private ProtocolLibrary protocolLib;
     private ProtocolManager protocolManager;
 
@@ -35,6 +37,7 @@ public class DependencyManager {
         loadEssentials();
         loadProtocolLib();
         loadFactions();
+        loadTowny();
     }
 
     // ECONOMY
@@ -142,6 +145,27 @@ public class DependencyManager {
      */
     public Factions getFactions() {
         return factions;
+    }
+
+
+
+    //TOWNY
+    private void loadTowny() {
+        Plugin plugin = cwc.getServer().getPluginManager().getPlugin("Towny");
+        if (plugin == null || !(plugin instanceof Towny)) {
+            cwc.error("Towny dependency couldn't be loaded!");
+            return;
+        }
+        towny = (Towny) plugin;
+        cwc.log("Towny dependency loaded!");
+    }
+
+    /**
+     * Get Factions plugin class.
+     * @return Factions
+     */
+    public Towny getTowny() {
+        return towny;
     }
 
 
