@@ -159,17 +159,17 @@ public class ColoredImageEffect extends BaseEffect {
                 //Thanks to codename_B for the useful Color->ChatColor class!
                 ChatColor cc = matchColor(new Color(image.getRGB(x, y)));
                 if(cc.equals(ChatColor.BLACK)||cc.equals(ChatColor.DARK_GRAY))
-                    colorEffect = ParticleEffect.SMOKE;
+                    colorEffect = ParticleEffect.SMOKE_NORMAL;
                 else if(cc.equals(ChatColor.BLUE)||cc.equals(ChatColor.DARK_BLUE)||cc.equals(ChatColor.AQUA))
                     colorEffect = ParticleEffect.DRIP_WATER;
                 else if(cc.equals(ChatColor.GREEN)||cc.equals(ChatColor.DARK_GREEN))
-                    colorEffect = ParticleEffect.HAPPY_VILLAGER;
+                    colorEffect = ParticleEffect.VILLAGER_HAPPY;
                 else if(cc.equals(ChatColor.RED)||cc.equals(ChatColor.DARK_RED))
-                    colorEffect = ParticleEffect.RED_DUST;
+                    colorEffect = ParticleEffect.REDSTONE;
                 else if(cc.equals(ChatColor.GOLD)||cc.equals(ChatColor.YELLOW))
                     colorEffect = ParticleEffect.FLAME;
                 else if(cc.equals(ChatColor.DARK_PURPLE)||cc.equals(ChatColor.LIGHT_PURPLE))
-                    colorEffect = ParticleEffect.WITCH_MAGIC;
+                    colorEffect = ParticleEffect.SPELL_WITCH;
                 else if(cc.equals(ChatColor.WHITE)||cc.equals(ChatColor.GRAY))
                     colorEffect = ParticleEffect.SNOW_SHOVEL;
 
@@ -191,7 +191,7 @@ public class ColoredImageEffect extends BaseEffect {
                     }
                     VectorUtils.rotateVector(v, rotX, rotY, rotZ);
                 }
-                colorEffect.display(location.add(v), visibleRange);
+                colorEffect.display(0f, 0f, 0f, 0.0f, 1, location.add(v), visibleRange);
                 location.subtract(v);
             }
         }

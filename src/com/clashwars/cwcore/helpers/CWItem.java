@@ -2,9 +2,6 @@ package com.clashwars.cwcore.helpers;
 
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.comphenix.protocol.wrappers.nbt.NbtCompound;
-import com.comphenix.protocol.wrappers.nbt.NbtFactory;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -14,9 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class CWItem extends ItemStack {
 
@@ -32,6 +27,79 @@ public class CWItem extends ItemStack {
         addUnsafeEnchantments(itemStack.getEnchantments());
         if (itemStack.hasItemMeta()) {
             setItemMeta(itemStack.getItemMeta());
+        }
+    }
+
+    /**
+     * Create a CWItem from a string.
+     * It uses the same formatting as essentials does.
+     * http://ess.khhq.net/wiki/Item_Meta
+     * Firework and book data is not yet supported.
+     * @param itemStr The string with item data/meta.
+     */
+    public CWItem(String itemStr) {
+        super(Material.AIR, 1);
+
+        String[] split = itemStr.split(" ");
+        if (itemStr.isEmpty() || split.length < 0) {
+            return;
+        }
+
+        //Material
+        Material mat = CWCore.inst().getMaterials().getMaterial(split[0]);
+        if (mat != null) {
+            setType(mat);
+        }
+
+        //Data
+        int data = CWCore.inst().getMaterials().getMaterialData(split[0]);
+        if (data >= 0) {
+            setDurability((short)data);
+        }
+
+        //Amount
+        if (split.length > 1) {
+            int amt = CWUtil.getInt(split[1]);
+            if (amt > 0) {
+                setAmount(amt);
+            }
+        }
+
+        //Extra data
+        for (String str : split) {
+            String[] split2 = str.split(":");
+            if (split.length < 2) {
+                continue;
+            }
+
+            String key = split[0].toLowerCase();
+            String value = split[1];
+
+            if (key.equals("name")) {
+                setName(value);
+                continue;
+            }
+
+            if (key.equals("lore")) {
+                value.replace("_", " ");
+                value.replace("__", "_");
+                value.replace("\n", "|");
+                setLore(value.split("/|"));
+                continue;
+            }
+
+            if (key.equals("player")) {
+                setSkullOwner(value);
+            }
+
+            if (key.equals("color")) {
+                setLeatherColor(value);
+            }
+
+            Enchantment enchant = CWCore.inst().getEnchants().getenchant(key);
+            if (enchant != null) {
+                addEnchantment(enchant, Math.max(CWUtil.getInt(value), 0));
+            }
         }
     }
 

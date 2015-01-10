@@ -2,7 +2,6 @@ package com.clashwars.cwcore.effect;
 
 import com.clashwars.cwcore.packet.ParticleEffect;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 public class Particle {
@@ -47,22 +46,15 @@ public class Particle {
 
 
     public void display(Location location, double range) {
-        particleEffect.display(location, range, xOffset, yOffset, zOffset, speed, amount);
+        particleEffect.display(xOffset, yOffset, zOffset, speed, amount, location, range);
     }
 
     public void display(Location location) {
-        particleEffect.display(location, xOffset, yOffset, zOffset, speed, amount);
+        particleEffect.display(xOffset, yOffset, zOffset, speed, amount, location);
     }
 
     public void display(Location location, String subtype, double range) {
-        particleEffect.display(subtype, location, range, xOffset, yOffset, zOffset, speed, amount);
-    }
-
-    public void displayTo(Player player, Location location, double range) {
-        particleEffect.displayTo(player, location, xOffset, yOffset, zOffset, speed, amount);
-    }
-
-    public void displayTo(Player player, Location location, String subtype, double range) {
-        particleEffect.displayTo(player, subtype, location, xOffset, yOffset, zOffset, speed, amount);
+        //TODO: Fix this up.
+        particleEffect.display(xOffset, yOffset, zOffset, speed, amount, location, range);
     }
 }

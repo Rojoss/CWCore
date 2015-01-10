@@ -66,7 +66,7 @@ public class Commands {
             float speed = CWUtil.getFloat(args[4]);
             int amt = CWUtil.getInt(args[5]);
 
-            effect.display(player.getLocation(), xo, yo, zo, speed, amt);
+            effect.display(xo, yo, zo, speed, amt, player.getLocation());
             return true;
         }
 

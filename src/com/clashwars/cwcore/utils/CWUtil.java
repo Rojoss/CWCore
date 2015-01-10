@@ -42,6 +42,14 @@ public class CWUtil {
         return integrateColor("&8[&4CW&8] &6" + msg);
     }
 
+    /**
+     * Format a message with [AR] Prefix
+     * @param msg
+     * @return formatted message
+     */
+    public static String formatARMsg(String msg) {
+        return integrateColor("&8[&9AR&8] &6" + msg);
+    }
 
     /**
      * Integrate ChatColor in a string based on color codes.

@@ -11,6 +11,7 @@ import com.sk89q.worldedit.data.DataException;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Polygonal2DRegion;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.util.io.file.FilenameException;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.bukkit.WGBukkit;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -189,7 +190,7 @@ public class CWWorldGuard {
      * @throws DataException
      * @throws IOException
      */
-    public static CuboidClipboard pasteSchematic(World world, File file, Location location, boolean noAir, int rotation, boolean offset) throws MaxChangedBlocksException, DataException, IOException {
+    public static CuboidClipboard pasteSchematic(World world, File file, Location location, boolean noAir, int rotation, boolean offset) throws MaxChangedBlocksException, com.sk89q.worldedit.world.DataException, IOException {
         return pasteSchematic(world, file, BukkitUtil.toVector(location), noAir, rotation, offset);
     }
 
@@ -204,7 +205,7 @@ public class CWWorldGuard {
      * @throws IOException
      * @throws MaxChangedBlocksException
      */
-    public static CuboidClipboard pasteSchematic(World world, File file, Vector origin, boolean noAir, int rotation, boolean offset) throws DataException, IOException, MaxChangedBlocksException {
+    public static CuboidClipboard pasteSchematic(World world, File file, Vector origin, boolean noAir, int rotation, boolean offset) throws com.sk89q.worldedit.world.DataException, IOException, MaxChangedBlocksException {
         if (rotation != 90 && rotation != 180 && rotation != 270 && rotation != 360 && rotation != 0) {
             rotation = 0;
         }
@@ -225,7 +226,7 @@ public class CWWorldGuard {
         return false;
     }
 
-    public static File getSchematicFile(String name) throws FilenameException, CommandException {
+    public static File getSchematicFile(String name) throws CommandException, FilenameException {
         File dir = WorldEdit.getInstance().getWorkingDirectoryFile(WorldEdit.getInstance().getConfiguration().saveDir);
 //        if (CWCore.inst().getServer().getOnlinePlayers().size() <= 0) {
 //            return null;

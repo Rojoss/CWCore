@@ -48,16 +48,18 @@ public class PotionEffects extends EasyConfig {
      * @return PotionEffectType
      */
     public PotionEffectType getEffect(String alias) {
-        for (String effectName : effects.keySet()) {
-
-            for (PotionEffectType effectType : PotionEffectType.values()) {
-                if (effectType.toString().equalsIgnoreCase(effectName) || effectType.toString().replace("_", "").equalsIgnoreCase(effectName)) {
-                    return effectType;
-                }
+        for (PotionEffectType effectType : PotionEffectType.values()) {
+            if (effectType == null) {
+                continue;
             }
+            if (effectType.getName().equalsIgnoreCase(alias) || effectType.getName().replace("_", "").equalsIgnoreCase(alias)) {
+                return effectType;
+            }
+        }
 
-            for (String s : effects.get(effectName)) {
-                if (s.equalsIgnoreCase(alias)) {
+        for (String effectName : effects.keySet()) {
+            for (String a : effects.get(effectName)) {
+                if (a.equalsIgnoreCase(alias)) {
                     return PotionEffectType.getByName(effectName);
                 }
             }
@@ -72,10 +74,10 @@ public class PotionEffects extends EasyConfig {
      * @return Display name for effect
      */
     public String getDisplayName(PotionEffectType effect) {
-        String effectName = effect.toString();
+        String effectName = effect.getName();
         if (!effects.containsKey(effectName) || effects.get(effectName).size() < 1) {
             String name = "";
-            String[] split = effect.toString().split("_");
+            String[] split = effect.getName().split("_");
             for (String str : split) {
                 name += CWUtil.capitalize(str);
             }
