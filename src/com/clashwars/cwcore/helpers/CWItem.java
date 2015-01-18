@@ -11,7 +11,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CWItem extends ItemStack {
 
@@ -476,8 +478,8 @@ public class CWItem extends ItemStack {
             List<String> loreList = new ArrayList<String>();
             List<String> loreClone = getLore();
             for (String lore : loreClone) {
-                loreList.addAll(CWUtil.splitToList(lore, "\\|\\|", false));
-        }
+                loreList.addAll(CWUtil.splitToList(lore, "\\|", false));
+            }
             setLore(loreList);
         }
         return this;
