@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -17,6 +18,7 @@ public class DependencyManager {
     private CWCore cwc;
 
     private Economy economy;
+    private Permission permissions;
     private WorldEditPlugin worldedit;
     private WorldGuardPlugin worldguard;
     private Essentials essentials;
@@ -32,6 +34,7 @@ public class DependencyManager {
     public void loadDependencies() {
         cwc.log("Loading dependencies...");
         loadEconomy();
+        loadPermissions();
         loadWorldedit();
         loadWorldguard();
         loadEssentials();
@@ -65,6 +68,34 @@ public class DependencyManager {
      */
     public Economy getEconomy() {
         return economy;
+    }
+
+
+    // PERMISSIONS
+    private void loadPermissions() {
+        if (cwc.getServer().getPluginManager().getPlugin("Vault") == null) {
+            cwc.error("Vault dependency couldn't be loaded!");
+            return;
+        }
+        RegisteredServiceProvider<Permission> rsp = cwc.getServer().getServicesManager().getRegistration(Permission.class);
+        if (rsp == null) {
+            cwc.error("Permissions from vault couldn't be loaded!");
+            return;
+        }
+        permissions = rsp.getProvider();
+        if (permissions == null) {
+            cwc.error("Permissions from vault couldn't be loaded!");
+            return;
+        }
+        cwc.log("Permissions (Vault) dependency loaded!");
+    }
+
+    /**
+     * Get Permission class from Vault to manage permissions.
+     * @return Permission
+     */
+    public Permission getPermissions() {
+        return permissions;
     }
 
 

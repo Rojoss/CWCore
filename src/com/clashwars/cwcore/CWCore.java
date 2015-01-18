@@ -139,6 +139,18 @@ public class CWCore extends JavaPlugin {
      * But with this you can access the main classes and like economy manager and protocol manager.
      * @return DependencyManager
      */
+    public DependencyManager getDM() {
+        return dm;
+    }
+
+    /**
+     * Get the dependency manager.
+     * All dependencies can be accessed from here.
+     * Some dependencies like WorldGuard have a Util class like CWWorldGuard for easier access.
+     * But with this you can access the main classes and like economy manager and protocol manager.
+     * @return DependencyManager
+     * @deprecated Use getDM() instead.
+     */
     public DependencyManager GetDM() {
         return dm;
     }
