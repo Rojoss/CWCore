@@ -1,5 +1,6 @@
 package com.clashwars.cwcore.scoreboard;
 
+import com.clashwars.cwcore.utils.CWUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -193,9 +194,9 @@ public class CWBoard {
             return false;
         }
         Team t = board.registerNewTeam(team);
-        t.setPrefix(prefix);
-        t.setSuffix(suffix);
-        t.setDisplayName(name);
+        t.setPrefix(CWUtil.integrateColor(prefix));
+        t.setSuffix(CWUtil.integrateColor(suffix));
+        t.setDisplayName(CWUtil.integrateColor(name));
         t.setAllowFriendlyFire(friendlyFire);
         t.setCanSeeFriendlyInvisibles(seeInvis);
         t.setNameTagVisibility(nameTagVisible);

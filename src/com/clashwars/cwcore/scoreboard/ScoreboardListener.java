@@ -1,8 +1,10 @@
 package com.clashwars.cwcore.scoreboard;
 
+import com.clashwars.cwcore.CWCore;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class ScoreboardListener implements Listener {
 
@@ -11,15 +13,25 @@ public class ScoreboardListener implements Listener {
         CWBoard board = CWBoard.activeBoard;
         if (board != null && board.isVisible()) {
             if (board.isGlobal()) {
-                CWBoard.prevBoards.put(event.getPlayer().getUniqueId(), event.getPlayer().getScoreboard());
-                event.getPlayer().setScoreboard(board.getBoard());
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        CWBoard.prevBoards.put(event.getPlayer().getUniqueId(), event.getPlayer().getScoreboard());
+                        event.getPlayer().setScoreboard(board.getBoard());
+                    }
+                }.runTaskLater(CWCore.inst(), 40);
             }
         }
         for (CWBoard cwb : CWBoard.boards.values()) {
             if (!cwb.isGlobal()) {
                 if (cwb.canSee(event.getPlayer())) {
-                    CWBoard.prevBoards.put(event.getPlayer().getUniqueId(), event.getPlayer().getScoreboard());
-                    event.getPlayer().setScoreboard(cwb.getBoard());
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            CWBoard.prevBoards.put(event.getPlayer().getUniqueId(), event.getPlayer().getScoreboard());
+                            event.getPlayer().setScoreboard(cwb.getBoard());
+                        }
+                    }.runTaskLater(CWCore.inst(), 40);
                 }
             }
         }

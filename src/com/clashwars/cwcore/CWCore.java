@@ -8,6 +8,7 @@ import com.clashwars.cwcore.dependencies.internal.DependencyManager;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EntityManager;
 import com.clashwars.cwcore.effect.event.ItemListener;
+import com.clashwars.cwcore.scoreboard.ScoreboardListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -62,6 +63,7 @@ public class CWCore extends JavaPlugin {
         //Listeners
         getServer().getPluginManager().registerEvents(new ItemListener(), this);
         getServer().getPluginManager().registerEvents(new SelectionListener(this), this);
+        getServer().getPluginManager().registerEvents(new ScoreboardListener(), this);
 
         loadAliases();
 

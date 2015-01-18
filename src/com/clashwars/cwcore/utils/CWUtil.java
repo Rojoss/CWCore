@@ -1099,45 +1099,36 @@ public class CWUtil {
     }
 
     /**
-     * Set the tab header
-     * @param player The player to send the header to.
+     * Set the tab header/footer.
+     * Call this method on login to send it to the player.
+     * @param player The player to send the header/footer to.
      * @param header The header text
-     */
-    public static void setTabHeader(Player player, String header){
-        CraftPlayer cplayer = (CraftPlayer) player;
-        PlayerConnection connection = cplayer.getHandle().playerConnection;
-        IChatBaseComponent hj = ChatSerializer.a("{'text':'"+header+"'}");
-        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
-        try{
-            Field headerField = packet.getClass().getDeclaredField("a");
-            headerField.setAccessible(true);
-            headerField.set(packet, hj);
-            headerField.setAccessible(!headerField.isAccessible());
-
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        connection.sendPacket(packet);
-    }
-
-    /**
-     * Set the tab footer
-     * @param player The player to send the footer to.
      * @param footer The footer text
      */
-    public static void setTabFooter(Player player, String footer){
-        CraftPlayer cp = (CraftPlayer) player;
-        PlayerConnection con = cp.getHandle().playerConnection;
-        IChatBaseComponent fj = ChatSerializer.a("{'text':'"+footer+"'}");
-        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
-        try{
-            Field footerField = packet.getClass().getDeclaredField("b");
-            footerField.setAccessible(true);
-            footerField.set(packet, fj);
-            footerField.setAccessible(!footerField.isAccessible());
-        }catch(Exception e){
-            e.printStackTrace();
+    public static void setTab(Player player, String header, String footer) {
+        if (header == null) {
+            header = "";
         }
-        con.sendPacket(packet);
+        header = ChatColor.translateAlternateColorCodes('&', header);
+
+        if (footer == null) {
+            footer = "";
+        }
+        footer = ChatColor.translateAlternateColorCodes('&', footer);
+
+        PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
+        IChatBaseComponent tabTitle = ChatSerializer.a("{\"text\": \"" + header + "\"}");
+        IChatBaseComponent tabFoot = ChatSerializer.a("{\"text\": \"" + footer + "\"}");
+        PacketPlayOutPlayerListHeaderFooter headerPacket = new PacketPlayOutPlayerListHeaderFooter(tabTitle);
+
+        try {
+            Field field = headerPacket.getClass().getDeclaredField("b");
+            field.setAccessible(true);
+            field.set(headerPacket, tabFoot);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            connection.sendPacket(headerPacket);
+        }
     }
 }
