@@ -1,9 +1,14 @@
 package com.clashwars.cwcore.utils;
 
+import net.minecraft.server.v1_8_R1.*;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
+import org.bukkit.Chunk;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -13,6 +18,7 @@ import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class CWUtil {
@@ -139,6 +145,18 @@ public class CWUtil {
     //##########################################################################################
     //##################################  STRING UTILITIES  ####################################
     //##########################################################################################
+
+    /**
+     * Send a message the player his actionbar. (above hotbar)
+     * @param player The palyer to send the message to.
+     * @param message The message can have chat colors and stuff.
+     */
+    public static void sendActionBar(Player player, String message){
+        CraftPlayer p = (CraftPlayer) player;
+        IChatBaseComponent cbc = ChatSerializer.a("{\"text\": \"" + message + "\"}");
+        PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, (byte) 2);
+        p.getHandle().playerConnection.sendPacket(ppoc);
+    }
 
     /**
      * Capitalize the first character of a string.
@@ -1078,5 +1096,48 @@ public class CWUtil {
             }
         }
         return blocks;
+    }
+
+    /**
+     * Set the tab header
+     * @param player The player to send the header to.
+     * @param header The header text
+     */
+    public static void setTabHeader(Player player, String header){
+        CraftPlayer cplayer = (CraftPlayer) player;
+        PlayerConnection connection = cplayer.getHandle().playerConnection;
+        IChatBaseComponent hj = ChatSerializer.a("{'text':'"+header+"'}");
+        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
+        try{
+            Field headerField = packet.getClass().getDeclaredField("a");
+            headerField.setAccessible(true);
+            headerField.set(packet, hj);
+            headerField.setAccessible(!headerField.isAccessible());
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        connection.sendPacket(packet);
+    }
+
+    /**
+     * Set the tab footer
+     * @param player The player to send the footer to.
+     * @param footer The footer text
+     */
+    public static void setTabFooter(Player player, String footer){
+        CraftPlayer cp = (CraftPlayer) player;
+        PlayerConnection con = cp.getHandle().playerConnection;
+        IChatBaseComponent fj = ChatSerializer.a("{'text':'"+footer+"'}");
+        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
+        try{
+            Field footerField = packet.getClass().getDeclaredField("b");
+            footerField.setAccessible(true);
+            footerField.set(packet, fj);
+            footerField.setAccessible(!footerField.isAccessible());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        con.sendPacket(packet);
     }
 }
