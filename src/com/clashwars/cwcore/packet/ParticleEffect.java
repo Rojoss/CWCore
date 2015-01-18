@@ -465,7 +465,7 @@ public enum ParticleEffect {
      */
     public static ParticleEffect fromName(String name) {
         for (Entry<String, ParticleEffect> entry : NAME_MAP.entrySet()) {
-            if (!entry.getKey().equalsIgnoreCase(name)) {
+            if (!entry.getKey().equalsIgnoreCase(name) && !entry.getKey().replace("_","").equalsIgnoreCase(name)) {
                 continue;
             }
             return entry.getValue();

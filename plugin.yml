@@ -22,3 +22,11 @@ commands:
   pe:
     description: Display particle effects
     usage: /<command>
+  sound:
+    description: Play sounds
+    usage: /<command>
+    aliases: [so]
+  soundcheck:
+    description: Test sounds with different pitches
+    usage: /<command>
+    aliases: [sc, soc]

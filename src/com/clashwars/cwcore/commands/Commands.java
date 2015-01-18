@@ -7,9 +7,11 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +30,14 @@ public class Commands {
         if (label.equalsIgnoreCase("pe")) {
             //Console check
             if (!(sender instanceof Player)) {
-                sender.sendMessage(CWUtil.formatCWMsg("&cThis is a player command only."));
+                sender.sendMessage(CWUtil.formatARMsg("&cThis is a player command only."));
                 return true;
             }
             Player player = (Player) sender;
 
             //Permission check.
             if (!player.isOp() && !player.hasPermission("cwcore.pe")) {
-                player.sendMessage(CWUtil.formatCWMsg("&cInsuficient permissions."));
+                player.sendMessage(CWUtil.formatARMsg("&cInsuficient permissions."));
                 return true;
             }
 
@@ -44,18 +46,18 @@ public class Commands {
                 for (ParticleEffect effect : ParticleEffect.values()) {
                     effectNames.add(effect.toString().toLowerCase().replace("_", ""));
                 }
-                player.sendMessage(CWUtil.formatCWMsg("&6&lEffect List&8&l: &7" + CWUtil.implode(effectNames, "&8, &7")));
+                player.sendMessage(CWUtil.formatARMsg("&6&lEffect List&8&l: &7" + CWUtil.implode(effectNames, "&8, &7")));
                 return true;
             }
 
             if (args.length < 6) {
-                player.sendMessage(CWUtil.formatCWMsg("&cInvalid usage: &4/pe {particle|list} {xo} {yo} {zo} {speed} {amt}"));
+                player.sendMessage(CWUtil.formatARMsg("&cInvalid usage: &4/pe {particle|list} {xo} {yo} {zo} {speed} {amt}"));
                 return true;
             }
 
             ParticleEffect effect = ParticleEffect.fromName(args[0]);
             if (effect == null) {
-                player.sendMessage(CWUtil.formatCWMsg("&cInvalid effect specified. See &4/pe list &cfor effects."));
+                player.sendMessage(CWUtil.formatARMsg("&cInvalid effect specified. See &4/pe list &cfor effects."));
                 return true;
             }
 
@@ -70,25 +72,134 @@ public class Commands {
             return true;
         }
 
+        //Sounds
+        if (label.equalsIgnoreCase("sound") || label.equalsIgnoreCase("so")) {
+            //Console check
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(CWUtil.formatARMsg("&cThis is a player command only."));
+                return true;
+            }
+            Player player = (Player)sender;
+
+            //Permission check.
+            if (!player.isOp() && !player.hasPermission("cwcore.sound")) {
+                player.sendMessage(CWUtil.formatARMsg("&cInsuficient permissions."));
+                return true;
+            }
+
+            if (args.length > 0 && args[0].equalsIgnoreCase("list")) {
+                List<String> soundNames = new ArrayList<String>();
+                for (Sound sound : Sound.values()) {
+                    soundNames.add(sound.toString().toLowerCase().replace("_", ""));
+                }
+                player.sendMessage(CWUtil.formatARMsg("&6&lSound List&8&l: &7" + CWUtil.implode(soundNames, "&8, &7")));
+                return true;
+            }
+
+            if (args.length < 1) {
+                player.sendMessage(CWUtil.formatARMsg("&cInvalid usage: &4/sound {sound|list} [volume] [pitch]"));
+                return true;
+            }
+
+            Sound sound = cwc.getSounds().getSound(args[0]);
+            if (sound == null) {
+                player.sendMessage(CWUtil.formatARMsg("&cInvalid sound specified. See &4/sound list &cfor all sounds."));
+                return true;
+            }
+
+            float volume = 1;
+            if (args.length > 1) {
+                volume = CWUtil.getInt(args[1]);
+                if (volume < 0) {
+                    volume = 1;
+                }
+            }
+            final float volumeFinal = volume;
+
+            float pitch = 1;
+            if (args.length > 2) {
+                pitch = CWUtil.getInt(args[2]);
+                if (pitch < 0) {
+                    volume = 1;
+                }
+            }
+
+            player.playSound(player.getLocation(), sound, volume, pitch);
+            return true;
+        }
+
+        //Soundcheck (test in all 3 pitches)
+        if (label.equalsIgnoreCase("soundcheck") || label.equalsIgnoreCase("sc") || label.equalsIgnoreCase("soc")) {
+            //Console check
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(CWUtil.formatARMsg("&cThis is a player command only."));
+                return true;
+            }
+            Player player = (Player)sender;
+
+            //Permission check.
+            if (!player.isOp() && !player.hasPermission("cwcore.sound")) {
+                player.sendMessage(CWUtil.formatARMsg("&cInsuficient permissions."));
+                return true;
+            }
+
+            if (args.length > 0 && args[0].equalsIgnoreCase("list")) {
+                List<String> soundNames = new ArrayList<String>();
+                for (Sound sound : Sound.values()) {
+                    soundNames.add(sound.toString().toLowerCase().replace("_", ""));
+                }
+                player.sendMessage(CWUtil.formatARMsg("&6&lSound List&8&l: &7" + CWUtil.implode(soundNames, "&8, &7")));
+                return true;
+            }
+
+            if (args.length < 1) {
+                player.sendMessage(CWUtil.formatARMsg("&cInvalid usage: &4/soundcheck {sound|list} [delay]"));
+                return true;
+            }
+
+            Sound sound = cwc.getSounds().getSound(args[0]);
+            if (sound == null) {
+                player.sendMessage(CWUtil.formatARMsg("&cInvalid sound specified. See &4/soundcheck list &cfor all sounds."));
+                return true;
+            }
+
+            final int delay = args.length > 1 ? CWUtil.getInt(args[1]) : 20;
+            player.playSound(player.getLocation(), sound, 1, 0);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.playSound(player.getLocation(), sound, 1, 1);
+
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            player.playSound(player.getLocation(), sound, 1, 2);
+                        }
+                    }.runTaskLater(cwc, delay);
+                }
+            }.runTaskLater(cwc, delay);
+            return true;
+        }
 
 
-        // Wand command.
+
+            // Wand command.
         if (label.equalsIgnoreCase("cww") || label.equalsIgnoreCase("cwwand")) {
             //Console check
             if (!(sender instanceof Player)) {
-                sender.sendMessage(CWUtil.formatCWMsg("&cThis is a player command only."));
+                sender.sendMessage(CWUtil.formatARMsg("&cThis is a player command only."));
                 return true;
             }
             Player player = (Player) sender;
 
             //Permission check.
             if (!player.isOp() && !player.hasPermission("cwcore.wand")) {
-                player.sendMessage(CWUtil.formatCWMsg("&cInsuficient permissions."));
+                player.sendMessage(CWUtil.formatARMsg("&cInsuficient permissions."));
                 return true;
             }
 
             cwc.getSel().getWand().giveToPlayer(player);
-            player.sendMessage(CWUtil.formatCWMsg("&6Wand given."));
+            player.sendMessage(CWUtil.formatARMsg("&6Wand given."));
             return true;
         }
 
@@ -96,24 +207,24 @@ public class Commands {
         if (label.equalsIgnoreCase("p1") || label.equalsIgnoreCase("l1") || label.equalsIgnoreCase("p2") || label.equalsIgnoreCase("l2")) {
             //Console check
             if (!(sender instanceof Player)) {
-                sender.sendMessage(CWUtil.formatCWMsg("&cThis is a player command only."));
+                sender.sendMessage(CWUtil.formatARMsg("&cThis is a player command only."));
                 return true;
             }
             Player player = (Player) sender;
 
             //Permission check.
             if (!player.isOp() && !player.hasPermission("cwcore.wand")) {
-                player.sendMessage(CWUtil.formatCWMsg("&cInsuficient permissions."));
+                player.sendMessage(CWUtil.formatARMsg("&cInsuficient permissions."));
                 return true;
             }
 
             Location loc = player.getLocation();
             if (label.equalsIgnoreCase("p1") || label.equalsIgnoreCase("l1")) {
                 cwc.getSel().setPos1(player, loc);
-                player.sendMessage(CWUtil.formatCWMsg("&5Pos1 &6selected! &8(&7" + loc.getBlockX() + "&8, &7" + loc.getBlockY() + "&8, &7" + loc.getBlockZ() + "&8)"));
+                player.sendMessage(CWUtil.formatARMsg("&5Pos1 &6selected! &8(&7" + loc.getBlockX() + "&8, &7" + loc.getBlockY() + "&8, &7" + loc.getBlockZ() + "&8)"));
             } else {
                 cwc.getSel().setPos2(player, loc);
-                player.sendMessage(CWUtil.formatCWMsg("&5Pos2 &6selected! &8(&7" + loc.getBlockX() + "&8, &7" + loc.getBlockY() + "&8, &7" + loc.getBlockZ() + "&8)"));
+                player.sendMessage(CWUtil.formatARMsg("&5Pos2 &6selected! &8(&7" + loc.getBlockX() + "&8, &7" + loc.getBlockY() + "&8, &7" + loc.getBlockZ() + "&8)"));
             }
         }
 
@@ -121,26 +232,26 @@ public class Commands {
         if (label.equalsIgnoreCase("sel")) {
             //Console check
             if (!(sender instanceof Player)) {
-                sender.sendMessage(CWUtil.formatCWMsg("&cThis is a player command only."));
+                sender.sendMessage(CWUtil.formatARMsg("&cThis is a player command only."));
                 return true;
             }
             Player player = (Player) sender;
 
             //Permission check.
             if (!player.isOp() && !player.hasPermission("cwcore.sel")) {
-                player.sendMessage(CWUtil.formatCWMsg("&cInsuficient permissions."));
+                player.sendMessage(CWUtil.formatARMsg("&cInsuficient permissions."));
                 return true;
             }
 
             if (args.length < 1) {
-                player.sendMessage(CWUtil.formatCWMsg("&cInvalid command usage."));
-                player.sendMessage(CWUtil.formatCWMsg("&4Edit options: &cfill&8, &creplace&8, &cwall&8, &creplacewall"));
+                player.sendMessage(CWUtil.formatARMsg("&cInvalid command usage."));
+                player.sendMessage(CWUtil.formatARMsg("&4Edit options: &cfill&8, &creplace&8, &cwall&8, &creplacewall"));
                 return true;
             }
 
             Cuboid cuboid = cwc.getSel().getSelection(player);
             if (cuboid == null) {
-                player.sendMessage(CWUtil.formatCWMsg("&cNo selection has been made."));
+                player.sendMessage(CWUtil.formatARMsg("&cNo selection has been made."));
                 return true;
             }
             CuboidEditor ce = new CuboidEditor(cuboid);
@@ -148,7 +259,7 @@ public class Commands {
 
             if (args[0].equalsIgnoreCase("fill") || args[0].equalsIgnoreCase("set")) {
                 if (args.length < 2) {
-                    player.sendMessage(CWUtil.formatCWMsg("&cSpecify a material."));
+                    player.sendMessage(CWUtil.formatARMsg("&cSpecify a material."));
                     return true;
                 }
                 Material mat = cwc.getMaterials().getMaterial(args[1]);
@@ -162,7 +273,7 @@ public class Commands {
 
             if (args[0].equalsIgnoreCase("replace")) {
                 if (args.length < 3) {
-                    player.sendMessage(CWUtil.formatCWMsg("&cSpecify 2 materials."));
+                    player.sendMessage(CWUtil.formatARMsg("&cSpecify 2 materials."));
                     return true;
                 }
                 Material mat1 = cwc.getMaterials().getMaterial(args[1]);
@@ -177,7 +288,7 @@ public class Commands {
 
             if (args[0].equalsIgnoreCase("walls")) {
                 if (args.length < 2) {
-                    player.sendMessage(CWUtil.formatCWMsg("&cSpecify a material."));
+                    player.sendMessage(CWUtil.formatARMsg("&cSpecify a material."));
                     return true;
                 }
                 Material mat = cwc.getMaterials().getMaterial(args[1]);
@@ -191,7 +302,7 @@ public class Commands {
 
             if (args[0].equalsIgnoreCase("replacewalls")) {
                 if (args.length < 3) {
-                    player.sendMessage(CWUtil.formatCWMsg("&cSpecify 2 materials."));
+                    player.sendMessage(CWUtil.formatARMsg("&cSpecify 2 materials."));
                     return true;
                 }
                 Material mat1 = cwc.getMaterials().getMaterial(args[1]);
