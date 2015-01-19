@@ -9,8 +9,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class ScoreboardListener implements Listener {
 
     @EventHandler
-    private void login(PlayerLoginEvent event) {
-        CWBoard board = CWBoard.activeBoard;
+    private void login(final PlayerLoginEvent event) {
+        final CWBoard board = CWBoard.activeBoard;
         if (board != null && board.isVisible()) {
             if (board.isGlobal()) {
                 new BukkitRunnable() {
@@ -22,7 +22,7 @@ public class ScoreboardListener implements Listener {
                 }.runTaskLater(CWCore.inst(), 40);
             }
         }
-        for (CWBoard cwb : CWBoard.boards.values()) {
+        for (final CWBoard cwb : CWBoard.boards.values()) {
             if (!cwb.isGlobal()) {
                 if (cwb.canSee(event.getPlayer())) {
                     new BukkitRunnable() {
