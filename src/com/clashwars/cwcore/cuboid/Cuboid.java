@@ -1,9 +1,6 @@
 package com.clashwars.cwcore.cuboid;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -593,10 +590,10 @@ public class Cuboid implements Iterable<Block>, Cloneable {
         World world = getWorld();
 
         for (int x = minX; x <= maxX; x++) {
-            blockList.add(world.getBlockAt(x, minX, minZ));
+            blockList.add(world.getBlockAt(x, minY, minZ));
             blockList.add(world.getBlockAt(x, minY, maxZ));
             blockList.add(world.getBlockAt(x, maxY, minZ));
-            blockList.add(world.getBlockAt(x, maxX, maxY));
+            blockList.add(world.getBlockAt(x, maxY, maxZ));
         }
         for (int y = minY; y < maxY; y++) {
             blockList.add(world.getBlockAt(minX, y, minZ));
@@ -622,10 +619,10 @@ public class Cuboid implements Iterable<Block>, Cloneable {
         List<Vector> vectorList = new ArrayList<Vector>();
 
         for (int x = minX; x <= maxX; x++) {
-            vectorList.add(new Vector(x, minX, minZ));
+            vectorList.add(new Vector(x, minY, minZ));
             vectorList.add(new Vector(x, minY, maxZ));
             vectorList.add(new Vector(x, maxY, minZ));
-            vectorList.add(new Vector(x, maxX, maxY));
+            vectorList.add(new Vector(x, maxY, maxZ));
         }
         for (int y = minY; y < maxY; y++) {
             vectorList.add(new Vector(minX, y, minZ));

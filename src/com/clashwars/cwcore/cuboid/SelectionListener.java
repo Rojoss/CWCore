@@ -58,7 +58,7 @@ public class SelectionListener implements Listener {
                 if (sel.getStatus(player) == SelectionStatus.BOTH) {
                     Cuboid cuboid = new Cuboid(sel.getPos1(player), sel.getPos2(player));
                     for (org.bukkit.util.Vector vector : cuboid.getEdgeVectors()) {
-                        ParticleEffect.FIREWORKS_SPARK.display(0.5f, 0.5f, 0.5f, 0f, 5, vector.add(halfBlock).toLocation(player.getWorld()), 300);
+                        ParticleEffect.CLOUD.display(0.2f, 0.2f, 0.2f, 0f, 5, vector.add(halfBlock).toLocation(player.getWorld()), 300);
                     }
                 }
             }
@@ -72,7 +72,7 @@ public class SelectionListener implements Listener {
                 if (sel.getStatus(player) == SelectionStatus.BOTH) {
                     Cuboid cuboid = new Cuboid(sel.getPos1(player), sel.getPos2(player));
                     for (org.bukkit.util.Vector vector : cuboid.getEdgeVectors()) {
-                        ParticleEffect.FIREWORKS_SPARK.display(0.5f, 0.5f, 0.5f, 0f, 5, vector.add(halfBlock).toLocation(player.getWorld()), 300);
+                        ParticleEffect.CLOUD.display(0.2f, 0.2f, 0.2f, 0f, 5, vector.add(halfBlock).toLocation(player.getWorld()), 300);
                     }
                 }
             }

@@ -109,7 +109,7 @@ public class Commands {
 
             float volume = 1;
             if (args.length > 1) {
-                volume = CWUtil.getInt(args[1]);
+                volume = CWUtil.getFloat(args[1]);
                 if (volume < 0) {
                     volume = 1;
                 }
@@ -118,7 +118,7 @@ public class Commands {
 
             float pitch = 1;
             if (args.length > 2) {
-                pitch = CWUtil.getInt(args[2]);
+                pitch = CWUtil.getFloat(args[2]);
                 if (pitch < 0) {
                     volume = 1;
                 }
