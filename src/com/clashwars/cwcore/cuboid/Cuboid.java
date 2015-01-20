@@ -585,6 +585,65 @@ public class Cuboid implements Iterable<Block>, Cloneable {
     }
 
     /**
+     * Get a List<Vector> of all block vectors at the edges.
+     * @return List with all edge vectors.
+     */
+    public List<Block> getEdgeBlocks() {
+        List<Block> blockList = new ArrayList<Block>();
+        World world = getWorld();
+
+        for (int x = minX; x <= maxX; x++) {
+            blockList.add(world.getBlockAt(x, minX, minZ));
+            blockList.add(world.getBlockAt(x, minY, maxZ));
+            blockList.add(world.getBlockAt(x, maxY, minZ));
+            blockList.add(world.getBlockAt(x, maxX, maxY));
+        }
+        for (int y = minY; y < maxY; y++) {
+            blockList.add(world.getBlockAt(minX, y, minZ));
+            blockList.add(world.getBlockAt(minX, y, maxZ));
+            blockList.add(world.getBlockAt(maxX, y, minZ));
+            blockList.add(world.getBlockAt(maxX, y, maxZ));
+        }
+        for (int z = minZ; z < maxZ; z++) {
+            blockList.add(world.getBlockAt(minX, minY, z));
+            blockList.add(world.getBlockAt(minX, maxY, z));
+            blockList.add(world.getBlockAt(maxX, minY, z));
+            blockList.add(world.getBlockAt(maxX, maxY, z));
+        }
+
+        return blockList;
+    }
+
+    /**
+     * Get a List<Vector> of all block vectors at the edges.
+     * @return List with all edge vectors.
+     */
+    public List<Vector> getEdgeVectors() {
+        List<Vector> vectorList = new ArrayList<Vector>();
+
+        for (int x = minX; x <= maxX; x++) {
+            vectorList.add(new Vector(x, minX, minZ));
+            vectorList.add(new Vector(x, minY, maxZ));
+            vectorList.add(new Vector(x, maxY, minZ));
+            vectorList.add(new Vector(x, maxX, maxY));
+        }
+        for (int y = minY; y < maxY; y++) {
+            vectorList.add(new Vector(minX, y, minZ));
+            vectorList.add(new Vector(minX, y, maxZ));
+            vectorList.add(new Vector(maxX, y, minZ));
+            vectorList.add(new Vector(maxX, y, maxZ));
+        }
+        for (int z = minZ; z < maxZ; z++) {
+            vectorList.add(new Vector(minX, minY, z));
+            vectorList.add(new Vector(minX, maxY, z));
+            vectorList.add(new Vector(maxX, minY, z));
+            vectorList.add(new Vector(maxX, maxY, z));
+        }
+
+        return vectorList;
+    }
+
+    /**
      * Get a List<Vector> of all block vectors within this cuboid.
      * @return List with all vectors or empty list if none found.
      */

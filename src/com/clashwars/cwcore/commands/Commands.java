@@ -135,7 +135,7 @@ public class Commands {
                 sender.sendMessage(CWUtil.formatARMsg("&cThis is a player command only."));
                 return true;
             }
-            Player player = (Player)sender;
+            final Player player = (Player)sender;
 
             //Permission check.
             if (!player.isOp() && !player.hasPermission("cwcore.sound")) {
@@ -157,7 +157,7 @@ public class Commands {
                 return true;
             }
 
-            Sound sound = cwc.getSounds().getSound(args[0]);
+            final Sound sound = cwc.getSounds().getSound(args[0]);
             if (sound == null) {
                 player.sendMessage(CWUtil.formatARMsg("&cInvalid sound specified. See &4/soundcheck list &cfor all sounds."));
                 return true;
@@ -184,7 +184,7 @@ public class Commands {
 
 
             // Wand command.
-        if (label.equalsIgnoreCase("cww") || label.equalsIgnoreCase("cwwand")) {
+        if (label.equalsIgnoreCase("cww") || label.equalsIgnoreCase("cwwand") || label.equalsIgnoreCase("arw") || label.equalsIgnoreCase("arwand")) {
             //Console check
             if (!(sender instanceof Player)) {
                 sender.sendMessage(CWUtil.formatARMsg("&cThis is a player command only."));

@@ -16,7 +16,7 @@ import java.util.UUID;
  */
 public class Selection {
 
-    private CWItem basicWand = new CWItem(Material.STONE_AXE, 1, (byte)0, "&4&lCW &6&lWAND", new String[] {"&7Select CW cuboids."});
+    private CWItem basicWand = new CWItem(Material.STONE_AXE, 1, (byte)0, "&9AR &6wand", new String[] {"&7Select cuboids."});
 
     Map<UUID, SelectionData> selections = new HashMap<UUID, SelectionData>();
     SelectionData globalSelection = new SelectionData();
@@ -47,6 +47,42 @@ public class Selection {
             return new Cuboid(sd.pos2, sd.pos2);
         } else {
             return null;
+        }
+    }
+
+
+    /**
+     * Get the status of the selection.
+     * @param player Get selection from the specified player or get global selection if it's null.
+     * @return SelectionStatus
+     */
+    public SelectionStatus getStatus(Player player) {
+        if (player == null) {
+            if (globalSelection.pos1 == null && globalSelection.pos2 == null) {
+                return SelectionStatus.NONE;
+            }
+            if (globalSelection.pos1 == null) {
+                return SelectionStatus.POS2;
+            }
+            if (globalSelection.pos2 == null) {
+                return SelectionStatus.POS1;
+            }
+            return SelectionStatus.BOTH;
+        } else {
+            UUID uuid = player.getUniqueId();
+            if (!selections.containsKey(uuid)) {
+                return SelectionStatus.NONE;
+            }
+            if (selections.get(uuid).pos1 == null && selections.get(uuid).pos2 == null) {
+                return SelectionStatus.NONE;
+            }
+            if (selections.get(uuid).pos1 == null) {
+                return SelectionStatus.POS2;
+            }
+            if (selections.get(uuid).pos2 == null) {
+                return SelectionStatus.POS1;
+            }
+            return SelectionStatus.BOTH;
         }
     }
 
