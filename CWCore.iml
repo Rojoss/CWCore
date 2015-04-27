@@ -9,7 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.7" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library>
@@ -81,26 +81,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../_LIB/bukkit/1.8/bukkit-1.8-R0.1-SNAPSHOT.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../_LIB/bukkit/1.8/craftbukkit-1.8-R0.1-SNAPSHOT.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../_LIB/bukkit/1.8/craftbukkit-1.8-R0.1-SNAPSHOT.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/../_LIB/plugins/worldedit-bukkit-6.0.2-SNAPSHOT-dist.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -116,6 +96,17 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../_LIB/bukkit/1.8/craftbukkit-1.8.3-R0.1-SNAPSHOT.jar!/" />
+          <root url="jar://$MODULE_DIR$/../_LIB/bukkit/1.8/bukkit-1.8.3-R0.1-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../_LIB/bukkit/1.8/craftbukkit-1.8.3-R0.1-SNAPSHOT.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>
-

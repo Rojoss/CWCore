@@ -1,6 +1,6 @@
 package com.clashwars.cwcore.utils;
 
-import net.minecraft.server.v1_8_R1.*;
+import net.minecraft.server.v1_8_R2.*;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.Chunk;
@@ -8,7 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -153,7 +153,7 @@ public class CWUtil {
      */
     public static void sendActionBar(Player player, String message){
         CraftPlayer p = (CraftPlayer) player;
-        IChatBaseComponent cbc = ChatSerializer.a("{\"text\": \"" + message + "\"}");
+        IChatBaseComponent cbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
         PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, (byte) 2);
         p.getHandle().playerConnection.sendPacket(ppoc);
     }
@@ -1117,8 +1117,8 @@ public class CWUtil {
         footer = ChatColor.translateAlternateColorCodes('&', footer);
 
         PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
-        IChatBaseComponent tabTitle = ChatSerializer.a("{\"text\": \"" + header + "\"}");
-        IChatBaseComponent tabFoot = ChatSerializer.a("{\"text\": \"" + footer + "\"}");
+        IChatBaseComponent tabTitle = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + header + "\"}");
+        IChatBaseComponent tabFoot = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + footer + "\"}");
         PacketPlayOutPlayerListHeaderFooter headerPacket = new PacketPlayOutPlayerListHeaderFooter(tabTitle);
 
         try {
