@@ -1018,7 +1018,7 @@ public class CWUtil {
         List<Entity> entities = new ArrayList<Entity>();
 
         for(Chunk chunk : getNearbyChunks(l, range)) {
-            if (entityTypes == null && entityTypes.size() > 0) {
+            if (entityTypes == null || entityTypes.size() <= 0) {
                 entities.addAll(Arrays.asList(chunk.getEntities()));
             } else {
                 for (Entity e : chunk.getEntities()) {

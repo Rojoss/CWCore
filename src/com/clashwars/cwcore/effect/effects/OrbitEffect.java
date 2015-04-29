@@ -15,6 +15,8 @@ public class OrbitEffect extends BaseEffect {
      */
     public float radius = .4f;
 
+    public float heightPerStep = 1.9f;
+
     /**
      * Current step. Works as a counter
      */
@@ -30,7 +32,7 @@ public class OrbitEffect extends BaseEffect {
     @Override
     public void onRun() {
         Location location = getLocation();
-        location.add(0, 1.9f, 0);
+        location.add(0, heightPerStep, 0);
         location.add(Math.cos(radialsPerStep * step) * radius, 0, Math.sin(radialsPerStep * step) * radius);
         for (Particle particle : particleList) {
             particle.display(location, visibleRange);
