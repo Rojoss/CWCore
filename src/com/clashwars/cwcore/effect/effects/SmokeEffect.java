@@ -6,6 +6,11 @@ import org.bukkit.Location;
 
 public class SmokeEffect extends BaseEffect {
 
+    public int particleCount = 20;
+
+    public double maxDistance = 0.6d;
+    public double maxYDistance = 2;
+
     public SmokeEffect(EffectManager effectManager) {
         super(effectManager);
         type = EffectType.REPEATING;
@@ -16,9 +21,9 @@ public class SmokeEffect extends BaseEffect {
     @Override
     public void onRun() {
         Location location = getLocation();
-        for (int i = 0; i < 20; i++) {
-            location.add(RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * 0.6d));
-            location.add(0, RandomUtils.random.nextFloat() * 2, 0);
+        for (int i = 0; i < particleCount; i++) {
+            location.add(RandomUtils.getRandomCircleVector().multiply(RandomUtils.random.nextDouble() * maxDistance));
+            location.add(0, RandomUtils.random.nextFloat() * maxYDistance, 0);
             for (Particle particle : particleList) {
                 particle.display(location, visibleRange);
             }
