@@ -1,5 +1,7 @@
 package com.clashwars.cwcore.utils;
 
+import com.clashwars.cwcore.Debug;
+import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -59,43 +61,66 @@ public final class VectorUtils {
 	}
 
 
-	/** @param startPos
-	 *            starting position
-	 * @param radius
-	 *            distance cone travels
-	 * @param degrees
-	 *            angle of cone
-	 * @param direction
-	 *            direction of the cone
+	/** @param startPos starting position
+	 * @param radius distance cone travels
+	 * @param degrees angle of cone
+	 * @param direction direction of the cone
 	 * @return All block positions inside the cone */
 	public static List<Vector> getPositionsInCone(Vector startPos, float radius, float degrees, Vector direction, boolean filterByDistance) {
-
-		List<Vector> positions = new ArrayList<Vector>();        //    Returned list
-		float squaredRadius = radius * radius;                     //    We don't want to use square root
+		List<Vector> positions = new ArrayList<Vector>();
+		float squaredRadius = radius * radius;
 
 		for (float x=startPos.getBlockX()-radius; x<startPos.getBlockX()+radius; x++)
 			for (float y=startPos.getBlockY()-radius; y<startPos.getBlockY()+radius; y++)
 				for (float z=startPos.getBlockZ()-radius; z<startPos.getBlockZ()+radius; z++) {
 					Vector relative = new Vector(x,y,z);
 					relative.subtract(startPos);
-					if (relative.lengthSquared() > squaredRadius) continue;            //    First check : distance
-					if (getAngleBetweenVectors(direction, relative) > degrees) continue;    //    Second check : angle
+					if (relative.lengthSquared() > squaredRadius) continue;
+					if (getAngleBetweenVectors(direction, relative) > degrees) continue;
 
 					Vector v = new Vector(x,y,z);
 					double distance = v.distance(startPos);
-					if (filterByDistance) {
+					if (filterByDistance && positions.size() > 0) {
 						int i = 0;
-						for (Vector vl : positions) {
+						boolean added = false;
+						List<Vector> positionsClone = new ArrayList<Vector>(positions);
+						for (Vector vl : positionsClone) {
 							if (distance < vl.distance(startPos)) {
 								positions.add(i, v);
+								added = true;
+								break;
 							}
 							i++;
+						}
+						if (!added) {
+							positions.add(v);
 						}
 					} else {
 						positions.add(v);
 					}
 				}
 		return positions;
+	}
+
+	/** @param entities List of nearby entities
+	 * @param startPos starting position
+	 * @param radius distance cone travels
+	 * @param degrees angle of cone
+	 * @param direction direction of the cone
+	 * @return All entities inside the cone */
+	public static List<Entity> getEntitiesInCone(List<Entity> entities, Vector startPos, float radius, float degrees, Vector direction) {
+
+		List<Entity> newEntities = new ArrayList<Entity>();
+		float squaredRadius = radius * radius;
+
+		for (Entity e : entities) {
+			Vector relativePosition = e.getLocation().toVector();
+			relativePosition.subtract(startPos);
+			if (relativePosition.lengthSquared() > squaredRadius) continue;
+			if (getAngleBetweenVectors(direction, relativePosition) > degrees) continue;
+			newEntities.add(e);
+		}
+		return newEntities;
 	}
 
 
