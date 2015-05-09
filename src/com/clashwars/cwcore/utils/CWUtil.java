@@ -1,5 +1,6 @@
 package com.clashwars.cwcore.utils;
 
+import com.clashwars.cwcore.Debug;
 import net.minecraft.server.v1_8_R2.*;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
@@ -1086,7 +1087,7 @@ public class CWUtil {
         for (int x = 0; x <= xDiff; x++) {
             for (int z = 0; z <= zDiff; z++) {
                 for (int y = 0; y <= yDiff; y++) {
-                    block = pos1.getWorld().getBlockAt(min.getBlockX() + x,  min.getBlockY() + y, min.getBlockZ() + z);
+                    block = pos1.getWorld().getBlockAt(min.getBlockX() + x, min.getBlockY() + y, min.getBlockZ() + z);
                     if (filterList == null) {
                         blocks.add(block);
                     } else if (filterList.contains(block.getType())) {
@@ -1096,6 +1097,36 @@ public class CWUtil {
             }
         }
         return blocks;
+    }
+
+    public static void createSphere(Location center, Material mat, byte data, float radius, boolean overrideBlocks, boolean hollow) {
+        //Vector centerVec = center.toVector();
+        Vector zeroVec = new Vector(0,0,0);
+        Vector blockVec;
+        Location blockLoc;
+        for (float x = -radius; x <= radius; x++) {
+            for (float y = -radius; y <= radius; y++) {
+                for (float z = -radius; z <= radius; z++) {
+                    blockVec = new Vector(x, y, z);
+
+                    double distance = blockVec.distance(zeroVec);
+                    if (distance > radius) {
+                        continue;
+                    }
+
+                    if (hollow && distance < radius - 1) {
+                        continue;
+                    }
+
+                    blockLoc = center.clone().add(blockVec);
+                    if (!overrideBlocks && blockLoc.getBlock().getType() != Material.AIR) {
+                        continue;
+                    }
+
+                    blockLoc.getBlock().setTypeIdAndData(mat.getId(), data, false);
+                }
+            }
+        }
     }
 
     /**
@@ -1130,5 +1161,33 @@ public class CWUtil {
         } finally {
             connection.sendPacket(headerPacket);
         }
+    }
+
+    public static double lerp(double start, double end, double perc) {
+        if (Double.isNaN(perc) || perc > 1) {
+            return end;
+        } else if (perc < 0) {
+            return start;
+        } else {
+            return start * (1 - perc) + end * perc;
+        }
+    }
+
+    public static Vector lerp(Vector start, Vector end, double perc) {
+        Vector newvec = new Vector();
+        newvec.setX(lerp(start.getX(), end.getX(), perc));
+        newvec.setY(lerp(start.getY(), end.getY(), perc));
+        newvec.setZ(lerp(start.getZ(), end.getZ(), perc));
+        return newvec;
+    }
+
+    public static Location lerp(Location start, Location end, double perc) {
+        Location newloc = new Location(start.getWorld(), 0, 0, 0);
+        newloc.setX(lerp(start.getX(), end.getX(), perc));
+        newloc.setY(lerp(start.getY(), end.getY(), perc));
+        newloc.setZ(lerp(start.getZ(), end.getZ(), perc));
+        newloc.setYaw((float) lerp(start.getYaw(), end.getYaw(), perc));
+        newloc.setPitch((float) lerp(start.getPitch(), end.getPitch(), perc));
+        return newloc;
     }
 }
