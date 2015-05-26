@@ -9,7 +9,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -214,6 +219,19 @@ public class CWItem extends ItemStack {
         super(material, amount, durability);
         setName(name);
         setLore(lore);
+    }
+
+    /**
+     * Create a new Potion itemstack with multiple effects.
+     * @param potion The potion type used as main effect.
+     * @param splash Is it a splash potion?
+     * @param amount Amount for the itemstack.
+     */
+    public CWItem(PotionType potion, boolean splash, int amount) {
+        super(Material.POTION, amount);
+        Potion pot = new Potion(potion);
+        pot.setSplash(splash);
+        pot.apply(this);
     }
 
 
@@ -442,6 +460,16 @@ public class CWItem extends ItemStack {
         return this;
     }
 
+
+    //POTION EFFECTS
+    public CWItem addPotionEffect(PotionEffectType effect, int amplifier, int duration) {
+        if (getType() == Material.POTION) {
+            PotionMeta pmeta = (PotionMeta)getItemMeta();
+            pmeta.addCustomEffect(new PotionEffect(effect, duration, amplifier), true);
+            setItemMeta(pmeta);
+        }
+        return this;
+    }
 
 
     //UTILS
