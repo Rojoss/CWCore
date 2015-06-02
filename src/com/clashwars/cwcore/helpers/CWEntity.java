@@ -1,5 +1,6 @@
 package com.clashwars.cwcore.helpers;
 
+import com.clashwars.cwcore.utils.CWUtil;
 import net.minecraft.server.v1_8_R2.NBTTagCompound;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
@@ -516,6 +517,26 @@ public class CWEntity {
         nmsEntity.c(tag);
         tag.setInt("NoAI", 1);
         nmsEntity.f(tag);
+        return this;
+    }
+
+    public CWEntity setRemoveWhenFarAway(boolean remove) {
+        if (entity instanceof LivingEntity) {
+            ((LivingEntity)entity).setRemoveWhenFarAway(remove);
+        }
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).setRemoveWhenFarAway(remove);
+        }
+        return this;
+    }
+
+    public CWEntity setName(String name) {
+        entity().setCustomName(CWUtil.integrateColor(name));
+        return this;
+    }
+
+    public CWEntity setNameVisible(boolean visible) {
+        entity().setCustomNameVisible(visible);
         return this;
     }
 
