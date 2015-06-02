@@ -1,13 +1,16 @@
 package com.clashwars.cwcore.helpers;
 
+import net.minecraft.server.v1_8_R2.NBTTagCompound;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
+import org.bukkit.craftbukkit.v1_8_R2.entity.CraftEntity;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.material.Colorable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 import java.util.Arrays;
@@ -24,8 +27,9 @@ public class CWEntity {
     public static CWEntity create(EntityType type, Location location) throws IllegalArgumentException {
         if (type.isSpawnable()) {
             return new CWEntity(location.getWorld().spawnEntity(location, type));
+        } else {
+            return new CWEntity(location.getWorld().spawn(location, type.getEntityClass()));
         }
-        throw new IllegalArgumentException();
     }
 
     public Entity entity() {
@@ -98,12 +102,18 @@ public class CWEntity {
         if (entity instanceof Enderman) {
             ((Enderman)entity).setCarriedMaterial(item.getData());
         }
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).setItemInHand(item);
+        }
         return this;
     }
 
     public CWEntity setHelmet(ItemStack item) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).getEquipment().setHelmet(item);
+        }
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).setHelmet(item);
         }
         return this;
     }
@@ -112,12 +122,18 @@ public class CWEntity {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).getEquipment().setChestplate(item);
         }
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).getEquipment().setChestplate(item);
+        }
         return this;
     }
 
     public CWEntity setLeggings(ItemStack item) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).getEquipment().setLeggings(item);
+        }
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).getEquipment().setLeggings(item);
         }
         return this;
     }
@@ -126,12 +142,18 @@ public class CWEntity {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).getEquipment().setBoots(item);
         }
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).getEquipment().setBoots(item);
+        }
         return this;
     }
 
     public CWEntity clearEquipment() {
         if (entity instanceof LivingEntity) {
             ((LivingEntity) entity).getEquipment().clear();
+        }
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand) entity).getEquipment().clear();
         }
         return this;
     }
@@ -430,6 +452,70 @@ public class CWEntity {
             return this;
         }
         entity.setVelocity(velocity);
+        return this;
+    }
+
+    public CWEntity setPose(PoseType type, Vector rotation) {
+        return setPose(type, new EulerAngle(rotation.getX(), rotation.getY(), rotation.getZ()));
+    }
+
+    public CWEntity setPose(PoseType type, EulerAngle rotation) {
+        if (entity instanceof ArmorStand) {
+            ArmorStand stand = (ArmorStand)entity;
+            if (type == PoseType.HEAD) {
+                stand.setHeadPose(rotation);
+            } else if (type == PoseType.BODY) {
+                stand.setBodyPose(rotation);
+            } else if (type == PoseType.LEFT_ARM) {
+                stand.setLeftArmPose(rotation);
+            } else if (type == PoseType.RIGHT_ARM) {
+                stand.setRightArmPose(rotation);
+            } else if (type == PoseType.LEFT_LEG) {
+                stand.setLeftLegPose(rotation);
+            } else if (type == PoseType.RIGHT_LEG) {
+                stand.setRightLegPose(rotation);
+            }
+        }
+        return this;
+    }
+
+    public CWEntity setArmorstandVisibility(boolean visible) {
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).setVisible(visible);
+        }
+        return this;
+    }
+
+    public CWEntity setArmorstandArms(boolean arms) {
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).setArms(arms);
+        }
+        return this;
+    }
+
+    public CWEntity setArmorstandPlate(boolean plate) {
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).setBasePlate(plate);
+        }
+        return this;
+    }
+
+    public CWEntity setArmorstandGravity(boolean gravity) {
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).setGravity(gravity);
+        }
+        return this;
+    }
+
+    public CWEntity setAI(boolean AI) {
+        net.minecraft.server.v1_8_R2.Entity nmsEntity = ((CraftEntity)entity()).getHandle();
+        NBTTagCompound tag = nmsEntity.getNBTTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+        }
+        nmsEntity.c(tag);
+        tag.setInt("NoAI", 1);
+        nmsEntity.f(tag);
         return this;
     }
 
