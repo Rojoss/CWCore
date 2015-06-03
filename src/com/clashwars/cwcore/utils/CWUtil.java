@@ -942,8 +942,10 @@ public class CWUtil {
     }
 
     public static void dropItemStack(Location loc, ItemStack item, JavaPlugin plugin, Player owner) {
+        loc.add(0.5f, 0.5f, 0.5f);
         Item itemDrop = loc.getWorld().dropItem(loc, item);
         itemDrop.setMetadata("owner", new FixedMetadataValue(plugin, owner.getName()));
+        itemDrop.setVelocity(itemDrop.getVelocity().multiply(0.2f));
     }
 
 
