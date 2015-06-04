@@ -14,6 +14,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,12 +26,24 @@ public class CWEntity {
         this.entity = entity;
     }
 
-    public static CWEntity create(EntityType type, Location location) throws IllegalArgumentException {
+    public static CWEntity create(EntityType type, Location location) {
         if (type.isSpawnable()) {
             return new CWEntity(location.getWorld().spawnEntity(location, type));
         } else {
             return new CWEntity(location.getWorld().spawn(location, type.getEntityClass()));
         }
+    }
+
+    public static List<CWEntity> create(EntityType type, Location location, int amount) {
+        List<CWEntity> spawned = new ArrayList<CWEntity>();
+        for (int i = 0 ; i < amount; i++) {
+            if (type.isSpawnable()) {
+                spawned.add(new CWEntity(location.getWorld().spawnEntity(location, type)));
+            } else {
+                spawned.add(new CWEntity(location.getWorld().spawn(location, type.getEntityClass())));
+            }
+        }
+        return spawned;
     }
 
     public Entity entity() {
