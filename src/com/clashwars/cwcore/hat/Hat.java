@@ -2,10 +2,8 @@ package com.clashwars.cwcore.hat;
 
 import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.helpers.CWItem;
+import com.clashwars.cwcore.helpers.EntityTag;
 import org.bukkit.entity.*;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 public class Hat {
@@ -14,9 +12,11 @@ public class Hat {
     private CWItem item;
     private boolean equipped = false;
 
+    private ArmorStand stand;
     private CWEntity entity;
     private EntityType entityType;
     private Item hatItem;
+    private Vector offset = new Vector(0,0.8f,0);
 
 
     public Hat(Player owner, CWItem item) {
@@ -51,23 +51,29 @@ public class Hat {
             return;
         }
 
+        stand = owner.getWorld().spawn(owner.getLocation(), ArmorStand.class);
+        stand.setVisible(false);
+        stand.setGravity(false);
+        stand.setSmall(true);
+        stand.setBasePlate(false);
+        stand.setArms(false);
+
         if (item != null) {
             hatItem = owner.getWorld().dropItem(owner.getLocation(), item);
             hatItem.setPickupDelay(Integer.MAX_VALUE);
             hatItem.setVelocity(new Vector(0, 0, 0));
+            stand.setPassenger(hatItem);
         }
 
-        entity = CWEntity.create(entityType == null ? EntityType.RABBIT : entityType, owner.getLocation());
-        if (entityType == null) {
-            entity.addPotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false);
+        if (entityType != null) {
+            entity = CWEntity.create(entityType == null ? EntityType.BAT : entityType, owner.getLocation());
+            entity.setSize(-1);
+            entity.setAge(-1);
+            entity.setTag(EntityTag.NO_AI, 1);
+            entity.setTag(EntityTag.SILENT, 1);
+            entity.setTag(EntityTag.INVULNERABLE, 1);
+            stand.setPassenger(entity.entity());
         }
-        entity.setAI(false);
-        entity.setSilent(true);
-        entity.setInvulnerable(true);
-
-        owner.eject();
-        owner.setPassenger(entity.entity());
-        entity.entity().setPassenger(hatItem);
 
         equipped = true;
     }
@@ -82,6 +88,9 @@ public class Hat {
         if (entity != null) {
             entity.entity().remove();
         }
+        if (stand != null) {
+            stand.remove();
+        }
         equipped = false;
     }
 
@@ -90,6 +99,19 @@ public class Hat {
         HatManager.removeHat(owner);
     }
 
+    public void setOffset(Vector offset) {
+        this.offset = offset;
+    }
+
+    public void setOffset(double x, double y, double z) {
+        offset.setX(x);
+        offset.setY(y);
+        offset.setZ(z);
+    }
+
+    public Vector getOffset() {
+        return offset;
+    }
 
     public Player getOwner() {
         return owner;
@@ -113,5 +135,9 @@ public class Hat {
 
     public CWEntity getEntity() {
         return entity;
+    }
+
+    public ArmorStand getStand() {
+        return stand;
     }
 }

@@ -20,6 +20,27 @@ public class HatManager implements Listener {
 
     private static HashMap<UUID, Hat> hats = new HashMap<UUID, Hat>();
 
+
+    public HatManager() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Hat hat : hats.values()) {
+                    if (hat.isEquipped()) {
+                        hat.getStand().eject();
+                        hat.getStand().teleport(hat.getOwner().getLocation().add(hat.getOffset()));
+                        hat.getStand().setVelocity(hat.getOwner().getVelocity());
+                        if (hat.getHatItem() != null) {
+                            hat.getStand().setPassenger(hat.getHatItem());
+                        } else if (hat.getEntity() != null) {
+                            hat.getStand().setPassenger(hat.getEntity().entity());
+                        }
+                    }
+                }
+            }
+        }.runTaskTimer(CWCore.inst(), 0, 1);
+    }
+
     public static boolean hasHat(Player player) {
         if (hats.containsKey(player.getUniqueId())) {
             return true;
@@ -89,15 +110,6 @@ public class HatManager implements Listener {
                 }
             }
         }.runTaskLater(CWCore.inst(), 10);
-    }
-
-    @EventHandler
-    private void onEntityDamage(EntityDamageEvent event) {
-        for (Hat hat : hats.values()) {
-            if (hat.getEntity().entity().equals(event.getEntity())) {
-                event.setCancelled(true);
-            }
-        }
     }
 
 }

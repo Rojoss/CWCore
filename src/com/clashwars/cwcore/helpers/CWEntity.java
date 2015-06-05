@@ -15,6 +15,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -522,50 +523,14 @@ public class CWEntity {
         return this;
     }
 
-    public CWEntity setAI(boolean AI) {
+    public CWEntity setTag(EntityTag entityTag, int value) {
         net.minecraft.server.v1_8_R2.Entity nmsEntity = ((CraftEntity)entity()).getHandle();
         NBTTagCompound tag = nmsEntity.getNBTTag();
         if (tag == null) {
             tag = new NBTTagCompound();
         }
         nmsEntity.c(tag);
-        if (AI) {
-            tag.setInt("NoAI", 1);
-        } else {
-            tag.setInt("NoAI", 0);
-        }
-        nmsEntity.f(tag);
-        return this;
-    }
-
-    public CWEntity setSilent(boolean silent) {
-        net.minecraft.server.v1_8_R2.Entity nmsEntity = ((CraftEntity)entity()).getHandle();
-        NBTTagCompound tag = nmsEntity.getNBTTag();
-        if (tag == null) {
-            tag = new NBTTagCompound();
-        }
-        nmsEntity.c(tag);
-        if (silent) {
-            tag.setInt("Silent", 1);
-        } else {
-            tag.setInt("Silent", 0);
-        }
-        nmsEntity.f(tag);
-        return this;
-    }
-
-    public CWEntity setInvulnerable(boolean invulnerable) {
-        net.minecraft.server.v1_8_R2.Entity nmsEntity = ((CraftEntity)entity()).getHandle();
-        NBTTagCompound tag = nmsEntity.getNBTTag();
-        if (tag == null) {
-            tag = new NBTTagCompound();
-        }
-        nmsEntity.c(tag);
-        if (invulnerable) {
-            tag.setInt("invulnerable", 1);
-        } else {
-            tag.setInt("invulnerable", 0);
-        }
+        tag.setInt(entityTag.tag, value);
         nmsEntity.f(tag);
         return this;
     }
