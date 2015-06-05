@@ -8,6 +8,8 @@ import com.clashwars.cwcore.dependencies.internal.DependencyManager;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EntityManager;
 import com.clashwars.cwcore.effect.event.ItemListener;
+import com.clashwars.cwcore.hat.Hat;
+import com.clashwars.cwcore.hat.HatManager;
 import com.clashwars.cwcore.scoreboard.ScoreboardListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -26,6 +28,7 @@ public class CWCore extends JavaPlugin {
     private CooldownManager cdm;
     private EntityManager entityManager;
     private Selection sel;
+    private HatManager hm;
 
     private Materials materialsCfg;
     private Sounds soundsCfg;
@@ -37,6 +40,9 @@ public class CWCore extends JavaPlugin {
 
 
     public void onDisable() {
+        for (Hat hat : HatManager.getHats().values()) {
+            hat.remove();
+        }
         log("Disabled.");
     }
 
@@ -53,6 +59,7 @@ public class CWCore extends JavaPlugin {
         //Other
         cdm = new CooldownManager();
         sel = new Selection();
+        hm = new HatManager();
 
         //Load effects
         entityManager = new EntityManager(this);
@@ -64,6 +71,7 @@ public class CWCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ItemListener(), this);
         getServer().getPluginManager().registerEvents(new SelectionListener(this), this);
         getServer().getPluginManager().registerEvents(new ScoreboardListener(), this);
+        getServer().getPluginManager().registerEvents(hm, this);
 
         loadAliases();
 
@@ -239,5 +247,9 @@ public class CWCore extends JavaPlugin {
 
     public Selection getSel() {
         return sel;
+    }
+
+    public HatManager getHatMan() {
+        return hm;
     }
 }

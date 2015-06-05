@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.material.Colorable;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
@@ -528,7 +529,43 @@ public class CWEntity {
             tag = new NBTTagCompound();
         }
         nmsEntity.c(tag);
-        tag.setInt("NoAI", 1);
+        if (AI) {
+            tag.setInt("NoAI", 1);
+        } else {
+            tag.setInt("NoAI", 0);
+        }
+        nmsEntity.f(tag);
+        return this;
+    }
+
+    public CWEntity setSilent(boolean silent) {
+        net.minecraft.server.v1_8_R2.Entity nmsEntity = ((CraftEntity)entity()).getHandle();
+        NBTTagCompound tag = nmsEntity.getNBTTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+        }
+        nmsEntity.c(tag);
+        if (silent) {
+            tag.setInt("Silent", 1);
+        } else {
+            tag.setInt("Silent", 0);
+        }
+        nmsEntity.f(tag);
+        return this;
+    }
+
+    public CWEntity setInvulnerable(boolean invulnerable) {
+        net.minecraft.server.v1_8_R2.Entity nmsEntity = ((CraftEntity)entity()).getHandle();
+        NBTTagCompound tag = nmsEntity.getNBTTag();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+        }
+        nmsEntity.c(tag);
+        if (invulnerable) {
+            tag.setInt("invulnerable", 1);
+        } else {
+            tag.setInt("invulnerable", 0);
+        }
         nmsEntity.f(tag);
         return this;
     }
@@ -550,6 +587,20 @@ public class CWEntity {
 
     public CWEntity setNameVisible(boolean visible) {
         entity().setCustomNameVisible(visible);
+        return this;
+    }
+
+    public CWEntity addPotionEffect(PotionEffectType type, int ticks, int amplifier) {
+        if (entity instanceof LivingEntity) {
+            ((LivingEntity)entity).addPotionEffect(new PotionEffect(type, ticks, amplifier, false, true));
+        }
+        return this;
+    }
+
+    public CWEntity addPotionEffect(PotionEffectType type, int ticks, int amplifier, boolean ambient, boolean particles) {
+        if (entity instanceof LivingEntity) {
+            ((LivingEntity)entity).addPotionEffect(new PotionEffect(type, ticks, amplifier, ambient, particles));
+        }
         return this;
     }
 
