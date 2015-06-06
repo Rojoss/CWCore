@@ -3,14 +3,13 @@ package com.clashwars.cwcore.helpers;
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.utils.CWUtil;
 import org.bukkit.Color;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -459,6 +458,71 @@ public class CWItem extends ItemStack {
         }
         return this;
     }
+
+    public Color getLeatherColor() {
+        if (getType() == Material.LEATHER_BOOTS || getType() == Material.LEATHER_LEGGINGS || getType() == Material.LEATHER_CHESTPLATE || getType() == Material.LEATHER_HELMET) {
+            LeatherArmorMeta lmeta = (LeatherArmorMeta) getItemMeta();
+            return lmeta.getColor();
+        }
+        return Color.WHITE;
+    }
+
+
+    // Banner stuff
+
+    /**
+     * Set the base color of the banner.
+     * @param color The color.
+     * @return CWItem
+     */
+    public CWItem setBaseColor(DyeColor color) {
+        if (getType() == Material.BANNER) {
+            BannerMeta bmeta = (BannerMeta) getItemMeta();
+            bmeta.setBaseColor(color);
+            setItemMeta(bmeta);
+        }
+        return this;
+    }
+
+    public CWItem setPattern(int index, Pattern pattern) {
+        if (getType() == Material.BANNER) {
+            BannerMeta bmeta = (BannerMeta) getItemMeta();
+            if (bmeta.getPatterns().size() > index) {
+                bmeta.setPattern(index, pattern);
+            } else {
+                bmeta.addPattern(pattern);
+            }
+            setItemMeta(bmeta);
+        }
+        return this;
+    }
+
+    public Pattern getPattern(int index) {
+        if (getType() == Material.BANNER) {
+            BannerMeta bmeta = (BannerMeta) getItemMeta();
+            return bmeta.getPattern(index);
+        }
+        return null;
+    }
+
+    public CWItem setPatterns(List<Pattern> patterns) {
+        if (getType() == Material.BANNER) {
+            BannerMeta bmeta = (BannerMeta) getItemMeta();
+            bmeta.setPatterns(patterns);
+            setItemMeta(bmeta);
+        }
+        return this;
+    }
+
+    public List<Pattern> getPatterns() {
+        if (getType() == Material.BANNER) {
+            BannerMeta bmeta = (BannerMeta) getItemMeta();
+            return bmeta.getPatterns();
+        }
+        return null;
+    }
+
+
 
 
     //POTION EFFECTS
