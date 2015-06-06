@@ -1,5 +1,6 @@
 package com.clashwars.cwcore.hat;
 
+import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.helpers.EntityTag;
@@ -16,7 +17,7 @@ public class Hat {
     private CWEntity entity;
     private EntityType entityType;
     private Item hatItem;
-    private Vector offset = new Vector(0,2f,0);
+    private Vector offset = new Vector(0,3f,0);
 
 
     public Hat(Player owner, CWItem item) {
@@ -64,6 +65,7 @@ public class Hat {
             hatItem = owner.getWorld().dropItem(owner.getLocation(), item);
             hatItem.setPickupDelay(Integer.MAX_VALUE);
             hatItem.setVelocity(new Vector(0, 0, 0));
+            CWCore.inst().getEntityHider().hideEntity(owner, hatItem);
             stand.setPassenger(hatItem);
         }
 

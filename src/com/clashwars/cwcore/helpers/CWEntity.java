@@ -1,5 +1,6 @@
 package com.clashwars.cwcore.helpers;
 
+import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.utils.CWUtil;
 import net.minecraft.server.v1_8_R2.NBTTagCompound;
 import org.bukkit.*;
@@ -565,6 +566,24 @@ public class CWEntity {
     public CWEntity addPotionEffect(PotionEffectType type, int ticks, int amplifier, boolean ambient, boolean particles) {
         if (entity instanceof LivingEntity) {
             ((LivingEntity)entity).addPotionEffect(new PotionEffect(type, ticks, amplifier, ambient, particles));
+        }
+        return this;
+    }
+
+    public CWEntity hide(Player player) {
+        if (entity instanceof Player)  {
+            player.hidePlayer((Player)entity);
+        } else {
+            CWCore.inst().getEntityHider().hideEntity(player, entity);
+        }
+        return this;
+    }
+
+    public CWEntity show(Player player) {
+        if (entity instanceof Player)  {
+            player.showPlayer((Player) entity);
+        } else {
+            CWCore.inst().getEntityHider().showEntity(player, entity);
         }
         return this;
     }

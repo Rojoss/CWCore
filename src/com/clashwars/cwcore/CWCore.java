@@ -10,6 +10,7 @@ import com.clashwars.cwcore.effect.EntityManager;
 import com.clashwars.cwcore.effect.event.ItemListener;
 import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.hat.HatManager;
+import com.clashwars.cwcore.helpers.EntityHider;
 import com.clashwars.cwcore.scoreboard.ScoreboardListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -29,6 +30,7 @@ public class CWCore extends JavaPlugin {
     private EntityManager entityManager;
     private Selection sel;
     private HatManager hm;
+    private EntityHider entityHider;
 
     private Materials materialsCfg;
     private Sounds soundsCfg;
@@ -60,6 +62,7 @@ public class CWCore extends JavaPlugin {
         cdm = new CooldownManager();
         sel = new Selection();
         hm = new HatManager();
+        entityHider = new EntityHider(this, EntityHider.Policy.BLACKLIST);
 
         //Load effects
         entityManager = new EntityManager(this);
@@ -251,5 +254,9 @@ public class CWCore extends JavaPlugin {
 
     public HatManager getHatMan() {
         return hm;
+    }
+
+    public EntityHider getEntityHider() {
+        return entityHider;
     }
 }
