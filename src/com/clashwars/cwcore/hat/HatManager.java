@@ -2,6 +2,7 @@ package com.clashwars.cwcore.hat;
 
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.Debug;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Rabbit;
@@ -28,7 +29,8 @@ public class HatManager implements Listener {
                 for (Hat hat : hats.values()) {
                     if (hat.isEquipped()) {
                         hat.getStand().eject();
-                        hat.getStand().teleport(hat.getOwner().getLocation().add(hat.getOffset()));
+                        Location playerLoc = hat.getOwner().getLocation().clone();
+                        hat.getStand().teleport(playerLoc.add(hat.getOffset()));
                         hat.getStand().setVelocity(hat.getOwner().getVelocity());
                         if (hat.getHatItem() != null) {
                             hat.getStand().setPassenger(hat.getHatItem());
@@ -110,6 +112,22 @@ public class HatManager implements Listener {
                 }
             }
         }.runTaskLater(CWCore.inst(), 10);
+    }
+
+    @EventHandler
+    private void onTeleport(final PlayerTeleportEvent event) {
+        if (hats.containsKey(event.getPlayer().getUniqueId())) {
+            hats.get(event.getPlayer().getUniqueId()).unequip();
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (hats.containsKey(event.getPlayer().getUniqueId())) {
+                        hats.get(event.getPlayer().getUniqueId()).equip();
+                    }
+                }
+            }.runTaskLater(CWCore.inst(), 20);
+        }
     }
 
 }

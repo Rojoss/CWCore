@@ -16,7 +16,7 @@ public class Hat {
     private CWEntity entity;
     private EntityType entityType;
     private Item hatItem;
-    private Vector offset = new Vector(0,0.8f,0);
+    private Vector offset = new Vector(0,2f,0);
 
 
     public Hat(Player owner, CWItem item) {
@@ -51,12 +51,14 @@ public class Hat {
             return;
         }
 
-        stand = owner.getWorld().spawn(owner.getLocation(), ArmorStand.class);
+        stand = owner.getWorld().spawn(owner.getLocation().add(offset), ArmorStand.class);
         stand.setVisible(false);
         stand.setGravity(false);
         stand.setSmall(true);
         stand.setBasePlate(false);
         stand.setArms(false);
+        CWEntity cwStand = new CWEntity(stand);
+        cwStand.setTag(EntityTag.MARKER, 1);
 
         if (item != null) {
             hatItem = owner.getWorld().dropItem(owner.getLocation(), item);
