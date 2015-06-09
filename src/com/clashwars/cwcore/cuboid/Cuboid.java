@@ -2,6 +2,7 @@ package com.clashwars.cwcore.cuboid;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -145,6 +146,15 @@ public class Cuboid implements Iterable<Block>, Cloneable {
      */
     public boolean contains(Player player) {
         return contains(player.getLocation());
+    }
+
+    /**
+     * Check if the given entity is within the cuboid.
+     * @param entity The Entity that needs to be checked.
+     * @return true if it is and false if not.
+     */
+    public boolean contains(Entity entity) {
+        return contains(entity.getLocation());
     }
 
     /**
