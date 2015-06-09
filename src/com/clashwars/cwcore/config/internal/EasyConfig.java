@@ -1,5 +1,6 @@
 package com.clashwars.cwcore.config.internal;
 
+import com.clashwars.cwcore.utils.CWUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -7,6 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -141,8 +143,10 @@ public abstract class EasyConfig {
     private Object toBukkit(Object in, Field field, String path) throws Exception {
         if (isConfigurationSection(in)) {
             return getMap((ConfigurationSection) in, field, path);
-        } else if (isJsonLocation(in)) {
+        /*} else if (isJsonLocation(in)) {
             return getLocation((String) in);
+        } else if (isVector(in)) {
+            return getVector((String) in);*/
         } else {
             return in;
         }
@@ -152,8 +156,10 @@ public abstract class EasyConfig {
     private Object toConfig(Object out, Field field, String path) throws Exception {
         if (isMap(out)) {
             return getMap((Map) out, field, path);
-        } else if (isLocation(out)) {
+        /*} else if (isLocation(out)) {
             return getLocation((Location) out);
+        } else if (isVector(out)) {
+            return getVector((Vector) out);*/
         } else {
             return out;
         }
@@ -177,6 +183,7 @@ public abstract class EasyConfig {
         }
     }
 
+    /*
     private boolean isJsonLocation(Object o) {
         if (isJSON(o)) {
             if (o instanceof String) {
@@ -189,6 +196,19 @@ public abstract class EasyConfig {
         return false;
     }
 
+    private boolean isJsonVector(Object o) {
+        if (isJSON(o)) {
+            if (o instanceof String) {
+                String s = ((String) o).toLowerCase();
+                if (s.contains("x\":") && s.contains("y\":") && s.contains("z\":")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    */
+
     @SuppressWarnings("rawtypes")
     private boolean isMap(Object o) {
         try {
@@ -198,6 +218,7 @@ public abstract class EasyConfig {
         }
     }
 
+    /*
     private boolean isLocation(Object o) {
         try {
             return (Location) o != null;
@@ -205,6 +226,15 @@ public abstract class EasyConfig {
             return false;
         }
     }
+
+    private boolean isVector(Object o) {
+        try {
+            return (Vector) o != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    */
 
     private boolean isConfigurationSection(Object o) {
         try {
@@ -248,21 +278,25 @@ public abstract class EasyConfig {
         return map;
     }
 
+    /*
     private Location getLocation(String json) throws Exception {
         JSONObject data = (JSONObject) new JSONParser().parse(json);
         // world
-        World world = Bukkit.getWorld((String) data.get("world"));
+        World world = Bukkit.getWorld(((String)data.get("world")).trim());
         // x, y, z
-        double x = Double.parseDouble((String) data.get("x"));
-        double y = Double.parseDouble((String) data.get("y"));
-        double z = Double.parseDouble((String) data.get("z"));
-        // pitch, yaw
-        float pitch = Float.parseFloat((String) data.get("pitch"));
-        float yaw = Float.parseFloat((String) data.get("yaw"));
+        double x = data.containsKey("x") ? Double.parseDouble(((String)data.get("x")).trim()) : 0;
+        double y = data.containsKey("y") ? Double.parseDouble(((String)data.get("y")).trim()) : 0;
+        double z = data.containsKey("z") ? Double.parseDouble(((String)data.get("z")).trim()) : 0;
         // generate Location
         Location loc = new Location(world, x, y, z);
-        loc.setPitch(pitch);
-        loc.setYaw(yaw);
+
+        // pitch, yaw
+        if (data.containsKey("pitch")) {
+            loc.setPitch(Float.parseFloat(((String)data.get("pitch")).trim()));
+        }
+        if (data.containsKey("yaw")) {
+            loc.setPitch(Float.parseFloat(((String)data.get("yaw")).trim()));
+        }
         return loc;
     }
 
@@ -280,6 +314,29 @@ public abstract class EasyConfig {
         data.put("yaw", String.valueOf(loc.getYaw()));
         return data.toJSONString();
     }
+
+    private Vector getVector(String json) throws Exception {
+        JSONObject data = (JSONObject) new JSONParser().parse(json);
+        // x, y, z
+        double x = data.containsKey("x") ? Double.parseDouble(((String)data.get("x")).trim()) : 0;
+        double y = data.containsKey("y") ? Double.parseDouble(((String)data.get("y")).trim()) : 0;
+        double z = data.containsKey("z") ? Double.parseDouble(((String)data.get("z")).trim()) : 0;
+
+        return new Vector(x,y,z);
+    }
+
+    @SuppressWarnings("unchecked")
+    private String getVector(Vector vector) {
+        JSONObject data = new JSONObject();
+
+        data.put("x", String.valueOf(vector.getX()));
+        data.put("y", String.valueOf(vector.getY()));
+        data.put("z", String.valueOf(vector.getZ()));
+
+        return data.toJSONString();
+    }
+    */
+
     
     /*
      * Utility methods
