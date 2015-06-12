@@ -524,6 +524,13 @@ public class CWEntity {
         return this;
     }
 
+    public CWEntity setSmall(boolean small) {
+        if (entity instanceof ArmorStand) {
+            ((ArmorStand)entity).setSmall(small);
+        }
+        return this;
+    }
+
     public CWEntity setTag(EntityTag entityTag, int value) {
         net.minecraft.server.v1_8_R2.Entity nmsEntity = ((CraftEntity)entity()).getHandle();
         NBTTagCompound tag = nmsEntity.getNBTTag();
