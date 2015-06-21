@@ -16,7 +16,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class CWCore extends JavaPlugin {
@@ -42,7 +45,8 @@ public class CWCore extends JavaPlugin {
 
 
     public void onDisable() {
-        for (Hat hat : HatManager.getHats().values()) {
+        Collection<Hat> hats = new HashMap<UUID, Hat>(HatManager.getHats()).values();
+        for (Hat hat : hats) {
             hat.remove();
         }
         log("Disabled.");

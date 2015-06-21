@@ -578,7 +578,7 @@ public enum ParticleEffect {
             throw new ParticleDataException("This particle effect requires additional data");
         }
         if (hasProperty(ParticleProperty.REQUIRES_WATER) && !isWater(center)) {
-            throw new IllegalArgumentException("There is no water at the center location");
+            return;
         }
         new ParticlePacket(this, offsetX, offsetY, offsetZ, speed, amount, range > 256, null).sendTo(center, range);
     }
@@ -623,7 +623,7 @@ public enum ParticleEffect {
             throw new IllegalArgumentException("This particle effect is not directional");
         }
         if (hasProperty(ParticleProperty.REQUIRES_WATER) && !isWater(center)) {
-            throw new IllegalArgumentException("There is no water at the center location");
+            return;
         }
         new ParticlePacket(this, direction, speed, range > 256, null).sendTo(center, range);
     }
