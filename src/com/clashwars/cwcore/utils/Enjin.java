@@ -13,8 +13,18 @@ public class Enjin {
 
     private static String server_key = "30ef33e2efc7aa9fc18ad4f4494e6d2fe6b5b965c3b3936256";
     public static JSONObject users;
+    private static Long lastRequest = null;
 
     public static JSONObject getUsers() {
+        if (lastRequest != null) {
+            if (users != null) {
+                if (System.currentTimeMillis() - lastRequest <= 10000) {
+                    return users;
+                }
+            }
+        }
+        lastRequest = System.currentTimeMillis();
+
         StringBuilder builder = new StringBuilder();
         builder.append("authkey=" + server_key);
         builder.append("&characters=true");
