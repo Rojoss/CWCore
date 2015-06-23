@@ -17,7 +17,7 @@ public class Hat {
     private CWEntity entity;
     private EntityType entityType;
     private Item hatItem;
-    private Vector offset = new Vector(0,3f,0);
+    private Vector offset = new Vector(0,2f,0);
 
 
     public Hat(Player owner, CWItem item) {
