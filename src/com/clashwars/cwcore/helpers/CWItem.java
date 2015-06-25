@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.Potion;
@@ -556,8 +557,22 @@ public class CWItem extends ItemStack {
         }
     }
 
+    public CWItem hideTooltips() {
+        ItemMeta meta = getItemMeta();
+        for (ItemFlag itemFlag : ItemFlag.values()) {
+            meta.addItemFlags(itemFlag);
+        }
+        setItemMeta(meta);
+        return this;
+    }
+
     public CWItem makeGlowing() {
-        //TODO: Make this with protocol stuff...
+        ItemMeta meta = getItemMeta();
+        if (!meta.hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
+        setItemMeta(meta);
+        addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 0);
         return this;
     }
 

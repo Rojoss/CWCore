@@ -22,6 +22,7 @@ import org.bukkit.util.Vector;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.*;
 
 public class CWUtil {
@@ -416,6 +417,12 @@ public class CWUtil {
         val = Math.round(val);
         val = val / 100;
         return val;
+    }
+
+    public static float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
     }
 
     /**
@@ -1046,6 +1053,20 @@ public class CWUtil {
         return entities;
     }
 
+    public static List<Player> getPlayersInNearbyChunks(Location l, int range) {
+        List<Player> players = new ArrayList<Player>();
+
+        for(Chunk chunk : getNearbyChunks(l, range)) {
+            for (Entity e : chunk.getEntities()) {
+                if (e instanceof  Player) {
+                    players.add((Player)e);
+                }
+            }
+        }
+
+        return players;
+    }
+
     public static List<Entity> getNearbyEntities(Location l, float range, List<EntityType> entityTypes) {
         List<Entity> entities = new ArrayList<Entity>();
         for (Entity e : getEntitiesInNearbyChunks(l, (int) range, entityTypes)) {
@@ -1053,8 +1074,19 @@ public class CWUtil {
                 entities.add(e);
             }
         }
-
         return entities;
+    }
+
+    public List<Player> getNearbyPlayers(Location l, float range) {
+        List<Player> players = new ArrayList<Player>();
+
+        for (Player player : getPlayersInNearbyChunks(l, (int) range)) {
+            if (player.getLocation().distance(l) <= range) {
+                players.add(player);
+            }
+        }
+
+        return players;
     }
 
     public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map, final boolean descending) {
@@ -1202,5 +1234,15 @@ public class CWUtil {
         newloc.setYaw((float) lerp(start.getYaw(), end.getYaw(), perc));
         newloc.setPitch((float) lerp(start.getPitch(), end.getPitch(), perc));
         return newloc;
+    }
+
+    public static String getName(UUID playerUUID) {
+        if (playerUUID != null) {
+            OfflinePlayer oplayer = Bukkit.getOfflinePlayer(playerUUID);
+            if (oplayer != null) {
+                return oplayer.getName();
+            }
+        }
+        return null;
     }
 }
