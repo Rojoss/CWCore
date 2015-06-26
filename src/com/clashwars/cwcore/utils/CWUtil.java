@@ -1077,7 +1077,7 @@ public class CWUtil {
         return entities;
     }
 
-    public List<Player> getNearbyPlayers(Location l, float range) {
+    public static List<Player> getNearbyPlayers(Location l, float range) {
         List<Player> players = new ArrayList<Player>();
 
         for (Player player : getPlayersInNearbyChunks(l, (int) range)) {
