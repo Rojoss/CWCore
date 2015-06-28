@@ -249,6 +249,10 @@ public class CWUtil {
     //###################################  TIME UTILITIES  #####################################
     //##########################################################################################
 
+    public static String formatTime(long time, String syntax) {
+        return formatTime(time, syntax, false);
+    }
+
     /**
      * Format a timestamp to a string with days/hours/mins/secs/ms.
      * For example: '%Dd %H:%M:%S' will be replaced with something like '1d 23:12:52'
@@ -264,7 +268,7 @@ public class CWUtil {
      * @param syntax The string with the above options which will be replaced with the time.
      * @return Formatted time string.
      */
-    public static String formatTime(long time, String syntax) {
+    public static String formatTime(long time, String syntax, boolean extraZeros) {
         //time = time / 1000;
 
         int days = (int) time / MSEC_IN_DAY;
@@ -284,9 +288,9 @@ public class CWUtil {
         int fs = (int) time / 10;
 
         syntax = syntax.replace("%D", "" + days);
-        syntax = syntax.replace("%H", "" + hours);
-        syntax = syntax.replace("%M", "" + mins);
-        syntax = syntax.replace("%S", "" + secs);
+        syntax = syntax.replace("%H", "" + (hours < 10 && extraZeros ? "0"+hours : hours));
+        syntax = syntax.replace("%M", "" + (mins < 10 && extraZeros ? "0"+mins : mins));
+        syntax = syntax.replace("%S", "" + (secs < 10 && extraZeros ? "0"+secs : secs));
         syntax = syntax.replace("%MS", "" + ms);
         syntax = syntax.replace("%%%", "" + fs);
         syntax = syntax.replace("%%", "" + ds);
