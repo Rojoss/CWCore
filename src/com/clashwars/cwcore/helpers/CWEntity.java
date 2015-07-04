@@ -2,10 +2,14 @@ package com.clashwars.cwcore.helpers;
 
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.utils.CWUtil;
+import net.minecraft.server.v1_8_R2.AttributeInstance;
+import net.minecraft.server.v1_8_R2.EntityInsentient;
+import net.minecraft.server.v1_8_R2.GenericAttributes;
 import net.minecraft.server.v1_8_R2.NBTTagCompound;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_8_R2.entity.CraftLivingEntity;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -108,6 +112,14 @@ public class CWEntity {
     public CWEntity setHorseArmor(ItemStack item) {
         if (entity instanceof Horse) {
             ((Horse)entity).getInventory().setArmor(item);
+        }
+        return this;
+    }
+
+    public CWEntity setHorseSpeed(double speed) {
+        if (entity instanceof Horse) {
+            AttributeInstance attributes = ((EntityInsentient)((CraftLivingEntity)entity).getHandle()).getAttributeInstance(GenericAttributes.d);
+            attributes.setValue(speed);
         }
         return this;
     }
