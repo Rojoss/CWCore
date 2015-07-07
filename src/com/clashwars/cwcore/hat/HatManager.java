@@ -1,15 +1,11 @@
 package com.clashwars.cwcore.hat;
 
 import com.clashwars.cwcore.CWCore;
-import com.clashwars.cwcore.Debug;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Rabbit;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -115,18 +111,9 @@ public class HatManager implements Listener {
     }
 
     @EventHandler
-    private void onTeleport(final PlayerTeleportEvent event) {
-        if (hats.containsKey(event.getPlayer().getUniqueId())) {
-            hats.get(event.getPlayer().getUniqueId()).unequip();
-
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (hats.containsKey(event.getPlayer().getUniqueId())) {
-                        hats.get(event.getPlayer().getUniqueId()).equip();
-                    }
-                }
-            }.runTaskLater(CWCore.inst(), 20);
+    private void itemDespawn(ItemDespawnEvent event) {
+        if (event.getEntity().hasMetadata("status-icon")) {
+            event.setCancelled(true);
         }
     }
 

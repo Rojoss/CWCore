@@ -5,6 +5,7 @@ import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.helpers.EntityTag;
 import org.bukkit.entity.*;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 public class Hat {
@@ -63,6 +64,7 @@ public class Hat {
 
         if (item != null) {
             hatItem = owner.getWorld().dropItem(owner.getLocation(), item);
+            hatItem.setMetadata("status-icon", new FixedMetadataValue(CWCore.inst(), true));
             hatItem.setPickupDelay(Integer.MAX_VALUE);
             hatItem.setVelocity(new Vector(0, 0, 0));
             CWCore.inst().getEntityHider().hideEntity(owner, hatItem);
@@ -83,9 +85,6 @@ public class Hat {
     }
 
     public void unequip() {
-        if (!equipped) {
-            return;
-        }
         if (hatItem != null) {
             hatItem.remove();
         }
