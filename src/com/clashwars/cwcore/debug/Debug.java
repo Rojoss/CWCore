@@ -1,5 +1,6 @@
-package com.clashwars.cwcore;
+package com.clashwars.cwcore.debug;
 
+import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.utils.CWUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Block;

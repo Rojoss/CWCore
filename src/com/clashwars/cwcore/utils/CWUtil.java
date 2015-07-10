@@ -1,6 +1,6 @@
 package com.clashwars.cwcore.utils;
 
-import com.clashwars.cwcore.Debug;
+import com.clashwars.cwcore.helpers.CWItem;
 import net.minecraft.server.v1_8_R2.*;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
@@ -17,12 +17,15 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
 import java.io.*;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CWUtil {
@@ -149,6 +152,11 @@ public class CWUtil {
     //##########################################################################################
     //##################################  STRING UTILITIES  ####################################
     //##########################################################################################
+
+
+    public static void sendActionBar(Player player, String prefixClr, String message){
+        sendActionBar(player, CWUtil.integrateColor(prefixClr + ">> " + message + prefixClr + " <<"));
+    }
 
     /**
      * Send a message the player his actionbar. (above hotbar)
@@ -296,6 +304,19 @@ public class CWUtil {
         syntax = syntax.replace("%%", "" + ds);
         return syntax;
     }
+
+    public static String getTimeStamp() {
+        return getTimeStamp("[dd-MM HH:mm:ss]");
+    }
+
+    public static String getTimeStamp(String syntax) {
+        return new SimpleDateFormat(syntax).format(Calendar.getInstance().getTime());
+    }
+
+    public static String timeStampToDateString(Timestamp timestamp) {
+        return new SimpleDateFormat("dd MMM yyyy").format(timestamp);
+    }
+
 
 
 
@@ -1248,5 +1269,46 @@ public class CWUtil {
             }
         }
         return null;
+    }
+
+    public static void resetPlayer(Player player, GameMode gameMode) {
+        clearPlayerInv(player, true);
+        removePotionEffects(player);
+
+        player.setMaxHealth(20);
+        player.setHealth(20);
+        player.setFoodLevel(20);
+        player.setFireTicks(0);
+        player.setSaturation(10);
+
+        player.setFlying(false);
+        player.setAllowFlight(false);
+        player.setWalkSpeed(0.2f);
+        player.setFlySpeed(0.1f);
+
+        player.setTotalExperience(0);
+        player.setLevel(0);
+        player.setExp(0);
+
+        player.setGameMode(gameMode);
+
+        player.updateInventory();
+    }
+
+    public static void clearPlayerInv(Player player, boolean armorSlots) {
+        player.getInventory().clear();
+        if (armorSlots) {
+            player.getInventory().setHelmet(new CWItem(Material.AIR));
+            player.getInventory().setChestplate(new CWItem(Material.AIR));
+            player.getInventory().setLeggings(new CWItem(Material.AIR));
+            player.getInventory().setBoots(new CWItem(Material.AIR));
+        }
+    }
+
+    public static void removePotionEffects(Player player) {
+        Collection<PotionEffect> effects = player.getActivePotionEffects();
+        for (PotionEffect pe : effects) {
+            player.removePotionEffect(pe.getType());
+        }
     }
 }

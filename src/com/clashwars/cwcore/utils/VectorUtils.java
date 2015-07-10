@@ -1,6 +1,5 @@
 package com.clashwars.cwcore.utils;
 
-import com.clashwars.cwcore.Debug;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 

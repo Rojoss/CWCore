@@ -4,8 +4,6 @@ import com.clashwars.cwcore.CWCore;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.earth2me.essentials.Essentials;
-import com.massivecraft.factions.Factions;
-import com.palmergames.bukkit.towny.Towny;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.economy.Economy;
@@ -22,8 +20,6 @@ public class DependencyManager {
     private WorldEditPlugin worldedit;
     private WorldGuardPlugin worldguard;
     private Essentials essentials;
-    private Factions factions;
-    private Towny towny;
     private ProtocolLibrary protocolLib;
     private ProtocolManager protocolManager;
 
@@ -39,8 +35,6 @@ public class DependencyManager {
         loadWorldguard();
         loadEssentials();
         loadProtocolLib();
-        loadFactions();
-        loadTowny();
     }
 
     // ECONOMY
@@ -156,47 +150,6 @@ public class DependencyManager {
      */
     public Essentials getEssentials() {
         return essentials;
-    }
-
-
-    //FACTIONS
-    private void loadFactions() {
-        Plugin plugin = cwc.getServer().getPluginManager().getPlugin("Factions");
-        if (plugin == null || !(plugin instanceof Factions)) {
-            cwc.error("Factions dependency couldn't be loaded!");
-            return;
-        }
-        factions = (Factions) plugin;
-        cwc.log("Factions dependency loaded!");
-    }
-
-    /**
-     * Get Factions plugin class.
-     * @return Factions
-     */
-    public Factions getFactions() {
-        return factions;
-    }
-
-
-
-    //TOWNY
-    private void loadTowny() {
-        Plugin plugin = cwc.getServer().getPluginManager().getPlugin("Towny");
-        if (plugin == null || !(plugin instanceof Towny)) {
-            cwc.error("Towny dependency couldn't be loaded!");
-            return;
-        }
-        towny = (Towny) plugin;
-        cwc.log("Towny dependency loaded!");
-    }
-
-    /**
-     * Get Factions plugin class.
-     * @return Factions
-     */
-    public Towny getTowny() {
-        return towny;
     }
 
 

@@ -2,7 +2,7 @@ main : com.clashwars.cwcore.CWCore
 name: CWCore
 version: 1.0
 description: Core plugin.
-softdepend: [Vault, ProtocolLib, WorldGuard, Factions, Essentials]
+softdepend: [Vault, ProtocolLib, WorldGuard, Essentials]
 commands:
   cww:
     description: Get cuboid selection wand.
@@ -19,14 +19,3 @@ commands:
     description: Set cuboid pos 2.
     usage: /<command>
     aliases: [l2]
-  pe:
-    description: Display particle effects
-    usage: /<command>
-  sound:
-    description: Play sounds
-    usage: /<command>
-    aliases: [so]
-  soundcheck:
-    description: Test sounds with different pitches
-    usage: /<command>
-    aliases: [sc, soc]

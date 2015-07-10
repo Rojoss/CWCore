@@ -23,28 +23,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../_LIB/plugins/MassiveCore.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../_LIB/plugins/MassiveCore.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../_LIB/plugins/Factions.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../_LIB/plugins/Factions.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/../_LIB/plugins/Vault.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -64,15 +42,6 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/../_LIB/other/commons-io-2.4.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../_LIB/plugins/Towny.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

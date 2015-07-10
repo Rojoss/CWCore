@@ -543,6 +543,20 @@ public class CWEntity {
         return this;
     }
 
+    public CWEntity setHealth(double amt) {
+        if (entity instanceof LivingEntity) {
+            ((LivingEntity)entity).setHealth(Math.min(amt, ((LivingEntity) entity).getMaxHealth()));
+        }
+        return this;
+    }
+
+    public CWEntity setMaxHealth(double amt) {
+        if (entity instanceof LivingEntity) {
+            ((LivingEntity)entity).setMaxHealth(amt);
+        }
+        return this;
+    }
+
     public CWEntity setTag(EntityTag entityTag, int value) {
         net.minecraft.server.v1_8_R2.Entity nmsEntity = ((CraftEntity)entity()).getHandle();
         NBTTagCompound tag = nmsEntity.getNBTTag();

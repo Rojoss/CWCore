@@ -75,6 +75,7 @@ public class CWCore extends JavaPlugin {
         //Load the aliases.
 
         //Listeners
+        getServer().getPluginManager().registerEvents(new ItemMenu.Events(), this);
         getServer().getPluginManager().registerEvents(new ItemListener(), this);
         getServer().getPluginManager().registerEvents(new SelectionListener(this), this);
         getServer().getPluginManager().registerEvents(new ScoreboardListener(), this);
