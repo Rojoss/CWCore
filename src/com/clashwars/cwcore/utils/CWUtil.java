@@ -56,15 +56,6 @@ public class CWUtil {
     }
 
     /**
-     * Format a message with [AR] Prefix
-     * @param msg
-     * @return formatted message
-     */
-    public static String formatARMsg(String msg) {
-        return integrateColor("&8[&9AR&8] &6" + msg);
-    }
-
-    /**
      * Integrate ChatColor in a string based on color codes.
      * @param str
      * @return formatted string
@@ -808,6 +799,41 @@ public class CWUtil {
         locStr += "$z|" + String.valueOf(loc.getZ());
         locStr += "$pitch|" + String.valueOf(loc.getPitch());
         locStr += "$yaw|" + String.valueOf(loc.getYaw());
+
+        return locStr;
+    }
+
+
+    public static Location locFromStringSimple(String locStr) {
+        Location loc = null;
+        if (locStr == null || locStr.isEmpty()) {
+            return null;
+        }
+        HashMap<String, String> dataMap = new HashMap<String, String>();
+        String[] dataArray = locStr.split(",");
+        if (dataArray.length >= 4 ) {
+            loc = new Location(Bukkit.getWorld(dataArray[0]), getDouble(dataArray[1]), getDouble(dataArray[2]), getDouble(dataArray[3]));
+        }
+        if (dataArray.length >= 5) {
+            loc.setPitch(getFloat(dataArray[4]));
+        }
+        if (dataArray.length >= 6) {
+            loc.setPitch(getFloat(dataArray[5]));
+        }
+        return loc;
+    }
+
+    public static String locToStringSimple(Location loc) {
+        if (loc == null) {
+            return null;
+        }
+        String locStr = "";
+        locStr += loc.getWorld().getName();
+        locStr += "," + String.valueOf(loc.getX());
+        locStr += "," + String.valueOf(loc.getY());
+        locStr += "," + String.valueOf(loc.getZ());
+        locStr += "," + String.valueOf(loc.getPitch());
+        locStr += "," + String.valueOf(loc.getYaw());
 
         return locStr;
     }

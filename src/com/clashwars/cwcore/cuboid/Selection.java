@@ -16,7 +16,7 @@ import java.util.UUID;
  */
 public class Selection {
 
-    private CWItem basicWand = new CWItem(Material.STONE_AXE, 1, (byte)0, "&9AR &6wand", new String[] {"&7Select cuboids."});
+    private CWItem basicWand = new CWItem(Material.STONE_AXE, 1, (byte)0, "&4&lCW &6wand", new String[] {"&7Select cuboids."});
 
     Map<UUID, SelectionData> selections = new HashMap<UUID, SelectionData>();
     SelectionData globalSelection = new SelectionData();

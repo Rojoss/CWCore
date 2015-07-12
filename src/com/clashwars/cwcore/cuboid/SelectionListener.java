@@ -1,7 +1,6 @@
 package com.clashwars.cwcore.cuboid;
 
 import com.clashwars.cwcore.CWCore;
-import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -10,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -24,7 +24,7 @@ public class SelectionListener implements Listener {
     }
 
     @EventHandler
-    private void onInteract(DelayedPlayerInteractEvent event) {
+    private void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (!player.isOp()  && !player.hasPermission("cwcore.sel")) {
             return;

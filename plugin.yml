@@ -7,7 +7,7 @@ commands:
   cww:
     description: Get cuboid selection wand.
     usage: /<command>
-    aliases: [cwwand, arw, arwand]
+    aliases: [cwwand]
   sel:
     description: Cuboid selection editor commands.
     usage: /<command> [args]
