@@ -1,11 +1,28 @@
 package com.clashwars.cwcore;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class CooldownManager {
 	
 	private HashMap<String, Cooldown> cooldowns = new HashMap<String, Cooldown>();
-	
+	private static HashMap<UUID, Long> interactCooldowns = new HashMap<UUID, Long>();
+
+
+	public static boolean interactCooldown(UUID uuid, Long miliseconds) {
+		if (interactCooldowns.containsKey(uuid)) {
+			if (System.currentTimeMillis() >= interactCooldowns.get(uuid) + miliseconds) {
+				interactCooldowns.put(uuid, System.currentTimeMillis());
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			interactCooldowns.put(uuid, System.currentTimeMillis());
+			return false;
+		}
+	}
+
 	
 	public void createCooldown(String identifier, long time) {
 		if (cooldowns.containsKey(identifier)) {

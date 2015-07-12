@@ -8,6 +8,7 @@ import com.clashwars.cwcore.dependencies.internal.DependencyManager;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EntityManager;
 import com.clashwars.cwcore.effect.event.ItemListener;
+import com.clashwars.cwcore.events.CustomEventHandler;
 import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.hat.HatManager;
 import com.clashwars.cwcore.helpers.EntityHider;
@@ -75,6 +76,7 @@ public class CWCore extends JavaPlugin {
         //Load the aliases.
 
         //Listeners
+        getServer().getPluginManager().registerEvents(new CustomEventHandler(this), this);
         getServer().getPluginManager().registerEvents(new ItemMenu.Events(), this);
         getServer().getPluginManager().registerEvents(new ItemListener(), this);
         getServer().getPluginManager().registerEvents(new SelectionListener(this), this);
