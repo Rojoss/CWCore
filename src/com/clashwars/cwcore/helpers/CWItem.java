@@ -18,9 +18,12 @@ import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class CWItem extends ItemStack {
+
+    private int slot = -1;
 
     /**
      * Create a CWItem from a bukkit ItemStack.
@@ -235,6 +238,31 @@ public class CWItem extends ItemStack {
     }
 
 
+
+    // SLOT
+
+    /**
+     * Set a slot number where this item needs to be set when giving it to the player.
+     * It will override any item already in the specified slot.
+     * Set the slot ID to -1 (default) so it's given normally.
+     * @param slot The slot Id where the item should be set. -1 to disable.
+     * @return CWItem
+     */
+    public CWItem setSlot(int slot) {
+        this.slot = slot;
+        return this;
+    }
+
+    /**
+     * Get the slot ID specified with setSlot.
+     * @return The slot ID. -1 if no slot has been specified.
+     */
+    public int getSlot() {
+        return slot;
+    }
+
+
+
     // NAME
 
     /**
@@ -412,6 +440,31 @@ public class CWItem extends ItemStack {
 
 
 
+    // ENCHANTS
+
+    /**
+     * Add the specified enchantment to the item.
+     * @param enchantment The Enchantment type.
+     * @param level The level to enchant. (can be unsafe)
+     * @return CWItem
+     */
+    public CWItem addEnchant(Enchantment enchantment, int level) {
+        super.addUnsafeEnchantment(enchantment, level);
+        return this;
+    }
+
+    /**
+     * Add all the specified enchantments in the hashmap to the item.
+     * @param enchantments HashMap with enchantments
+     * @return CWItem
+     */
+    public CWItem addEnchants(HashMap<Enchantment, Integer> enchantments) {
+        super.addUnsafeEnchantments(enchantments);
+        return this;
+    }
+
+
+
     // LEATHER COLOR
 
     /**
@@ -547,6 +600,10 @@ public class CWItem extends ItemStack {
      * @param player The player to give the items to.
      */
     public void giveToPlayer(Player player) {
+        if (slot >= 0) {
+            player.getInventory().setItem(slot, this);
+            return;
+        }
         CWItem itemClone = clone();
         itemClone.setAmount(1);
         for (int i = 0; i < getAmount(); i++) {
