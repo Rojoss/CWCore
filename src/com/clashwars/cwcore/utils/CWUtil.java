@@ -1,5 +1,6 @@
 package com.clashwars.cwcore.utils;
 
+import com.clashwars.cwcore.debug.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import net.minecraft.server.v1_8_R2.*;
 import org.apache.commons.io.FileUtils;
@@ -1337,4 +1338,30 @@ public class CWUtil {
             player.removePotionEffect(pe.getType());
         }
     }
+
+    public static String[] getPrefixes(boolean withFormat) {
+        String[] prefixes = new String[] {"&1","&4","&6","&2","&5","&3","&c","&a","&9","&e","&d","&b","&7","&8","&0","&f"};
+        if (withFormat) {
+            List<String> prefixList = new ArrayList<String>();
+            String[] formats = new String[] {"","&o","&n","&l","&o&l","&o&l","&u&l"};
+            for (String format : formats) {
+                for (String prefix : prefixes) {
+                    prefixList.add(format + prefix);
+                }
+            }
+            return prefixList.toArray(new String[prefixList.size()]);
+        }
+        return prefixes;
+    }
+
+    public static String getRandomPrefix(boolean withFormat) {
+        return random(getPrefixes(withFormat));
+    }
+
+    public static String getPrefix(boolean withFormat, int index) {
+        index = Math.max(Math.min(index, getPrefixes(withFormat).length-1),0);
+        return getPrefixes(withFormat)[index];
+    }
+
+
 }
