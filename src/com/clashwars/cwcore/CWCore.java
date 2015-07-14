@@ -1,6 +1,7 @@
 package com.clashwars.cwcore;
 
 import com.clashwars.cwcore.commands.Commands;
+import com.clashwars.cwcore.config.PlayerConfig;
 import com.clashwars.cwcore.config.aliases.*;
 import com.clashwars.cwcore.cuboid.Selection;
 import com.clashwars.cwcore.cuboid.SelectionListener;
@@ -12,6 +13,7 @@ import com.clashwars.cwcore.events.CustomEventHandler;
 import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.hat.HatManager;
 import com.clashwars.cwcore.helpers.EntityHider;
+import com.clashwars.cwcore.player.Vanish;
 import com.clashwars.cwcore.scoreboard.ScoreboardListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -36,6 +38,7 @@ public class CWCore extends JavaPlugin {
     private HatManager hm;
     private EntityHider entityHider;
 
+    private PlayerConfig playerCfg;
     private Materials materialsCfg;
     private Sounds soundsCfg;
     private PotionEffects effectsCfg;
@@ -73,7 +76,9 @@ public class CWCore extends JavaPlugin {
         entityManager = new EntityManager(this);
         EffectManager.initialize();
 
-        //Load the aliases.
+        //Config
+        playerCfg = new PlayerConfig("plugins/CWCore/PlayerData.yml");
+        playerCfg.load();
 
         //Listeners
         getServer().getPluginManager().registerEvents(new CustomEventHandler(this), this);
@@ -82,6 +87,7 @@ public class CWCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new SelectionListener(this), this);
         getServer().getPluginManager().registerEvents(new ScoreboardListener(), this);
         getServer().getPluginManager().registerEvents(hm, this);
+        getServer().getPluginManager().registerEvents(new Vanish(), this);
 
         loadAliases();
 
@@ -182,6 +188,14 @@ public class CWCore extends JavaPlugin {
      */
     public CooldownManager getCDM() {
         return cdm;
+    }
+
+    /**
+     * Get configuration with player data like vanished and frozen players.
+     * @return PlayerConfig
+     */
+    public PlayerConfig getPlayerCfg() {
+        return playerCfg;
     }
 
     /**
