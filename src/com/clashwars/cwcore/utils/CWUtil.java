@@ -819,7 +819,7 @@ public class CWUtil {
             loc.setPitch(getFloat(dataArray[4]));
         }
         if (dataArray.length >= 6) {
-            loc.setPitch(getFloat(dataArray[5]));
+            loc.setYaw(getFloat(dataArray[5]));
         }
         return loc;
     }
