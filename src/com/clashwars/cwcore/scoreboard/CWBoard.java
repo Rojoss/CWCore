@@ -13,6 +13,7 @@ public class CWBoard {
     public static Map<String, CWBoard> boards = new HashMap<String, CWBoard>();
     public static CWBoard activeBoard;
     public static Map<UUID, Scoreboard> prevBoards = new HashMap<UUID, Scoreboard>();
+    public static Scoreboard emptyBoard = getEmptyBoard();
 
     private ScoreboardManager bm = Bukkit.getScoreboardManager();
 
@@ -39,6 +40,19 @@ public class CWBoard {
             boards.put(ID, board);
             return board;
         }
+    }
+
+    public static Scoreboard getEmptyBoard() {
+        if (emptyBoard == null) {
+            CWBoard cwb = CWBoard.get("empty");
+            cwb.init(false);
+            cwb.addObjective("side", Criteria.DUMMY, DisplaySlot.SIDEBAR, true);
+            cwb.addObjective("tab", Criteria.DUMMY, DisplaySlot.PLAYER_LIST, true);
+            cwb.addObjective("name", Criteria.DUMMY, DisplaySlot.BELOW_NAME, true);
+            cwb.show();
+            emptyBoard = cwb.board;
+        }
+        return emptyBoard;
     }
 
     /**
@@ -104,6 +118,9 @@ public class CWBoard {
      * @return Scoreboard
      */
     public Scoreboard getBoard() {
+        if (board == null) {
+            init(false);
+        }
         return board;
     }
 
@@ -416,6 +433,37 @@ public class CWBoard {
     public void addPlayer(UUID uuid) {
         if (!players.contains(uuid)) {
             players.add(uuid);
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null) {
+                if (!isGlobal() && isVisible()) {
+                    prevBoards.put(uuid, player.getScoreboard());
+                    player.setScoreboard(board);
+                }
+            }
+        }
+    }
+
+    /**
+     * Remove a player from the scoreboard.
+     * This has no effect when the board is set global.
+     */
+    public void removePlayer(Player player) {
+        removePlayer(player.getUniqueId());
+    }
+
+    /**
+     * Remove a player from the scoreboard.
+     * This has no effect when the board is set global.
+     */
+    public void removePlayer(UUID uuid) {
+        if (players.contains(uuid)) {
+            players.remove(uuid);
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null) {
+                if (!isGlobal() && isVisible()) {
+                    player.setScoreboard(prevBoards.get(uuid) == null ? emptyBoard : prevBoards.get(uuid));
+                }
+            }
         }
     }
 
