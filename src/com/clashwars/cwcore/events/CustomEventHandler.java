@@ -3,10 +3,20 @@ package com.clashwars.cwcore.events;
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.debug.Debug;
+import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_8_R2.entity.AbstractProjectile;
+import org.bukkit.craftbukkit.v1_8_R2.entity.CraftArrow;
+import org.bukkit.craftbukkit.v1_8_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_8_R2.entity.CraftProjectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.util.BlockIterator;
+
+import java.lang.reflect.Field;
 
 public class CustomEventHandler implements Listener {
 
@@ -59,4 +69,18 @@ public class CustomEventHandler implements Listener {
     }
 
 
+    @EventHandler
+    private void onProjectileHit(final ProjectileHitEvent event) {
+        BlockIterator iterator = new BlockIterator(event.getEntity().getWorld(), event.getEntity().getLocation().toVector(), event.getEntity().getVelocity().normalize(), 0.0D, 4);
+        Block hitBlock = null;
+
+        while (iterator.hasNext()) {
+            hitBlock = iterator.next();
+
+            if (hitBlock.getTypeId() != 0) {
+                break;
+            }
+        }
+        Bukkit.getServer().getPluginManager().callEvent(new ProjectileHitBlockEvent(event.getEntity(), hitBlock));
+    }
 }
