@@ -10,6 +10,7 @@ public class PlayerConfig extends EasyConfig {
 
     public List<String> VANISH = new ArrayList<String>();
     public HashMap<String, String> FREEZE = new HashMap<String, String>();
+    public HashMap<String, String> SCOREBOARD = new HashMap<String, String>();
 
     public PlayerConfig(String fileName) {
         this.setFile(fileName);
@@ -17,7 +18,7 @@ public class PlayerConfig extends EasyConfig {
 
 
     public List<UUID> getVanishedPlayers() {
-        return stringListToUUIDList(VANISH);
+        return CWUtil.stringListToUUID(VANISH);
     }
 
     public boolean isVanished(UUID uuid) {
@@ -28,12 +29,14 @@ public class PlayerConfig extends EasyConfig {
         if (!isVanished(uuid)) {
             VANISH.add(uuid.toString());
         }
+        save();
     }
 
     public void unvanish(UUID uuid) {
         if (isVanished(uuid)) {
             VANISH.remove(uuid.toString());
         }
+        save();
     }
 
 
@@ -59,21 +62,46 @@ public class PlayerConfig extends EasyConfig {
 
     public void freeze(UUID uuid, Location location) {
         FREEZE.put(uuid.toString(), CWUtil.locToStringSimple(location));
+        save();
     }
 
     public void unfreeze(UUID uuid) {
         if (isFrozen(uuid)) {
             FREEZE.remove(uuid.toString());
         }
+        save();
     }
 
 
-
-    private List<UUID> stringListToUUIDList(List<String> stringList) {
-        List<UUID> uuidList = new ArrayList<UUID>();
-        for (String key : stringList) {
-            uuidList.add(UUID.fromString(key));
+    public HashMap<UUID, String> getScoreboards() {
+        HashMap<UUID, String> resultMap = new HashMap<UUID, String>();
+        for (Map.Entry<String, String> entry : SCOREBOARD.entrySet()) {
+            resultMap.put(UUID.fromString(entry.getKey()), entry.getValue());
         }
-        return uuidList;
+        return resultMap;
     }
+
+    public boolean hasScoreboard(UUID uuid) {
+        return SCOREBOARD.containsKey(uuid.toString()) && !SCOREBOARD.get(uuid.toString()).isEmpty();
+    }
+
+    public String getScoreboard(UUID uuid) {
+        if (hasScoreboard(uuid)) {
+            return SCOREBOARD.get(uuid.toString());
+        }
+        return "";
+    }
+
+    public void setScoreboard(UUID uuid, String scoreboardID) {
+        SCOREBOARD.put(uuid.toString(), scoreboardID);
+        save();
+    }
+
+    public void removeScoreboard(UUID uuid) {
+        if (SCOREBOARD.containsKey(uuid.toString())) {
+            SCOREBOARD.remove(uuid.toString());
+        }
+        save();
+    }
+
 }

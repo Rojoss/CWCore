@@ -1364,4 +1364,26 @@ public class CWUtil {
     }
 
 
+    public static List<UUID> stringListToUUID(List<String> stringList) {
+        if (stringList == null) {
+            return new ArrayList<UUID>();
+        }
+        List<UUID> uuidList = new ArrayList<UUID>();
+        for (String uuid : stringList) {
+            uuidList.add(UUID.fromString(uuid));
+        }
+        return uuidList;
+    }
+
+    public static List<String> uuidListToString(List<UUID> uuidList) {
+        if (uuidList == null) {
+            return new ArrayList<String>();
+        }
+        List<String> stringList = new ArrayList<String>();
+        for (UUID uuid : uuidList) {
+            stringList.add(uuid.toString());
+        }
+        return stringList;
+    }
+
 }

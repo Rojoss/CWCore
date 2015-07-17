@@ -2,9 +2,11 @@ package com.clashwars.cwcore;
 
 import com.clashwars.cwcore.commands.Commands;
 import com.clashwars.cwcore.config.PlayerConfig;
+import com.clashwars.cwcore.config.ScoreboardsCfg;
 import com.clashwars.cwcore.config.aliases.*;
 import com.clashwars.cwcore.cuboid.Selection;
 import com.clashwars.cwcore.cuboid.SelectionListener;
+import com.clashwars.cwcore.debug.Debug;
 import com.clashwars.cwcore.dependencies.internal.DependencyManager;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.effect.EntityManager;
@@ -14,20 +16,23 @@ import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.hat.HatManager;
 import com.clashwars.cwcore.helpers.EntityHider;
 import com.clashwars.cwcore.player.Vanish;
+import com.clashwars.cwcore.scoreboard.CWBoard;
 import com.clashwars.cwcore.scoreboard.ScoreboardListener;
+import com.clashwars.cwcore.scoreboard.data.BoardData;
+import com.google.gson.Gson;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class CWCore extends JavaPlugin {
 
     private static CWCore instance;
+    private Gson gson = new Gson();
     private final Logger log = Logger.getLogger("Minecraft");
 
     private Commands cmds;
@@ -39,6 +44,7 @@ public class CWCore extends JavaPlugin {
     private EntityHider entityHider;
 
     private PlayerConfig playerCfg;
+    private ScoreboardsCfg boardCfg;
     private Materials materialsCfg;
     private Sounds soundsCfg;
     private PotionEffects effectsCfg;
@@ -79,6 +85,8 @@ public class CWCore extends JavaPlugin {
         //Config
         playerCfg = new PlayerConfig("plugins/CWCore/PlayerData.yml");
         playerCfg.load();
+        boardCfg = new ScoreboardsCfg("plugins/CWCore/Scoreboards.yml");
+        boardCfg.load();
 
         //Listeners
         getServer().getPluginManager().registerEvents(new CustomEventHandler(this), this);
@@ -90,6 +98,20 @@ public class CWCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new Vanish(), this);
 
         loadAliases();
+
+        HashMap<String, BoardData> boards = boardCfg.getBoards();
+        for (String board : boards.keySet()) {
+            CWBoard cwb = CWBoard.get(board);
+            if (cwb.isVisible()) {
+                List<UUID> uuids = cwb.getPlayers();
+                for (UUID uuid : uuids) {
+                    Player player = getServer().getPlayer(uuid);
+                    if (player != null) {
+                        player.setScoreboard(cwb.getBukkitBoard());
+                    }
+                }
+            }
+        }
 
         log("Enabled.");
     }
@@ -191,6 +213,14 @@ public class CWCore extends JavaPlugin {
     }
 
     /**
+     * Get configuration with scoreboard data. (automatically saved/loaded with CWBoard)
+     * @return ScoreboardsCfg
+     */
+    public ScoreboardsCfg getBoardCfg() {
+        return boardCfg;
+    }
+
+    /**
      * Get configuration with player data like vanished and frozen players.
      * @return PlayerConfig
      */
@@ -279,5 +309,9 @@ public class CWCore extends JavaPlugin {
 
     public EntityHider getEntityHider() {
         return entityHider;
+    }
+
+    public Gson getGson() {
+        return gson;
     }
 }

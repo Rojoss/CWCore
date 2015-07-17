@@ -10,31 +10,26 @@ public class ScoreboardListener implements Listener {
 
     @EventHandler
     private void login(final PlayerLoginEvent event) {
-        final CWBoard board = CWBoard.activeBoard;
-        if (board != null && board.isVisible()) {
-            if (board.isGlobal()) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        CWBoard.prevBoards.put(event.getPlayer().getUniqueId(), event.getPlayer().getScoreboard());
-                        event.getPlayer().setScoreboard(board.getBoard());
-                    }
-                }.runTaskLater(CWCore.inst(), 40);
-            }
+        final String scoreboard = CWCore.inst().getPlayerCfg().getScoreboard(event.getPlayer().getUniqueId());
+        if (scoreboard.isEmpty()) {
+            return;
         }
-        for (final CWBoard cwb : CWBoard.boards.values()) {
-            if (!cwb.isGlobal()) {
-                if (cwb.canSee(event.getPlayer())) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            CWBoard.prevBoards.put(event.getPlayer().getUniqueId(), event.getPlayer().getScoreboard());
-                            event.getPlayer().setScoreboard(cwb.getBoard());
-                        }
-                    }.runTaskLater(CWCore.inst(), 40);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (CWBoard.hasBoard(scoreboard, true)) {
+                    CWBoard cwBoard = CWBoard.get(scoreboard);
+                    if (cwBoard.isVisible() && cwBoard.hasPlayer(event.getPlayer().getUniqueId())) {
+                        event.getPlayer().setScoreboard(CWBoard.get(scoreboard).getBukkitBoard());
+                    } else {
+                        event.getPlayer().setScoreboard(CWBoard.getEmptyBoard());
+                    }
+                } else {
+                    event.getPlayer().setScoreboard(CWBoard.getEmptyBoard());
                 }
             }
-        }
+        }.runTaskLater(CWCore.inst(), 20);
     }
 
 

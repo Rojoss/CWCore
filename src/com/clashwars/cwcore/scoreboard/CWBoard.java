@@ -1,9 +1,14 @@
 package com.clashwars.cwcore.scoreboard;
 
+import com.clashwars.cwcore.CWCore;
+import com.clashwars.cwcore.scoreboard.data.BoardData;
+import com.clashwars.cwcore.scoreboard.data.ObjectiveData;
+import com.clashwars.cwcore.scoreboard.data.TeamData;
 import com.clashwars.cwcore.utils.CWUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 
 import java.util.*;
@@ -11,46 +16,56 @@ import java.util.*;
 public class CWBoard {
 
     public static Map<String, CWBoard> boards = new HashMap<String, CWBoard>();
-    public static CWBoard activeBoard;
-    public static Map<UUID, Scoreboard> prevBoards = new HashMap<UUID, Scoreboard>();
     public static Scoreboard emptyBoard = getEmptyBoard();
 
+    private CWCore cwc = CWCore.inst();
     private ScoreboardManager bm = Bukkit.getScoreboardManager();
 
-    private String ID;
-    private boolean global;
-    private boolean visible;
-    private Scoreboard board;
-
-    private HashMap<String, Team> teams = new HashMap<String, Team>();
-    private List<UUID> players = new ArrayList<UUID>();
-
-
+    private BoardData boardData;
+    private Scoreboard scoreboard;
 
     /**
      * Get or create a CWBoard.
-     * @param ID The identifier of the board.
-     * @return CWBoard
+     * If the board doesn't exist internally it will check if it exisits in config.
+     * If it also doesn't exisit in config it will return a new scoreboard.
      */
     public static CWBoard get(String ID) {
         if (boards.containsKey(ID)) {
             return boards.get(ID);
+        } else if (CWCore.inst().getBoardCfg().hasBoard(ID)) {
+            BoardData boardData = CWCore.inst().getBoardCfg().getBoard(ID);
+            return new CWBoard(ID, boardData);
         } else {
-            CWBoard board = new CWBoard(ID);
-            boards.put(ID, board);
-            return board;
+            return new CWBoard(ID, new BoardData(ID));
         }
     }
 
+    /**
+     * Checks if there is a board with the given board identifier name.
+     * If checkConfig is true it will also check if the board exists in config if it doesn't exists internally.
+     */
+    public static boolean hasBoard(String ID, boolean checkConfig) {
+        if (boards.containsKey(ID)) {
+            return true;
+        }
+        if (checkConfig && CWCore.inst().getBoardCfg().hasBoard(ID)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get a empty scoreboard to be used to clear a scoreboard.
+     */
     public static Scoreboard getEmptyBoard() {
         if (emptyBoard == null) {
             CWBoard cwb = CWBoard.get("empty");
-            cwb.init(false);
-            cwb.addObjective("side", Criteria.DUMMY, DisplaySlot.SIDEBAR, true);
-            cwb.addObjective("tab", Criteria.DUMMY, DisplaySlot.PLAYER_LIST, true);
-            cwb.addObjective("name", Criteria.DUMMY, DisplaySlot.BELOW_NAME, true);
-            cwb.show();
-            emptyBoard = cwb.board;
+            cwb.register();
+            //cwb.addObjective("empty-side", "", Criteria.DUMMY, DisplaySlot.SIDEBAR, true);
+            //cwb.addObjective("empty-tab", "", Criteria.DUMMY, DisplaySlot.PLAYER_LIST, true);
+            //cwb.addObjective("empty-name", "", Criteria.DUMMY, DisplaySlot.BELOW_NAME, true);
+            cwb.show(true);
+            emptyBoard = cwb.scoreboard;
         }
         return emptyBoard;
     }
@@ -58,10 +73,11 @@ public class CWBoard {
     /**
      * The constructor.
      * Use CWBoard.get("SomeID") to get a board.
-     * @param ID The board ID
      */
-    private CWBoard(String ID) {
-        this.ID = ID;
+    private CWBoard(String ID, final BoardData boardData) {
+        this.boardData = boardData;
+        boardData.setID(ID);
+        boards.put(ID, this);
     }
 
     //##########################################################################################################################
@@ -69,59 +85,102 @@ public class CWBoard {
     //##########################################################################################################################
 
     /**
-     * Initialize the scoreboard.
-     * @return TRUE if it registered, FALSE if it was already registered.
+     * Checks if the scoreboard is registered or not.
      */
-    public boolean init() {
-        return init(false);
+    public boolean isRegistered() {
+        return scoreboard != null;
     }
 
     /**
-     * Initialize the scoreboard.
-     * @param global If this is true when showing the board all players will see it including new players that join.
-     *               If it's set to false you have to manually set who can see the board.
-     * @return TRUE if it registered, FALSE if it was already registered.
+     * Register the scoreboard by creating the actual Scoreboard.
+     * It will load all data out of the BoardData in to the scoreboard.
+     * It won't do anything if the board is already registred.
      */
-    public boolean init(boolean global) {
-        if (board != null) {
-            return false;
+    public void register() {
+        if (scoreboard != null) {
+            return;
+        }
+        if (boardData == null) {
+            boardData = new BoardData();
         }
 
-        board = bm.getNewScoreboard();
-        this.global = global;
+        if (!boards.containsKey(boardData.getID())) {
+            boards.put(boardData.getID(), this);
+        }
 
-        return true;
+        scoreboard = bm.getNewScoreboard();
+
+        HashMap<String, TeamData> teams = boardData.getTeams();
+        for (TeamData team : teams.values()) {
+            team.getTeam(scoreboard);
+        }
+
+        HashMap<String, ObjectiveData> objectives = boardData.getObjectives();
+        for (ObjectiveData objective : objectives.values()) {
+            objective.getObjective(scoreboard, boardData);
+        }
     }
 
     /**
-     * Unregister a board and remove all data.
+     * Unregister a board.
+     * The board will still stay in config and all data will be saved.
+     * Use delete() to delete the board completely.
      */
     public void unregister() {
-        hide();
-
-        for (String team : teams.keySet()) {
-            teams.get(team).unregister();
-        }
-        teams.clear();
-
-        if (activeBoard.getID() == getID()) {
-            activeBoard = null;
+        if (scoreboard == null) {
+            return;
         }
 
-        getTeamList();
+        if (boardData != null && boardData.isVisible()) {
+            hide(null);
+        }
 
-        board = null;
+        for (Team team : scoreboard.getTeams()) {
+            team.unregister();
+        }
+
+        for (Objective objective : scoreboard.getObjectives()) {
+            objective.unregister();
+        }
+        scoreboard = null;
+    }
+
+    /**
+     * Delete the scoreboard completely.
+     * This will remove the scoreboard from the config!
+     */
+    public void delete() {
+        if (isRegistered()) {
+            unregister();
+        }
+        cwc.getBoardCfg().removeBoard(boardData.getID());
+        boards.remove(boardData.getID());
+        boardData = null;
+    }
+
+    /**
+     * Save the board data to config.
+     */
+    public void save() {
+        cwc.getBoardCfg().setBoard(boardData.getID(), boardData);
     }
 
     /**
      * Get the Bukkit Scoreboard instance.
-     * @return Scoreboard
+     * If there is none it will first register the scoreboard.
      */
-    public Scoreboard getBoard() {
-        if (board == null) {
-            init(false);
+    public Scoreboard getBukkitBoard() {
+        if (scoreboard == null) {
+            register();
         }
-        return board;
+        return scoreboard;
+    }
+
+    /**
+     * Get the BoardData that holds all the data for the scoreboard.
+     */
+    public BoardData getData() {
+        return boardData;
     }
 
 
@@ -132,9 +191,7 @@ public class CWBoard {
 
     /**
      * Add a team to the board.
-     * If the team already exists it will return false and won't get recreated.
-     * @param team The ID of the team.
-     * @return TRUE if added, FALSE if the team already exists.
+     * If the team already exists it will update it with all the specified data.
      */
     public boolean addTeam(String team) {
         return addTeam(team, "", "", team, true, true, NameTagVisibility.ALWAYS, null);
@@ -142,10 +199,7 @@ public class CWBoard {
 
     /**
      * Add a team to the board.
-     * If the team already exists it will return false and won't get recreated.
-     * @param team The ID of the team.
-     * @param prefix Prefix which is added in front of the player his name.
-     * @return TRUE if added, FALSE if the team already exists.
+     * If the team already exists it will update it with all the specified data.
      */
     public boolean addTeam(String team, String prefix) {
         return addTeam(team, prefix, "", team, true, true, NameTagVisibility.ALWAYS, null);
@@ -153,11 +207,7 @@ public class CWBoard {
 
     /**
      * Add a team to the board.
-     * If the team already exists it will return false and won't get recreated.
-     * @param team The ID of the team.
-     * @param prefix Prefix which is added in front of the player his name.
-     * @param suffix Suffix which is added after the player his name.
-     * @return TRUE if added, FALSE if the team already exists.
+     * If the team already exists it will update it with all the specified data.
      */
     public boolean addTeam(String team, String prefix, String suffix) {
         return addTeam(team, prefix, suffix, team, true, true, NameTagVisibility.ALWAYS, null);
@@ -165,13 +215,7 @@ public class CWBoard {
 
     /**
      * Add a team to the board.
-     * If the team already exists it will return false and won't get recreated.
-     * @param team The ID of the team.
-     * @param prefix Prefix which is added in front of the player his name.
-     * @param suffix Suffix which is added after the player his name.
-     * @param friendlyFire If true team members can damage eachother and if false not.
-     * @param seeInvis If true team members can see eachother in ghost form when they are invisible.
-     * @return TRUE if added, FALSE if the team already exists.
+     * If the team already exists it will update it with all the specified data.
      */
     public boolean addTeam(String team, String prefix, String suffix, boolean friendlyFire, boolean seeInvis) {
         return addTeam(team, prefix, suffix, team, friendlyFire, seeInvis, NameTagVisibility.ALWAYS, null);
@@ -179,15 +223,7 @@ public class CWBoard {
 
     /**
      * Add a team to the board.
-     * If the team already exists it will return false and won't get recreated.
-     * @param team The ID of the team.
-     * @param prefix Prefix which is added in front of the player his name.
-     * @param suffix Suffix which is added after the player his name.
-     * @param name The display name of the team.
-     * @param friendlyFire If true team members can damage eachother and if false not.
-     * @param seeInvis If true team members can see eachother in ghost form when they are invisible.
-     * @param nameTagVisible Can be set to different modes which sets who can't see the nametag from the player.
-     * @return TRUE if added, FALSE if the team already exists.
+     * If the team already exists it will update it with all the specified data.
      */
     public boolean addTeam(String team, String prefix, String suffix, String name, boolean friendlyFire, boolean seeInvis, NameTagVisibility nameTagVisible) {
         return addTeam(team, prefix, suffix, name, friendlyFire, seeInvis, nameTagVisible, null);
@@ -195,85 +231,105 @@ public class CWBoard {
 
     /**
      * Add a team to the board.
-     * If the team already exists it will return false and won't get recreated.
-     * @param team The ID of the team.
-     * @param prefix Prefix which is added in front of the player his name.
-     * @param suffix Suffix which is added after the player his name.
-     * @param name The display name of the team.
-     * @param friendlyFire If true team members can damage eachother and if false not.
-     * @param seeInvis If true team members can see eachother in ghost form when they are invisible.
-     * @param nameTagVisible Can be set to different modes which sets who can't see the nametag from the player.
-     * @param players A list of players that will be added to the team.
-     * @return TRUE if added, FALSE if the team already exists.
+     * If the team already exists it will update it with all the specified data.
      */
-    public boolean addTeam(String team, String prefix, String suffix, String name, boolean friendlyFire, boolean seeInvis, NameTagVisibility nameTagVisible, List<OfflinePlayer> players) {
-        if (teams.containsKey(team)) {
-            return false;
+    public boolean addTeam(String team, String prefix, String suffix, String displayName, boolean friendlyFire, boolean seeInvis, NameTagVisibility nameTagVisible, List<UUID> players) {
+        Team t = getBukkitBoard().getTeam(team);
+        if (t == null) {
+            t = getBukkitBoard().registerNewTeam(team);
         }
-        Team t = board.registerNewTeam(team);
         t.setPrefix(CWUtil.integrateColor(prefix));
         t.setSuffix(CWUtil.integrateColor(suffix));
-        t.setDisplayName(CWUtil.integrateColor(name));
+        t.setDisplayName(CWUtil.integrateColor(displayName));
         t.setAllowFriendlyFire(friendlyFire);
         t.setCanSeeFriendlyInvisibles(seeInvis);
         t.setNameTagVisibility(nameTagVisible);
         if (players != null) {
-            for (OfflinePlayer player : players) {
-                t.addPlayer(player);
+            for (UUID uuid : players) {
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+                if (offlinePlayer != null) {
+                    t.addPlayer(offlinePlayer);
+                }
             }
         }
-        teams.put(team, t);
+        boardData.setTeam(team, new TeamData(team, displayName, prefix, suffix, friendlyFire, seeInvis, nameTagVisible, players));
+        save();
         return true;
     }
 
     /**
-     * Remove a team from the board and unregister it.
-     * @param team The team identifier.
+     * Add the specified player to the specified team if it exists.
      */
-    public void removeTeam(String team) {
-        if (!teams.containsKey(team)) {
-            return;
+    public void joinTeam(String team, OfflinePlayer player) {
+        if (boardData.hasTeam(team)) {
+            TeamData teamData = boardData.getTeam(team);
+            teamData.addPlayer(player.getUniqueId());
+            boardData.setTeam(team, teamData);
+            getBukkitBoard().getTeam(team).addPlayer(player);
+            save();
         }
-        getTeam(team).unregister();
-        teams.remove(team);
+    }
+
+    /**
+     * Remove the specified player from the specified team if it exists.
+     */
+    public void leaveTeam(String team, OfflinePlayer player) {
+        if (boardData.hasTeam(team)) {
+            TeamData teamData = boardData.getTeam(team);
+            teamData.removePlayer(player.getUniqueId());
+            boardData.setTeam(team, teamData);
+            getBukkitBoard().getTeam(team).removePlayer(player);
+            save();
+        }
+    }
+
+    /**
+     * Remove a team from the board and unregister it.
+     * If fromConfig is true it will also remove the team out of the BoardData
+     */
+    public void removeTeam(String team, boolean fromConfig) {
+        Team t = getBukkitBoard().getTeam(team);
+        if (t != null) {
+            t.unregister();
+        }
+        if (fromConfig) {
+            boardData.removeTeam(team);
+            save();
+        }
     }
 
     /**
      * Get a team by it's identifier.
-     * @param team The team identifier.
-     * @return Team or null
+     * If it doesn't exist it will return null.
+     * @deprecated This team should not be modified!
      */
+    @Deprecated
     public Team getTeam(String team) {
-        return teams.get(team);
+        return getBukkitBoard().getTeam(team);
     }
 
     /**
      * Check if the board has a team with the given identifier.
-     * @param team The team identifier.
-     * @return TRUE if it has it, FALSE if it doesn't have it.
      */
     public boolean hasTeam(String team) {
-        return teams.containsKey(team);
+        return getTeam(team) != null;
     }
 
     /**
      * Get the map with all teams from this board.
-     * @return Map with all team id's and teams.
      */
-    public Map<String, Team> getTeams() {
-        return teams;
+    public Set<Team> getTeams() {
+        return getBukkitBoard().getTeams();
     }
 
     /**
      * Get a list with all teams from this board.
      * @return List with all teams.
+     * @deprecated These team values should not be modified!
      */
+    @Deprecated
     public List<Team> getTeamList() {
-        List<Team> teams = new ArrayList<Team>();
-        for (Team team : this.teams.values()) {
-            teams.add(team);
-        }
-        return teams;
+        return new ArrayList<Team>(getTeams());
     }
 
 
@@ -282,95 +338,175 @@ public class CWBoard {
     //##########################################################################################################################
 
     /**
-     * Add a new objective to the scoreboard.
-     * If the objective already exists it will return null.
-     * @param name The identifier of the objective.
-     * @return Objective or null.
+     * Add a new objective to the scoreboard and return it.
+     * If it already exists it will return that objective.
+     * It will also update the ObjectiveData with all specified values.
      */
     public Objective addObjective(String name) {
-        return addObjective(name, Criteria.DUMMY, null, false);
+        return addObjective(name, name, Criteria.DUMMY, null, false);
     }
 
     /**
-     * Add a new objective to the scoreboard.
-     * If the objective already exists it will return null.
-     * @param name The identifier of the objective.
-     * @param criteria The Criteria for the objective.
-     * @return Objective or null.
+     * Add a new objective to the scoreboard and return it.
+     * If it already exists it will return that objective.
+     * It will also update the ObjectiveData with all specified values.
      */
     public Objective addObjective(String name, Criteria criteria) {
-        return addObjective(name, criteria, null, false);
+        return addObjective(name, name, criteria, null, false);
     }
 
     /**
-     * Add a new objective to the scoreboard.
-     * If the objective already exists it will return null.
-     * @param name The identifier of the objective.
-     * @param criteria The Criteria for the objective.
-     * @param slot The DisplaySlot for the objective.
-     * @param force If set to true and the slot is already used with another objective it will first clear the previous objective else it wont get added.
-     * @return Objective or null.
+     * Add a new objective to the scoreboard and return it.
+     * If it already exists it will return that objective.
+     * It will also update the ObjectiveData with all specified values.
      */
-    public Objective addObjective(String name, Criteria criteria, DisplaySlot slot, boolean force) {
-        if (board.getObjective(name) != null) {
-            return null;
+    public Objective addObjective(String name, String displayName) {
+        return addObjective(name, displayName, Criteria.DUMMY, null, false);
+    }
+
+    /**
+     * Add a new objective to the scoreboard and return it.
+     * If it already exists it will return that objective.
+     * It will also update the ObjectiveData with all specified values.
+     */
+    public Objective addObjective(String name, String displayName, Criteria criteria) {
+        return addObjective(name, displayName, criteria, null, false);
+    }
+
+    /**
+     * Add a new objective to the scoreboard and return it.
+     * If it already exists it will return that objective.
+     * It will also update the ObjectiveData with all specified values.
+     * It will place the objective in the given DisplaySlot for the scoreboard.
+     * If force is set to false it won't set it if there is already a objective in the specified slot.
+     */
+    public Objective addObjective(String name, String displayName, Criteria criteria, DisplaySlot slot, boolean force) {
+        Objective objective = getBukkitBoard().getObjective(name);
+        if (objective == null) {
+            objective = getBukkitBoard().registerNewObjective(name, criteria.getID());
         }
 
-        Objective obj = board.registerNewObjective(name, criteria.getID());
         if (slot != null) {
             if (force) {
-                board.clearSlot(slot);
+                getBukkitBoard().clearSlot(slot);
             }
-            obj.setDisplaySlot(slot);
+            objective.setDisplaySlot(slot);
+        }
+        if (slot == DisplaySlot.SIDEBAR) {
+            boardData.setSidebarObjective(name);
+        }
+        if (slot == DisplaySlot.BELOW_NAME) {
+            boardData.setNameObjective(name);
+        }
+        if (slot == DisplaySlot.PLAYER_LIST) {
+            boardData.setTablistObjective(name);
         }
 
-        return obj;
+        objective.setDisplayName(CWUtil.integrateColor(displayName));
+
+        boardData.setObjective(name, new ObjectiveData(name, displayName, criteria));
+        save();
+        return objective;
     }
 
     /**
      * Get a objective by it's ID.
-     * @param objective The string ID of the objective
-     * @return Objective
+     * Will return null if there is no objective with this name.
+     * @deprecated This objective should not be directly modified!
      */
+    @Deprecated
     public Objective getObjective(String objective) {
-        return board.getObjective(objective);
+        return getBukkitBoard().getObjective(objective);
     }
 
     /**
-     * Get a objective from a display slot.
-     * @param slot The displayslot to return the objective from.
-     * @return Objective
+     * Get the objective in the specified display slot.
+     * If there is no objective in the specified slot it will return null.
+     * @deprecated This objective should not be directly modified!
      */
+    @Deprecated
     public Objective getObjective(DisplaySlot slot) {
-        return board.getObjective(slot);
+        return getBukkitBoard().getObjective(slot);
     }
 
     /**
      * Get a Set with all objectives this board has.
-     * @return Set with Objectives
+     * @deprecated These objectives should not be directly modified!
      */
+    @Deprecated
     public Set<Objective> getObjectives() {
-        return board.getObjectives();
+        return getBukkitBoard().getObjectives();
     }
 
     /**
-     * Get a Score object.
-     * @param objective The objective string ID.
-     * @param player The score player key (doesn't have to be a actual player)
-     * @return Score
+     * Get a Score value from the specified objective.
+     * If the objective doesn't exist it will return -1
      */
-    public Score getScore(String objective, String player) {
-        return board.getObjective(objective).getScore(player);
+    public int getScore(String objective, String entry) {
+        if (getObjective(objective) == null) {
+            return -1;
+        }
+        return getBukkitBoard().getObjective(objective).getScore(entry).getScore();
     }
 
     /**
-     * Get a Score object.
-     * @param slot The objective display slot.
-     * @param player The score player key (doesn't have to be a actual player)
-     * @return Score
+     * Get a Score value from the objective in the specified display slot.
+     * If there is no objective in the specified slot it will return -1
      */
-    public Score getScore(DisplaySlot slot, String player) {
-        return board.getObjective(slot).getScore(player);
+    public int getScore(DisplaySlot slot, String entry) {
+        if (getObjective(slot) == null) {
+            return -1;
+        }
+        return getObjective(slot).getScore(entry).getScore();
+    }
+
+    /**
+     * Set the score value of the specified entry and objective.
+     * If the objective doesn't exist it won't set the score.
+     */
+    public void setScore(String objective, String entry, int value) {
+        if (getObjective(objective) == null) {
+            return;
+        }
+        getObjective(objective).getScore(entry).setScore(value);
+        ObjectiveData objectiveData = boardData.getObjective(objective);
+        objectiveData.setScore(entry, value);
+        boardData.setObjective(objective, objectiveData);
+        save();
+    }
+
+    /**
+     * Set the score value of the specified entry and slot.
+     * If there is no objective in the specified slot it won't set the score.
+     */
+    public void setScore(DisplaySlot slot, String entry, int value) {
+        if (getObjective(slot) == null) {
+            return;
+        }
+        getObjective(slot).getScore(entry).setScore(value);
+        ObjectiveData objectiveData = boardData.getObjective(getObjective(slot).getName());
+        objectiveData.setScore(entry, value);
+        boardData.setObjective(objectiveData.getName(), objectiveData);
+        save();
+    }
+
+    /**
+     * Reset all scores for the specified entry.
+     */
+    public void resetScore(String entry) {
+        getBukkitBoard().resetScores(entry);
+        for (ObjectiveData objective : boardData.getObjectives().values()) {
+            objective.removeScore(entry);
+            boardData.setObjective(objective.getName(), objective);
+        }
+        save();
+    }
+
+    /**
+     * Get a Set with all the entries in the scoreboard.
+     */
+    public Set<String> getEntries() {
+        return getBukkitBoard().getEntries();
     }
 
 
@@ -380,45 +516,18 @@ public class CWBoard {
     //##########################################################################################################################
 
     /**
-     * Get the ID of this board.
-     * @return The ID of the board.
-     */
-    public String getID() {
-        return ID;
-    }
-
-    /**
      * Check if the board is shown or not.
-     * It does not mean if it's visible that players can actually see it.
-     * This depends if it's global or not and if the player is added.
-     * @return TRUE if visible, FALSE if not.
+     * If it's visible it doesn't mean players can see it.
+     * Only players added to the board will be able to see it.
      */
     public boolean isVisible() {
-        return visible;
-    }
-
-    /**
-     * Set the board to global.
-     * When the board is global all players can see the board.
-     * @param global Set if the board should be global or not.
-     */
-    public void setGlobal(boolean global) {
-        this.global = global;
-    }
-
-    /**
-     * Check if a board is global or not.
-     * @return TRUE of it's global, FALSE if it isn't.
-     */
-    public boolean isGlobal() {
-        return global;
+        return boardData.isVisible();
     }
 
     /**
      * Add a player to the scoreboard.
      * All players added will be able to see the scoreboard if it's shown.
-     * this has no effect when the board is set global.
-     * @param player The Player to add.
+     * If the board is already visible it will directly show the board to the player.
      */
     public void addPlayer(Player player) {
         addPlayer(player.getUniqueId());
@@ -427,17 +536,17 @@ public class CWBoard {
     /**
      * Add a player to the scoreboard.
      * All players added will be able to see the scoreboard if it's shown.
-     * this has no effect when the board is set global.
-     * @param uuid The UUID of the player to add.
+     * If the board is already visible it will directly show the board to the player.
      */
     public void addPlayer(UUID uuid) {
-        if (!players.contains(uuid)) {
-            players.add(uuid);
-            Player player = Bukkit.getPlayer(uuid);
-            if (player != null) {
-                if (!isGlobal() && isVisible()) {
-                    prevBoards.put(uuid, player.getScoreboard());
-                    player.setScoreboard(board);
+        if (!boardData.hasPlayer(uuid)) {
+            cwc.getPlayerCfg().setScoreboard(uuid, boardData.getID());
+            boardData.addPlayer(uuid);
+            save();
+            if (isVisible()) {
+                Player player = Bukkit.getPlayer(uuid);
+                if (player != null) {
+                    player.setScoreboard(getBukkitBoard());
                 }
             }
         }
@@ -445,7 +554,7 @@ public class CWBoard {
 
     /**
      * Remove a player from the scoreboard.
-     * This has no effect when the board is set global.
+     * If the board is visible it will clear the board for the player.
      */
     public void removePlayer(Player player) {
         removePlayer(player.getUniqueId());
@@ -456,110 +565,80 @@ public class CWBoard {
      * This has no effect when the board is set global.
      */
     public void removePlayer(UUID uuid) {
-        if (players.contains(uuid)) {
-            players.remove(uuid);
-            Player player = Bukkit.getPlayer(uuid);
-            if (player != null) {
-                if (!isGlobal() && isVisible()) {
-                    player.setScoreboard(prevBoards.get(uuid) == null ? emptyBoard : prevBoards.get(uuid));
+        if (boardData.hasPlayer(uuid)) {
+            cwc.getPlayerCfg().removeScoreboard(uuid);
+            boardData.removePlayer(uuid);
+            save();
+            if (isVisible()) {
+                Player player = Bukkit.getPlayer(uuid);
+                if (player != null) {
+                    player.setScoreboard(getEmptyBoard());
                 }
             }
+
         }
     }
 
     /**
-     * Check if the specified player can see this board or not.
-     * This ignored the global flag so do a check for that separate.
-     * @param player The Player to check.
-     * @return TRUE if the player can see it, FALSE if not.
+     * Check if the specified player has been added to this board or not.
      */
-    public boolean canSee(Player player) {
-        return canSee(player.getUniqueId());
+    public boolean hasPlayer(Player player) {
+        return hasPlayer(player.getUniqueId());
     }
 
     /**
-     * Check if the specified player can see this board or not.
-     * This ignored the global flag so do a check for that separate.
-     * @param uuid The UUID of the player to check.
-     * @return TRUE if the player can see it, FALSE if not.
+     * Check if the specified player has been added to this board or not.
      */
-    public boolean canSee(UUID uuid) {
-        return players.contains(uuid);
+    public boolean hasPlayer(UUID uuid) {
+        return boardData.hasPlayer(uuid);
     }
 
     /**
-     * Get all players who can see this board.
-     * @return
+     * Get all players who are added to this board.
      */
     public List<UUID> getPlayers() {
-        return players;
+        return boardData.getPlayers();
     }
 
 
     /**
-     * Show this board to players.
-     * If the board is global it will show it to all online players.
-     * If the board isn't global it will show the board to all players which were added with addPlayer()
+     * Show this board to all players that have been added to this board.
+     * If the board is already visible this won't do anything.
+     * If override is set to false it won't change the scoreboard of a player if he already has one set.
      */
-    public void show() {
-        if (visible) {
+    public void show(boolean override) {
+        if (!override && boardData.isVisible()) {
             return;
         }
-        visible = true;
-        activeBoard = this;
+        boardData.setVisible(true);
+        save();
 
+        Scoreboard scoreboard = getBukkitBoard();
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (global || players.contains(player.getUniqueId())) {
-                prevBoards.put(player.getUniqueId(), player.getScoreboard());
-                player.setScoreboard(board);
+            if (boardData.hasPlayer(player.getUniqueId())) {
+                if ((player.getScoreboard() == null || player.getScoreboard().getObjective("empty-side") != null) || override) {
+                    player.setScoreboard(scoreboard);
+                }
             }
         }
     }
 
     /**
-     * Hide this board.
-     * It will try and set the scoreboard that the player had before this one was shown.
-     * It's important to first hide and then show and not the other way around.
-     * If you first show the board and then hide another board it might also hide the new board.
+     * Hide this board for all players that have been added to this board.
+     * If the board is already hidden this won't do anything.
+     * If a Scoreboard is provided it will set the player his scoreboard to the provided scoreboard.
+     * If it's null it will set the scoreboard to a empty one.
      */
-    public void hide() {
-        if (!visible) {
+    public void hide(Scoreboard newBoard) {
+        if (!boardData.isVisible()) {
             return;
         }
-        visible = false;
-        activeBoard = this;
+        boardData.setVisible(false);
+        save();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (global || players.contains(player.getUniqueId())) {
-                player.setScoreboard(prevBoards.get(player.getUniqueId()));
-            }
-        }
-    }
-
-
-    /**
-     * Update the board by showing it to all players.
-     * Normally it's not required to call this but in some cases it might be required.
-     * If force is true it will set the board again even if the player already has this board shown.
-     * @param force If set to true it will set the board of the player again even if the player already has this board shown.
-     */
-    public void update(boolean force) {
-        if (!isVisible()) {
-            return;
-        }
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (isGlobal()) {
-                if (!player.getScoreboard().equals(getBoard()) || force) {
-                    prevBoards.put(player.getUniqueId(), player.getScoreboard());
-                    player.setScoreboard(board);
-                }
-            } else {
-                if (players.contains(player.getUniqueId())) {
-                    if (!player.getScoreboard().equals(getBoard()) || force) {
-                        prevBoards.put(player.getUniqueId(), player.getScoreboard());
-                        player.setScoreboard(board);
-                    }
-                }
+            if (boardData.hasPlayer(player.getUniqueId())) {
+                player.setScoreboard(newBoard == null ? getEmptyBoard() : newBoard);
             }
         }
     }
