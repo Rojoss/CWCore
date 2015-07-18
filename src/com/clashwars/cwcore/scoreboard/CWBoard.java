@@ -1,6 +1,7 @@
 package com.clashwars.cwcore.scoreboard;
 
 import com.clashwars.cwcore.CWCore;
+import com.clashwars.cwcore.debug.Debug;
 import com.clashwars.cwcore.scoreboard.data.BoardData;
 import com.clashwars.cwcore.scoreboard.data.ObjectiveData;
 import com.clashwars.cwcore.scoreboard.data.TeamData;
@@ -217,16 +218,16 @@ public class CWBoard {
      * Add a team to the board.
      * If the team already exists it will update it with all the specified data.
      */
-    public boolean addTeam(String team, String prefix, String suffix, boolean friendlyFire, boolean seeInvis) {
-        return addTeam(team, prefix, suffix, team, friendlyFire, seeInvis, NameTagVisibility.ALWAYS, null);
+    public boolean addTeam(String team, String prefix, String suffix, String displayName, boolean friendlyFire, boolean seeInvis) {
+        return addTeam(team, prefix, suffix, displayName, friendlyFire, seeInvis, NameTagVisibility.ALWAYS, null);
     }
 
     /**
      * Add a team to the board.
      * If the team already exists it will update it with all the specified data.
      */
-    public boolean addTeam(String team, String prefix, String suffix, String name, boolean friendlyFire, boolean seeInvis, NameTagVisibility nameTagVisible) {
-        return addTeam(team, prefix, suffix, name, friendlyFire, seeInvis, nameTagVisible, null);
+    public boolean addTeam(String team, String prefix, String suffix, String displayName, boolean friendlyFire, boolean seeInvis, NameTagVisibility nameTagVisible) {
+        return addTeam(team, prefix, suffix, displayName, friendlyFire, seeInvis, nameTagVisible, null);
     }
 
     /**
