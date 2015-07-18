@@ -59,6 +59,7 @@ public class CWCore extends JavaPlugin {
         for (Hat hat : hats) {
             hat.remove();
         }
+        getServer().getScheduler().cancelAllTasks();
         log("Disabled.");
     }
 
