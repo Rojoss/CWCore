@@ -211,35 +211,45 @@ public class CWUtil {
         return Arrays.asList(trimFirst(list.toArray(new String[list.size() - 1])));
     }
 
-    public static String implode(String[] arr, String glue, int start, int end) {
+    public static String implode(Object[] arr, String glue, String lastGlue, int start, int end) {
         String ret = "";
 
         if (arr == null || arr.length <= 0)
             return ret;
 
         for (int i = start; i <= end && i < arr.length; i++) {
-            ret += arr[i] + glue;
+            if (i >= end-1 || i >= arr.length-2) {
+                ret += arr[i].toString() + lastGlue;
+            } else {
+                ret += arr[i].toString() + glue;
+            }
         }
 
-        return ret.substring(0, ret.length() - glue.length());
+        return ret.substring(0, ret.length() - lastGlue.length());
     }
 
-    public static String implode(String[] arr, String glue, int start) {
-        return implode(arr, glue, start, arr.length - 1);
+    public static String implode(Object[] arr, String glue, int start) {
+        return implode(arr, glue, glue, start, arr.length - 1);
     }
 
-    public static String implode(String[] arr, String glue) {
+    public static String implode(Object[] arr, String glue, String lastGlue) {
+        return implode(arr, glue, lastGlue, 0, arr.length - 1);
+    }
+
+    public static String implode(Object[] arr, String glue) {
         return implode(arr, glue, 0);
     }
 
-    public static String implode(String[] arr) {
-        return implode(arr, " ");
-    }
-
-    public static String implode(Collection<String> args, String glue) {
+    public static String implode(Collection<?> args, String glue) {
         if (args.isEmpty())
             return "";
-        return implode(args.toArray(new String[args.size()]), glue);
+        return implode(args.toArray(new Object[args.size()]), glue);
+    }
+
+    public static String implode(Collection<?> args, String glue, String lastGlue) {
+        if (args.isEmpty())
+            return "";
+        return implode(args.toArray(new Object[args.size()]), glue, lastGlue);
     }
 
 
@@ -1340,7 +1350,7 @@ public class CWUtil {
     }
 
     public static String[] getPrefixes(boolean withFormat) {
-        String[] prefixes = new String[] {"&1","&4","&6","&2","&5","&3","&c","&a","&9","&e","&d","&b","&7","&8","&0","&f"};
+        String[] prefixes = new String[] {"&5","&3","&6","&a","&9","&e","&d","&b","&c","&2","&1","&4","&7","&8","&0","&f"};
         if (withFormat) {
             List<String> prefixList = new ArrayList<String>();
             String[] formats = new String[] {"","&o","&n","&l","&o&l","&o&l","&u&l"};
@@ -1361,6 +1371,14 @@ public class CWUtil {
     public static String getPrefix(boolean withFormat, int index) {
         index = Math.max(Math.min(index, getPrefixes(withFormat).length-1),0);
         return getPrefixes(withFormat)[index];
+    }
+
+    public static String getTeamName(String prefix) {
+        Prefix p = Prefix.fromString(prefix);
+        if (p == null) {
+            return "unknown";
+        }
+        return p.name;
     }
 
 
