@@ -1099,8 +1099,8 @@ public class CWUtil {
 
     public static List<Entity> getEntitiesInNearbyChunks(Location l, int range, List<EntityType> entityTypes) {
         List<Entity> entities = new ArrayList<Entity>();
-
-        for(Chunk chunk : getNearbyChunks(l, range)) {
+        List<Chunk> nearby = getNearbyChunks(l, range);
+        for(Chunk chunk : nearby) {
             if (entityTypes == null || entityTypes.size() <= 0) {
                 entities.addAll(Arrays.asList(chunk.getEntities()));
             } else {
@@ -1117,8 +1117,8 @@ public class CWUtil {
 
     public static List<Player> getPlayersInNearbyChunks(Location l, int range) {
         List<Player> players = new ArrayList<Player>();
-
-        for(Chunk chunk : getNearbyChunks(l, range)) {
+        List<Chunk> nearby = getNearbyChunks(l, range);
+        for(Chunk chunk : nearby) {
             for (Entity e : chunk.getEntities()) {
                 if (e instanceof  Player) {
                     players.add((Player)e);
@@ -1131,7 +1131,11 @@ public class CWUtil {
 
     public static List<Entity> getNearbyEntities(Location l, float range, List<EntityType> entityTypes) {
         List<Entity> entities = new ArrayList<Entity>();
-        for (Entity e : getEntitiesInNearbyChunks(l, (int) range, entityTypes)) {
+        List<Entity> nearby = getEntitiesInNearbyChunks(l, (int) range, entityTypes);
+        for (Entity e : nearby) {
+            if (!e.getWorld().equals(l.getWorld())) {
+                continue;
+            }
             if (e.getLocation().distance(l) <= range) {
                 entities.add(e);
             }
@@ -1141,8 +1145,11 @@ public class CWUtil {
 
     public static List<Player> getNearbyPlayers(Location l, float range) {
         List<Player> players = new ArrayList<Player>();
-
-        for (Player player : getPlayersInNearbyChunks(l, (int) range)) {
+        List<Player> nearby = getPlayersInNearbyChunks(l, (int) range);
+        for (Player player : nearby) {
+            if (!player.getWorld().equals(l.getWorld())) {
+                continue;
+            }
             if (player.getLocation().distance(l) <= range) {
                 players.add(player);
             }
