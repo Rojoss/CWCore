@@ -38,7 +38,9 @@ public class TeamData {
         this.friendlyFire = friendlyFire;
         this.seeInvis = seeInvis;
         this.nameTagVisibility = nameTagVisibility;
-        setPlayers(players);
+        if (players != null) {
+            setPlayers(players);
+        }
     }
 
     public String getName() {
