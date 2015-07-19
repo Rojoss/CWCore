@@ -1337,7 +1337,7 @@ public enum ParticleEffect {
             String worldName = center.getWorld().getName();
             double squared = range * range;
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (!player.getWorld().getName().equals(worldName) || player.getLocation().distanceSquared(center) > squared) {
+                if (player.getWorld() == null || !player.getWorld().getName().equals(worldName) || player.getLocation() == null || center == null || player.getLocation().distanceSquared(center) > squared) {
                     continue;
                 }
                 sendTo(center, player);
