@@ -19,3 +19,7 @@ commands:
     description: Set cuboid pos 2.
     usage: /<command>
     aliases: [l2]
+  damagelog:
+    description: View your damage log
+    usage: /<command>
+    aliases: [dmglog,dlog,damage,dmg]

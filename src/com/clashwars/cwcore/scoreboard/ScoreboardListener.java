@@ -10,7 +10,7 @@ public class ScoreboardListener implements Listener {
 
     @EventHandler
     private void login(final PlayerLoginEvent event) {
-        final String scoreboard = CWCore.inst().getPlayerCfg().getScoreboard(event.getPlayer().getUniqueId());
+        final String scoreboard = CWCore.inst().getPM().getPlayer(event.getPlayer()).getScoreboard();
         if (scoreboard.isEmpty()) {
             return;
         }

@@ -19,23 +19,26 @@ public class Vanish implements Listener {
     private static CWCore cwc = CWCore.inst();
 
     public static void vanish(UUID playerUUID) {
-        cwc.getPlayerCfg().vanish(playerUUID);
-        Player player = Bukkit.getPlayer(playerUUID);
+        CWPlayer cwp = cwc.getPM().getPlayer(playerUUID);
+        cwp.setVanished(true);
+        Player player = cwp.getPlayer();
         if (player != null) {
             updateVanishedPlayers(player);
         }
     }
 
     public static void unvanish(UUID playerUUID) {
-        cwc.getPlayerCfg().unvanish(playerUUID);
-        Player player = Bukkit.getPlayer(playerUUID);
+        CWPlayer cwp = cwc.getPM().getPlayer(playerUUID);
+        cwp.setVanished(false);
+        Player player = cwp.getPlayer();
         if (player != null) {
             updateVanishedPlayers(player);
         }
     }
 
     public static boolean isVanished(UUID playerUUID) {
-        return cwc.getPlayerCfg().isVanished(playerUUID);
+        CWPlayer cwp = cwc.getPM().getPlayer(playerUUID);
+        return cwp.isVanished();
     }
 
     @EventHandler

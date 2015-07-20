@@ -2,6 +2,7 @@ package com.clashwars.cwcore.scoreboard;
 
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.debug.Debug;
+import com.clashwars.cwcore.player.CWPlayer;
 import com.clashwars.cwcore.scoreboard.data.BoardData;
 import com.clashwars.cwcore.scoreboard.data.ObjectiveData;
 import com.clashwars.cwcore.scoreboard.data.TeamData;
@@ -541,7 +542,7 @@ public class CWBoard {
      */
     public void addPlayer(UUID uuid) {
         if (!boardData.hasPlayer(uuid)) {
-            cwc.getPlayerCfg().setScoreboard(uuid, boardData.getID());
+            cwc.getPM().getPlayer(uuid).setScoreboard(boardData.getID());
             boardData.addPlayer(uuid);
             save();
             if (isVisible()) {
@@ -567,7 +568,7 @@ public class CWBoard {
      */
     public void removePlayer(UUID uuid) {
         if (boardData.hasPlayer(uuid)) {
-            cwc.getPlayerCfg().removeScoreboard(uuid);
+            cwc.getPM().getPlayer(uuid).setScoreboard("");
             boardData.removePlayer(uuid);
             save();
             if (isVisible()) {

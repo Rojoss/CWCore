@@ -6,6 +6,8 @@ import com.clashwars.cwcore.config.ScoreboardsCfg;
 import com.clashwars.cwcore.config.aliases.*;
 import com.clashwars.cwcore.cuboid.Selection;
 import com.clashwars.cwcore.cuboid.SelectionListener;
+import com.clashwars.cwcore.damage.DamageHandler;
+import com.clashwars.cwcore.damage.log.LogMenu;
 import com.clashwars.cwcore.debug.Debug;
 import com.clashwars.cwcore.dependencies.internal.DependencyManager;
 import com.clashwars.cwcore.effect.EffectManager;
@@ -15,6 +17,7 @@ import com.clashwars.cwcore.events.CustomEventHandler;
 import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.hat.HatManager;
 import com.clashwars.cwcore.helpers.EntityHider;
+import com.clashwars.cwcore.player.PlayerManager;
 import com.clashwars.cwcore.player.Vanish;
 import com.clashwars.cwcore.scoreboard.CWBoard;
 import com.clashwars.cwcore.scoreboard.ScoreboardListener;
@@ -36,6 +39,8 @@ public class CWCore extends JavaPlugin {
     private final Logger log = Logger.getLogger("Minecraft");
 
     private Commands cmds;
+
+    private PlayerManager pm;
     private DependencyManager dm;
     private CooldownManager cdm;
     private EntityManager entityManager;
@@ -52,6 +57,8 @@ public class CWCore extends JavaPlugin {
     private Enchantments enchantsCfg;
     private Biomes biomesCfg;
     private Particles particlesCfg;
+
+    private LogMenu logMenu;
 
 
     public void onDisable() {
@@ -73,7 +80,14 @@ public class CWCore extends JavaPlugin {
         //Load command system.
         cmds = new Commands(this);
 
+        //Config
+        playerCfg = new PlayerConfig("plugins/CWCore/Players.yml");
+        playerCfg.load();
+        boardCfg = new ScoreboardsCfg("plugins/CWCore/Scoreboards.yml");
+        boardCfg.load();
+
         //Other
+        pm = new PlayerManager(this);
         cdm = new CooldownManager();
         sel = new Selection();
         hm = new HatManager();
@@ -83,11 +97,8 @@ public class CWCore extends JavaPlugin {
         entityManager = new EntityManager(this);
         EffectManager.initialize();
 
-        //Config
-        playerCfg = new PlayerConfig("plugins/CWCore/PlayerData.yml");
-        playerCfg.load();
-        boardCfg = new ScoreboardsCfg("plugins/CWCore/Scoreboards.yml");
-        boardCfg.load();
+        //Menus
+        logMenu = new LogMenu(this);
 
         //Listeners
         getServer().getPluginManager().registerEvents(new CustomEventHandler(this), this);
@@ -97,6 +108,8 @@ public class CWCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ScoreboardListener(), this);
         getServer().getPluginManager().registerEvents(hm, this);
         getServer().getPluginManager().registerEvents(new Vanish(), this);
+        getServer().getPluginManager().registerEvents(logMenu, this);
+        getServer().getPluginManager().registerEvents(new DamageHandler(this), this);
 
         loadAliases();
 
@@ -180,6 +193,9 @@ public class CWCore extends JavaPlugin {
         return instance;
     }
 
+    public PlayerManager getPM() {
+        return pm;
+    }
 
     /**
      * Get the dependency manager.
@@ -290,6 +306,10 @@ public class CWCore extends JavaPlugin {
      */
     public Particles getParticles() {
         return particlesCfg;
+    }
+
+    public LogMenu getDamageLogMenu() {
+        return logMenu;
     }
 
     public EntityManager getEntityManager() {

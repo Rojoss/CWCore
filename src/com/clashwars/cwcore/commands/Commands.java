@@ -3,6 +3,7 @@ package com.clashwars.cwcore.commands;
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.cuboid.CuboidEditor;
+import com.clashwars.cwcore.debug.Debug;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import org.bukkit.Location;
@@ -25,6 +26,16 @@ public class Commands {
 
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+
+        if (label.equalsIgnoreCase("dmglog") || label.equalsIgnoreCase("dmg") || label.equalsIgnoreCase("damagelog") || label.equalsIgnoreCase("dlog") || label.equalsIgnoreCase("damage")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(CWUtil.formatCWMsg("&cPlayer command only."));
+                return true;
+            }
+
+            cwc.getDamageLogMenu().showMenu((Player) sender);
+            return true;
+        }
 
         // Wand command.
         if (label.equalsIgnoreCase("cww") || label.equalsIgnoreCase("cwwand")) {
