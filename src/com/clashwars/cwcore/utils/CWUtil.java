@@ -1411,4 +1411,17 @@ public class CWUtil {
         return stringList;
     }
 
+    public static String getNumberSufix(int n) {
+        String number = Integer.toString(n);
+        if (number.endsWith("1")) {
+            return "st";
+        } else if (number.endsWith("2")) {
+            return "nd";
+        } else if (number.endsWith("3")) {
+            return "rd";
+        } else {
+            return "th";
+        }
+    }
+
 }
