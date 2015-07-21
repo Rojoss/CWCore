@@ -1006,15 +1006,16 @@ public class CWUtil {
         return true;
     }
 
-    public static void dropItemStack(Location loc, ItemStack item) {
-        loc.getWorld().dropItem(loc, item);
+    public static Item dropItemStack(Location loc, ItemStack item) {
+        return loc.getWorld().dropItem(loc, item);
     }
 
-    public static void dropItemStack(Location loc, ItemStack item, JavaPlugin plugin, Player owner) {
+    public static Item dropItemStack(Location loc, ItemStack item, JavaPlugin plugin, Player owner) {
         loc.add(0.5f, 0.5f, 0.5f);
         Item itemDrop = loc.getWorld().dropItem(loc, item);
         itemDrop.setMetadata("owner", new FixedMetadataValue(plugin, owner.getName()));
         itemDrop.setVelocity(itemDrop.getVelocity().multiply(0.2f));
+        return itemDrop;
     }
 
 
@@ -1424,4 +1425,23 @@ public class CWUtil {
         }
     }
 
+    public static <T> T[] concat(T[] first, T[] second) {
+        T[] result = Arrays.copyOf(first, first.length + second.length);
+        System.arraycopy(second, 0, result, first.length, second.length);
+        return result;
+    }
+
+    public static <T> T[] concatAll(T[] first, T[]... rest) {
+        int totalLength = first.length;
+        for (T[] array : rest) {
+            totalLength += array.length;
+        }
+        T[] result = Arrays.copyOf(first, totalLength);
+        int offset = first.length;
+        for (T[] array : rest) {
+            System.arraycopy(array, 0, result, offset, array.length);
+            offset += array.length;
+        }
+        return result;
+    }
 }
