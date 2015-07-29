@@ -338,6 +338,16 @@ public class CWUtil {
     }
 
     /**
+     * Get a random float number between start and end.
+     * @param start
+     * @param end
+     * @return random float
+     */
+    public static float randomFloat(float start, float end) {
+        return random.nextFloat() * (end - start) + start;
+    }
+
+    /**
      * Get a random float (Same as Random.nextFloat())
      * @return random float between 0-1
      */

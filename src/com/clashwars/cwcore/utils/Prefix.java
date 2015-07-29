@@ -1,29 +1,31 @@
 package com.clashwars.cwcore.utils;
 
 public enum Prefix {
-    DARK_BLUE("&1", "DarkBlue"),
-    DARK_GREEN("&2", "DarkGreen"),
-    DARK_AQUA("&3", "Teal"),
-    DARK_RED("&4", "DarkRed"),
-    PURPLE("&5", "Purple"),
-    GOLD("&6", "Gold"),
-    LIGHT_GRAY("&7", "LightGray"),
-    DARK_GRAY("&8", "DarkGray"),
-    BLUE("&9", "Blue"),
-    BLACK("&0", "Black"),
-    GREEN("&a", "Green"),
-    AQUA("&b", "Aqua"),
-    RED("&c", "Red"),
-    PINK("&d", "Pink"),
-    YELLOW("&e", "Yellow"),
-    WHITE("&f", "White");
+    DARK_BLUE("&1", "DarkBlue", (byte)12),
+    DARK_GREEN("&2", "DarkGreen", (byte)13),
+    DARK_AQUA("&3", "Teal", (byte)9),
+    DARK_RED("&4", "DarkRed", (byte)14),
+    PURPLE("&5", "Purple", (byte)10),
+    GOLD("&6", "Gold", (byte)1),
+    LIGHT_GRAY("&7", "LightGray", (byte)8),
+    DARK_GRAY("&8", "DarkGray", (byte)7),
+    BLUE("&9", "Blue", (byte)11),
+    BLACK("&0", "Black", (byte)15),
+    GREEN("&a", "Green", (byte)5),
+    AQUA("&b", "Aqua", (byte)3),
+    RED("&c", "Red", (byte)6),
+    PINK("&d", "Pink", (byte)2),
+    YELLOW("&e", "Yellow", (byte)4),
+    WHITE("&f", "White", (byte)0);
 
     public String color;
     public String name;
+    public byte colorData;
 
-    Prefix(String color, String name) {
+    Prefix(String color, String name, byte colorData) {
         this.color = color;
         this.name = name;
+        this.colorData = colorData;
     }
 
     public static Prefix fromString(String name) {
@@ -46,6 +48,13 @@ public enum Prefix {
         return null;
     }
 
-
+    public static Prefix fromColor(byte colorData) {
+        for (Prefix p : values()) {
+            if (p.colorData == colorData) {
+                return p;
+            }
+        }
+        return null;
+    }
 
 }
