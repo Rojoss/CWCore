@@ -1,5 +1,6 @@
 package com.clashwars.cwcore.utils;
 
+import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.debug.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import net.minecraft.server.v1_8_R2.*;
@@ -19,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
@@ -1453,5 +1455,33 @@ public class CWUtil {
             offset += array.length;
         }
         return result;
+    }
+
+
+    public static void stackPotionEffect(final Player player, final PotionEffect effect) {
+        for (PotionEffect activeEffect : player.getActivePotionEffects()) {
+            if (activeEffect.getType().equals(effect.getType())) {
+                //If it's a lower amplifier don't give the effect.
+                if (effect.getAmplifier() < activeEffect.getAmplifier()) {
+                    return;
+                }
+                //If it's the same amplifier increase the time.
+                if (effect.getAmplifier() == activeEffect.getAmplifier()) {
+                    player.addPotionEffect(new PotionEffect(effect.getType(), activeEffect.getDuration() + effect.getDuration(), effect.getAmplifier()), true);
+                    return;
+                }
+                //If the amplifier is higher set the effect and restore the previous effect when it ends.
+                final PotionEffect currentEffect = activeEffect;
+                player.addPotionEffect(effect, true);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        player.addPotionEffect(currentEffect, true);
+                    }
+                }.runTaskLater(CWCore.inst(), effect.getDuration());
+                return;
+            }
+        }
+        player.addPotionEffect(effect);
     }
 }
