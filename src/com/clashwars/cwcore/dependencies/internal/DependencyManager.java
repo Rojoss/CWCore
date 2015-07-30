@@ -10,6 +10,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.primesoft.asyncworldedit.AsyncWorldEditMain;
 
 public class DependencyManager {
 
@@ -19,6 +20,7 @@ public class DependencyManager {
     private Permission permissions;
     private WorldEditPlugin worldedit;
     private WorldGuardPlugin worldguard;
+    private AsyncWorldEditMain asyncWorldedit;
     private Essentials essentials;
     private ProtocolLibrary protocolLib;
     private ProtocolManager protocolManager;
@@ -102,6 +104,14 @@ public class DependencyManager {
         }
         worldedit = (WorldEditPlugin) plugin;
         cwc.log("WorldEdit dependency loaded!");
+
+        plugin = cwc.getServer().getPluginManager().getPlugin("AsyncWorldEdit");
+        if (plugin == null || !(plugin instanceof AsyncWorldEditMain)) {
+            cwc.error("Async WorldEdit dependency couldn't be loaded!");
+            return;
+        }
+        asyncWorldedit = (AsyncWorldEditMain)plugin;
+        cwc.log("Async WorldEdit dependency loaded!");
     }
 
     /**
@@ -110,6 +120,15 @@ public class DependencyManager {
      */
     public WorldEditPlugin getWorldedit() {
         return worldedit;
+    }
+
+
+    /**
+     * Get Async WorldEdit plugin class.
+     * @return AsyncWorldEditMain
+     */
+    public AsyncWorldEditMain getAsyncWorldedit() {
+        return asyncWorldedit;
     }
 
 
