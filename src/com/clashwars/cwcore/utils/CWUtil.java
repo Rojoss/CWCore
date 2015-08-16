@@ -861,6 +861,30 @@ public class CWUtil {
         return locStr;
     }
 
+    public static Vector vecFromString(String vecStr) {
+        Vector v = null;
+        if (vecStr == null || vecStr.isEmpty()) {
+            return null;
+        }
+        String[] dataArray = vecStr.split(",");
+        if (dataArray.length >= 3 ) {
+            v = new Vector(getDouble(dataArray[1]), getDouble(dataArray[2]), getDouble(dataArray[3]));
+        }
+        return v;
+    }
+
+    public static String vecToString(Vector vec) {
+        if (vec == null) {
+            return null;
+        }
+        String vecStr = "";
+        vecStr += String.valueOf(vec.getX());
+        vecStr += "," + String.valueOf(vec.getY());
+        vecStr += "," + String.valueOf(vec.getZ());
+
+        return vecStr;
+    }
+
 
 
     //##########################################################################################
