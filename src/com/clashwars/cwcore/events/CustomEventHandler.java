@@ -9,6 +9,7 @@ import org.bukkit.craftbukkit.v1_8_R2.entity.AbstractProjectile;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftArrow;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftProjectile;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -82,5 +83,21 @@ public class CustomEventHandler implements Listener {
             }
         }
         Bukkit.getServer().getPluginManager().callEvent(new ProjectileHitBlockEvent(event.getEntity(), hitBlock));
+    }
+
+    @EventHandler
+    private void playerMove(PlayerMoveEvent event) {
+        if (event.getFrom().getBlockX() == event.getTo().getBlockX() && event.getFrom().getBlockZ() == event.getTo().getBlockZ()) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+        PlayerMoveBlockEvent newEvent = new PlayerMoveBlockEvent(event.getPlayer(), event.getFrom().getBlock(), event.getTo().getBlock());
+        cwc.getServer().getPluginManager().callEvent(newEvent);
+
+        if (newEvent.isCancelled()) {
+            event.setCancelled(true);
+            player.teleport(event.getFrom());
+        }
     }
 }
