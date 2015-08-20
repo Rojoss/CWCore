@@ -868,7 +868,7 @@ public class CWUtil {
         }
         String[] dataArray = vecStr.split(",");
         if (dataArray.length >= 3 ) {
-            v = new Vector(getDouble(dataArray[1]), getDouble(dataArray[2]), getDouble(dataArray[3]));
+            v = new Vector(getDouble(dataArray[0]), getDouble(dataArray[1]), getDouble(dataArray[2]));
         }
         return v;
     }
